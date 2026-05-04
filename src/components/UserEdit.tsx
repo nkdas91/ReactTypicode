@@ -1,10 +1,10 @@
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import useUser from "../hooks/useUser";
-import { ArrowLeftCircleIcon } from "@heroicons/react/24/outline";
 import type { User } from "../types/User";
 import { useEffect, useState } from "react";
 import TextField from "./TextField";
 import axios from "axios";
+import BackButton from "./BackButton";
 
 const UserEdit = () => {
   const { id } = useParams();
@@ -51,9 +51,7 @@ const UserEdit = () => {
 
   return (
     <div className="max-w-3xl mx-auto p-6 border border-gray-100 rounded-lg">
-      <Link to={`/users/${id}`}>
-        <ArrowLeftCircleIcon className="size-12 text-indigo-500" />
-      </Link>
+      <BackButton />
 
       <form onSubmit={handleSubmit}>
         <div className="mb-6 mt-4 grid md:grid-cols-2">
