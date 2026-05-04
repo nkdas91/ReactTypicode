@@ -1,12 +1,12 @@
 ### Install React + TypeScript + Vite
 
-npm create vite@latest posts
+`npm create vite@latest posts`
 
 ### Install tailwind
 
 npm install tailwindcss @tailwindcss/vite
 
-** Add the @tailwindcss/vite plugin to your Vite configuration. **
+**Add the @tailwindcss/vite plugin to your Vite configuration.**
 
 ```ts
 import { defineConfig } from "vite";
@@ -17,7 +17,7 @@ export default defineConfig({
 });
 ```
 
-** Add an @import to your CSS file that imports Tailwind CSS. **
+**Add an @import to your CSS file that imports Tailwind CSS.**
 
 ```ts
 @import "tailwindcss";
