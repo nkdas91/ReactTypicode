@@ -43,9 +43,12 @@ const UserDetails = () => {
       )}
 
       <div className="flex justify-end gap-2">
-        <button className="bg-indigo-500 px-4 py-2 text-white rounded-full cursor-pointer hover:bg-indigo-600">
+        <Link
+          to={`/users/${id}/edit`}
+          className="bg-indigo-500 px-4 py-2 text-white rounded-full cursor-pointer hover:bg-indigo-600"
+        >
           Edit
-        </button>
+        </Link>
         <button className="bg-rose-700 px-4 py-2 text-white rounded-full cursor-pointer hover:bg-rose-800">
           Delete
         </button>

@@ -3,6 +3,7 @@ import "./App.css";
 import Navbar from "./components/Navbar";
 import UserList from "./components/UserList";
 import UserDetails from "./components/UserDetails";
+import UserEdit from "./components/UserEdit";
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
         <Routes>
           <Route path="/" element={<UserList />} />
           <Route path="/users/:id" element={<UserDetails />} />
+          <Route path="/users/:id/edit" element={<UserEdit />} />
         </Routes>
       </div>
     </>
