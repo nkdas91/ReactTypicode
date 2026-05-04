@@ -1,10 +1,27 @@
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import useUser from "../hooks/useUser";
 import { ArrowLeftCircleIcon } from "@heroicons/react/24/outline";
+import axios from "axios";
 
 const UserDetails = () => {
   const { id } = useParams();
   const { data: user } = useUser(id ? parseInt(id) : null);
+  const navigate = useNavigate();
+
+  const handleDelete = (id: number | null) => {
+    if (!id) return;
+
+    try {
+      axios
+        .delete(`https://jsonplaceholder.typicode.com/users/${id}`)
+        .then((res) => {
+          console.log(res);
+          navigate("/");
+        });
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return (
     <div className="max-w-3xl mx-auto p-6 border border-gray-100 rounded-lg">
@@ -49,7 +66,10 @@ const UserDetails = () => {
         >
           Edit
         </Link>
-        <button className="bg-rose-700 px-4 py-2 text-white rounded-full cursor-pointer hover:bg-rose-800">
+        <button
+          onClick={(e) => handleDelete(id ? parseInt(id) : null)}
+          className="bg-rose-700 px-4 py-2 text-white rounded-full cursor-pointer hover:bg-rose-800"
+        >
           Delete
         </button>
       </div>
