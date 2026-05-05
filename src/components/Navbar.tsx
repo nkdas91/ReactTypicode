@@ -11,6 +11,22 @@ const Navbar = () => {
         >
           Home
         </Link>
+
+        <Link
+          to="/users"
+          aria-current="page"
+          className="px-3 py-2 text-sm font-medium text-black"
+        >
+          Users
+        </Link>
+
+        <Link
+          to="/posts"
+          aria-current="page"
+          className="px-3 py-2 text-sm font-medium text-black"
+        >
+          Posts
+        </Link>
       </div>
     </nav>
   );

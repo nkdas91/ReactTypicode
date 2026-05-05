@@ -13,7 +13,7 @@ const UserList = () => {
     const res = await deleteUser(id);
 
     if (res.data) {
-      navigate("/");
+      navigate("/users");
     } else {
       console.log(res.error);
     }

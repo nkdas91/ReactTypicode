@@ -14,7 +14,7 @@ const UserDetails = () => {
     const res = await deleteUser(id ?? null);
 
     if (res.data) {
-      navigate("/");
+      navigate("/users");
     } else {
       console.log(res.error);
     }
