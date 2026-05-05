@@ -1,7 +1,7 @@
 import { PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { Link, useNavigate } from "react-router-dom";
-import useUsers from "../hooks/useUsers";
-import { deleteUser } from "../services/userService";
+import useUsers from "../../hooks/useUsers";
+import { deleteUser } from "../../services/userService";
 
 const UserList = () => {
   const { data: users } = useUsers();

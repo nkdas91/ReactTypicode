@@ -1,7 +1,7 @@
 import { Link, useNavigate, useParams } from "react-router-dom";
-import useUser from "../hooks/useUser";
-import { deleteUser } from "../services/userService";
-import BackButton from "./BackButton";
+import useUser from "../../hooks/useUser";
+import { deleteUser } from "../../services/userService";
+import BackButton from "../../components/BackButton";
 
 const UserDetails = () => {
   const { id } = useParams();

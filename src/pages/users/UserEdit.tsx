@@ -1,10 +1,10 @@
 import { useParams } from "react-router-dom";
-import useUser from "../hooks/useUser";
-import type { User } from "../types/User";
+import useUser from "../../hooks/useUser";
+import type { User } from "../../types/User";
 import { useEffect, useState } from "react";
-import TextField from "./TextField";
+import TextField from "../../components/TextField";
 import axios from "axios";
-import BackButton from "./BackButton";
+import BackButton from "../../components/BackButton";
 
 const UserEdit = () => {
   const { id } = useParams();

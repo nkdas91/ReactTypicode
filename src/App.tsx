@@ -1,9 +1,9 @@
 import { Route, Routes } from "react-router-dom";
 import "./App.css";
 import Navbar from "./components/Navbar";
-import UserList from "./components/UserList";
-import UserDetails from "./components/UserDetails";
-import UserEdit from "./components/UserEdit";
+import UserList from "./pages/users/UserList";
+import UserDetails from "./pages/users/UserDetails";
+import UserEdit from "./pages/users/UserEdit";
 
 function App() {
   return (
