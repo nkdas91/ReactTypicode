@@ -1,19 +1,23 @@
 import { PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { ChevronDownIcon } from "@heroicons/react/24/solid";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
-import { usePostsWithUsers } from "../../hooks/UsePostsWithUsers";
+import { usePosts } from "../../hooks/usePosts";
 import useUsers from "../../hooks/useUsers";
 import { deletePost } from "../../services/postService";
 
 const PostList = () => {
   const [searchParams] = useSearchParams();
   const userId = searchParams.get("userId");
+  const page = Number(searchParams.get("page") || 1);
   const selectedUserId = userId ?? "";
 
-  const { data: posts } = usePostsWithUsers(selectedUserId);
+  const { data: posts, total } = usePosts(selectedUserId, page);
   const { data: users } = useUsers();
 
   const navigate = useNavigate();
+  const limit = 5;
+
+  const totalPages = Math.ceil(total / limit);
 
   const handleDelete = async (e: React.MouseEvent, id: number) => {
     e.preventDefault();
@@ -35,6 +39,24 @@ const PostList = () => {
     }
 
     navigate(`/posts?userId=${id}`);
+  };
+
+  const previousPage = () => {
+    if (page === 1) return;
+
+    const params = new URLSearchParams(searchParams);
+    params.set("page", (page - 1).toString());
+
+    navigate(`/posts?${params.toString()}`);
+  };
+
+  const nextPage = () => {
+    if (page === totalPages) return;
+
+    const params = new URLSearchParams(searchParams);
+    params.set("page", (page + 1).toString());
+
+    navigate(`/posts?${params.toString()}`);
   };
 
   return (
@@ -96,6 +118,23 @@ const PostList = () => {
           </div>
         </div>
       ))}
+
+      <div className="flex justify-end gap-2 mt-4">
+        <button
+          onClick={previousPage}
+          disabled={page === 1}
+          className={`${page === 1 ? "cursor-not-allowed border-gray-400 text-gray-400" : "cursor-pointer border-indigo-700 text-indigo-700 hover:bg-indigo-100"} border px-4 py-2 rounded-full`}
+        >
+          Previous
+        </button>
+        <button
+          onClick={nextPage}
+          disabled={page === totalPages}
+          className={`${page === totalPages ? "cursor-not-allowed border-gray-400 text-gray-400" : "cursor-pointer border-indigo-700 text-indigo-700 hover:bg-indigo-100"} border px-4 py-2 rounded-full`}
+        >
+          Next
+        </button>
+      </div>
     </div>
   );
 };
