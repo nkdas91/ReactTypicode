@@ -1,18 +1,13 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
 import type { User } from "../types/User";
+import { apiClient } from "../services/apiService";
 
 const useUser = (id?: number | null) => {
   const [data, setData] = useState<User | null>();
 
   useEffect(() => {
-    axios
-      .create({
-        baseURL: "https://jsonplaceholder.typicode.com",
-      })
-      .get(`/users/${id ?? ""}`)
-      .then((res) => setData(res.data));
-  }, []);
+    apiClient.get(`/users/${id ?? ""}`).then((res) => setData(res.data));
+  }, [id]);
 
   return { data };
 };
