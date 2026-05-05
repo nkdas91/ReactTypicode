@@ -62,7 +62,7 @@ const UserEdit = () => {
         </div>
 
         <div className="flex justify-end gap-2">
-          <button className="bg-indigo-500 px-4 py-2 text-white rounded-full cursor-pointer hover:bg-indigo-600">
+          <button className="bg-indigo-100 text-indigo-700 px-4 py-2 rounded-full cursor-pointer hover:bg-indigo-200">
             Save
           </button>
         </div>

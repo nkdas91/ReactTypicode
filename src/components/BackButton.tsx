@@ -5,7 +5,7 @@ const BackButton = () => {
   const navigate = useNavigate();
   return (
     <button onClick={() => navigate(-1) || navigate("/")}>
-      <ArrowLeftCircleIcon className="size-12 text-indigo-500" />
+      <ArrowLeftCircleIcon className="size-12 cursor-pointer text-gray-400 hover:text-indigo-500" />
     </button>
   );
 };

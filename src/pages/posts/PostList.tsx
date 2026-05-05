@@ -1,22 +1,19 @@
 import { PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
+import { ChevronDownIcon } from "@heroicons/react/24/solid";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
-import usePosts from "../../hooks/usePosts";
-import { deletePost } from "../../services/postService";
+import { usePostsWithUsers } from "../../hooks/UsePostsWithUsers";
 import useUsers from "../../hooks/useUsers";
+import { deletePost } from "../../services/postService";
 
 const PostList = () => {
-  const { data: posts } = usePosts();
-  const { data: users } = useUsers();
-
   const [searchParams] = useSearchParams();
   const userId = searchParams.get("userId");
   const selectedUserId = userId ?? "";
 
-  const navigate = useNavigate();
+  const { data: posts } = usePostsWithUsers(selectedUserId);
+  const { data: users } = useUsers();
 
-  const filteredPosts = userId
-    ? posts?.filter((p) => p.userId === Number(userId))
-    : posts;
+  const navigate = useNavigate();
 
   const handleDelete = async (e: React.MouseEvent, id: number) => {
     e.preventDefault();
@@ -45,38 +42,48 @@ const PostList = () => {
       <div className="flex justify-between items-center gap-2 mb-4">
         <h1 className="text-3xl mb-4">Posts</h1>
 
-        <div>
-          <label>Filter by User </label>
-          <select
-            value={selectedUserId}
-            onChange={(e) => selectUser(e.target.value)}
-            className="px-4 py-2 border border-gray-100 rounded-md"
-          >
-            <option value=""></option>
-            {users?.map((user) => (
-              <option key={user.id} value={user.id}>
-                {user.name}
-              </option>
-            ))}
-          </select>
+        <div className="flex items-center gap-2">
+          <label>Posts by </label>
+          <div className="grid grid-cols-1">
+            <select
+              value={selectedUserId}
+              onChange={(e) => selectUser(e.target.value)}
+              className="col-start-1 row-start-1 px-4 py-2 border border-gray-100 rounded-md appearance-none"
+            >
+              <option value="">All users</option>
+              {users?.map((user) => (
+                <option key={user.id} value={user.id}>
+                  {user.name}
+                </option>
+              ))}
+            </select>
+
+            <ChevronDownIcon className="pointer-events-none col-start-1 row-start-1 mr-2 size-5 self-center justify-self-end text-gray-400 sm:size-4" />
+          </div>
         </div>
       </div>
-      {filteredPosts?.map((post) => (
+      {posts?.map((post) => (
         <div
           key={post?.id}
-          className="pr-4 border border-gray-100 flex justify-between items-center hover:bg-gray-100"
+          className="pr-4 border border-gray-100 flex justify-between items-center gap-2"
         >
           <Link
             key={post?.id}
             to={`/posts/${post?.id}`}
-            className="p-4 flex-grow"
+            className="p-4 flex-grow hover:text-indigo-700 border-l-3 border-transparent hover:border-l-3 hover:border-indigo-700 hover:bg-linear-to-r hover:from-indigo-100 hover:to-white"
           >
             {post?.title}
           </Link>
-          <div className="flex gap-2">
+          <div className="flex items-center gap-2">
+            <Link
+              to={`/users/${post?.userId}`}
+              className="text-sm text-gray-500 italic hover:text-indigo-700 hover:underline"
+            >
+              {post?.name}
+            </Link>
             <Link
               to={`/posts/${post?.id}/edit`}
-              className="bg-indigo-100 p-2 text-indigo-500 rounded-full cursor-pointer hover:bg-indigo-200"
+              className="bg-indigo-100 p-2 text-indigo-700 rounded-full cursor-pointer hover:bg-indigo-200"
             >
               <PencilIcon className="size-6" />
             </Link>

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import type { Post } from "../types/Post";
 import { apiClient } from "../services/apiService";
 
-const useUser = () => {
+const usePosts = () => {
   const [data, setData] = useState<Post[] | null>();
 
   useEffect(() => {
@@ -12,4 +12,4 @@ const useUser = () => {
   return { data };
 };
 
-export default useUser;
+export default usePosts;
