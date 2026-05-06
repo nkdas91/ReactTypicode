@@ -43,7 +43,7 @@ function App() {
       <Navbar favouriteCount={favourites.length} />
       <div className="px-10 py-5 ">
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<Home favouritePosts={favourites} />} />
           <Route path="/users" element={<UserList />} />
           <Route path="/users/:id" element={<UserDetails />} />
           <Route path="/users/:id/edit" element={<UserEdit />} />
