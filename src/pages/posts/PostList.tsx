@@ -1,11 +1,10 @@
-import { PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { ChevronDownIcon } from "@heroicons/react/24/solid";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import Pagination from "../../components/Pagination";
+import PostCard from "../../components/posts/PostCard";
 import { usePosts } from "../../hooks/usePosts";
 import useUsers from "../../hooks/useUsers";
 import { deletePost } from "../../services/postService";
-import Pagination from "../../components/Pagination";
-import FavouriteButton from "../../components/FavouriteButton";
 
 interface PropListProp {
   favourites: number[];
@@ -109,42 +108,13 @@ const PostList = ({ favourites, toggleFavourite }: PropListProp) => {
         </div>
       </div>
       {posts?.map((post) => (
-        <div
-          key={post?.id}
-          className="pr-4 border border-gray-100 flex justify-between items-center gap-2"
-        >
-          <Link
-            key={post?.id}
-            to={`/posts/${post?.id}`}
-            className="p-4 flex-grow hover:text-indigo-700 border-l-3 border-transparent hover:border-l-3 hover:border-indigo-700 hover:bg-linear-to-r hover:from-indigo-100 hover:to-white"
-          >
-            {post?.title}
-          </Link>
-          <div className="flex items-center gap-2">
-            <Link
-              to={`/users/${post?.userId}`}
-              className="text-sm text-gray-500 italic hover:text-indigo-700 hover:underline"
-            >
-              {post?.name}
-            </Link>
-            <FavouriteButton
-              isFavourite={favourites.includes(post.id)}
-              toggleFavourite={() => toggleFavourite(post.id)}
-            />
-            <Link
-              to={`/posts/${post?.id}/edit`}
-              className="bg-indigo-100 p-2 text-indigo-700 rounded-full cursor-pointer hover:bg-indigo-200"
-            >
-              <PencilIcon className="size-6" />
-            </Link>
-            <button
-              onClick={(e) => handleDelete(e, post?.id)}
-              className="bg-rose-100 p-2 text-rose-700 rounded-full cursor-pointer hover:bg-rose-200"
-            >
-              <TrashIcon className="size-6" />
-            </button>
-          </div>
-        </div>
+        <PostCard
+          key={post.id}
+          post={post}
+          favourites={favourites}
+          toggleFavourite={() => toggleFavourite(post.id)}
+          handleDelete={(e) => handleDelete(e, post.id)}
+        />
       ))}
 
       <div className="flex justify-end items-center gap-2 mt-4">

@@ -9,6 +9,7 @@ import PostDetails from "./pages/posts/PostDetails";
 import PostEdit from "./pages/posts/PostEdit";
 import Home from "./pages/Home";
 import { useEffect, useState } from "react";
+import FavouritePosts from "./pages/posts/FavouritePosts";
 
 function App() {
   const [favourites, setFavourites] = useState<number[]>([]);
@@ -39,7 +40,7 @@ function App() {
 
   return (
     <>
-      <Navbar />
+      <Navbar favouriteCount={favourites.length} />
       <div className="px-10 py-5 ">
         <Routes>
           <Route path="/" element={<Home />} />
@@ -65,6 +66,15 @@ function App() {
             }
           />
           <Route path="/posts/:id/edit" element={<PostEdit />} />
+          <Route
+            path="/posts/favourites"
+            element={
+              <FavouritePosts
+                favourites={favourites}
+                toggleFavourite={toggleFavourite}
+              />
+            }
+          />
         </Routes>
       </div>
     </>
