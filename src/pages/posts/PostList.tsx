@@ -5,8 +5,14 @@ import { usePosts } from "../../hooks/usePosts";
 import useUsers from "../../hooks/useUsers";
 import { deletePost } from "../../services/postService";
 import Pagination from "../../components/Pagination";
+import FavouriteButton from "../../components/FavouriteButton";
 
-const PostList = () => {
+interface PropListProp {
+  favourites: number[];
+  toggleFavourite: (id: number) => void;
+}
+
+const PostList = ({ favourites, toggleFavourite }: PropListProp) => {
   const [searchParams] = useSearchParams();
   const userId = searchParams.get("userId");
   const page = Number(searchParams.get("page") || 1);
@@ -121,6 +127,10 @@ const PostList = () => {
             >
               {post?.name}
             </Link>
+            <FavouriteButton
+              isFavourite={favourites.includes(post.id)}
+              toggleFavourite={() => toggleFavourite(post.id)}
+            />
             <Link
               to={`/posts/${post?.id}/edit`}
               className="bg-indigo-100 p-2 text-indigo-700 rounded-full cursor-pointer hover:bg-indigo-200"

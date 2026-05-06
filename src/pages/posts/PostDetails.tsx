@@ -3,13 +3,23 @@ import usePost from "../../hooks/usePost";
 import { deletePost } from "../../services/postService";
 import BackButton from "../../components/BackButton";
 import useUser from "../../hooks/useUser";
+import FavouriteButton from "../../components/FavouriteButton";
 
-const PostDetails = () => {
+interface PropDetailsProp {
+  favourites: number[];
+  toggleFavourite: (id: number) => void;
+}
+
+const PostDetails = ({ favourites, toggleFavourite }: PropDetailsProp) => {
   const { id } = useParams();
+  const navigate = useNavigate();
+
   const { data: post } = usePost(id ? parseInt(id) : null);
   const { data: user } = useUser(post?.userId ? post.userId : null);
 
-  const navigate = useNavigate();
+  if (!post) return <label>Post not found!</label>;
+
+  const isFavourite = favourites.includes(post.id);
 
   const handleDelete = async (e: React.MouseEvent, id: number | undefined) => {
     e.preventDefault();
@@ -25,7 +35,14 @@ const PostDetails = () => {
 
   return (
     <div className="max-w-3xl mx-auto p-6 border border-gray-100 rounded-lg">
-      <BackButton />
+      <div className="flex justify-between aligh-center gap-4">
+        <BackButton />
+
+        <FavouriteButton
+          isFavourite={isFavourite}
+          toggleFavourite={() => toggleFavourite(post.id)}
+        />
+      </div>
 
       <div className="mb-6 mt-4">
         <h1 className="text-3xl">{post?.title}</h1>
