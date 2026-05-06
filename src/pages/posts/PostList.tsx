@@ -4,20 +4,19 @@ import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { usePosts } from "../../hooks/usePosts";
 import useUsers from "../../hooks/useUsers";
 import { deletePost } from "../../services/postService";
+import Pagination from "../../components/Pagination";
 
 const PostList = () => {
   const [searchParams] = useSearchParams();
   const userId = searchParams.get("userId");
   const page = Number(searchParams.get("page") || 1);
+  const limit = Number(searchParams.get("limit") || 5);
   const selectedUserId = userId ?? "";
 
-  const { data: posts, total } = usePosts(selectedUserId, page);
+  const { data: posts, total } = usePosts(selectedUserId, page, limit);
   const { data: users } = useUsers();
 
   const navigate = useNavigate();
-  const limit = 5;
-
-  const totalPages = Math.ceil(total / limit);
 
   const handleDelete = async (e: React.MouseEvent, id: number) => {
     e.preventDefault();
@@ -41,20 +40,18 @@ const PostList = () => {
     navigate(`/posts?userId=${id}`);
   };
 
-  const previousPage = () => {
-    if (page === 1) return;
-
+  const handlePageChange = (newPage: number) => {
     const params = new URLSearchParams(searchParams);
-    params.set("page", (page - 1).toString());
+    params.set("page", newPage.toString());
 
     navigate(`/posts?${params.toString()}`);
   };
 
-  const nextPage = () => {
-    if (page === totalPages) return;
+  const setLimit = (limit: string) => {
+    if (!limit) return;
 
     const params = new URLSearchParams(searchParams);
-    params.set("page", (page + 1).toString());
+    params.set("limit", limit);
 
     navigate(`/posts?${params.toString()}`);
   };
@@ -64,23 +61,44 @@ const PostList = () => {
       <div className="flex justify-between items-center gap-2 mb-4">
         <h1 className="text-3xl mb-4">Posts</h1>
 
-        <div className="flex items-center gap-2">
-          <label>Posts by </label>
-          <div className="grid grid-cols-1">
-            <select
-              value={selectedUserId}
-              onChange={(e) => selectUser(e.target.value)}
-              className="col-start-1 row-start-1 px-4 py-2 border border-gray-100 rounded-md appearance-none"
-            >
-              <option value="">All users</option>
-              {users?.map((user) => (
-                <option key={user.id} value={user.id}>
-                  {user.name}
-                </option>
-              ))}
-            </select>
+        <div className="flex gap-4">
+          <div className="flex items-center gap-2">
+            <label>Posts by </label>
+            <div className="grid grid-cols-1">
+              <select
+                value={selectedUserId}
+                onChange={(e) => selectUser(e.target.value)}
+                className="col-start-1 row-start-1 px-4 py-2 border border-gray-100 rounded-md appearance-none"
+              >
+                <option value="">All users</option>
+                {users?.map((user) => (
+                  <option key={user.id} value={user.id}>
+                    {user.name}
+                  </option>
+                ))}
+              </select>
 
-            <ChevronDownIcon className="pointer-events-none col-start-1 row-start-1 mr-2 size-5 self-center justify-self-end text-gray-400 sm:size-4" />
+              <ChevronDownIcon className="pointer-events-none col-start-1 row-start-1 mr-2 size-5 self-center justify-self-end text-gray-400 sm:size-4" />
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <label>Show </label>
+            <div className="grid grid-cols-1">
+              <select
+                value={limit}
+                onChange={(e) => setLimit(e.target.value)}
+                className="col-start-1 row-start-1 px-4 py-2 border border-gray-100 rounded-md appearance-none"
+              >
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="15">15</option>
+                <option value="20">20</option>
+              </select>
+
+              <ChevronDownIcon className="pointer-events-none col-start-1 row-start-1 mr-2 size-5 self-center justify-self-end text-gray-400 sm:size-4" />
+            </div>
+            <label> Records</label>
           </div>
         </div>
       </div>
@@ -119,21 +137,14 @@ const PostList = () => {
         </div>
       ))}
 
-      <div className="flex justify-end gap-2 mt-4">
-        <button
-          onClick={previousPage}
-          disabled={page === 1}
-          className={`${page === 1 ? "cursor-not-allowed border-gray-400 text-gray-400" : "cursor-pointer border-indigo-700 text-indigo-700 hover:bg-indigo-100"} border px-4 py-2 rounded-full`}
-        >
-          Previous
-        </button>
-        <button
-          onClick={nextPage}
-          disabled={page === totalPages}
-          className={`${page === totalPages ? "cursor-not-allowed border-gray-400 text-gray-400" : "cursor-pointer border-indigo-700 text-indigo-700 hover:bg-indigo-100"} border px-4 py-2 rounded-full`}
-        >
-          Next
-        </button>
+      <div className="flex justify-end items-center gap-2 mt-4">
+        <Pagination
+          totalRecords={total}
+          currentPage={page}
+          limit={limit}
+          dataLength={posts.length}
+          onPageChange={handlePageChange}
+        />
       </div>
     </div>
   );

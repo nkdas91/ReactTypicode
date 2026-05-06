@@ -5,11 +5,15 @@ import useUsers from "./useUsers";
 
 type Params = {
   _page?: number;
-  _limit: number;
+  _limit?: number;
   userId?: number;
 };
 
-export const usePosts = (userId?: string | null, page?: number | null) => {
+export const usePosts = (
+  userId?: string | null,
+  page?: number | null,
+  limit?: number | null,
+) => {
   const [data, setData] = useState<Post[]>([]);
   const [total, setTotal] = useState(0);
   const { data: users } = useUsers();
@@ -17,7 +21,7 @@ export const usePosts = (userId?: string | null, page?: number | null) => {
   useEffect(() => {
     const params: Params = {
       ...(page && { _page: Number(page) }),
-      _limit: 5,
+      ...(limit && { _limit: Number(limit) }),
       ...(userId && { userId: Number(userId) }),
     };
 
@@ -48,7 +52,7 @@ export const usePosts = (userId?: string | null, page?: number | null) => {
 
         setData(postsWithUsers);
       });
-  }, [userId, page, users]);
+  }, [userId, page, limit, users]);
 
   return { data, total };
 };
