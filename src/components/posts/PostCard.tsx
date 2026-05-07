@@ -19,7 +19,7 @@ const PostCard = ({
   return (
     <div
       key={post?.id}
-      className="pr-4 border border-gray-100 flex justify-between items-center gap-2"
+      className="border border-gray-100 flex justify-between items-center flex-wrap gap-2"
     >
       <Link
         key={post?.id}
@@ -28,7 +28,7 @@ const PostCard = ({
       >
         {post?.title}
       </Link>
-      <div className="flex items-center gap-2">
+      <div className="flex items-center ml-auto justify-end gap-2 px-4 py-2">
         <Link
           to={`/users/${post?.userId}`}
           className="text-sm text-gray-500 italic hover:text-indigo-700 hover:underline"

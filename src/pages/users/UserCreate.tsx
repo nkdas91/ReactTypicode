@@ -51,9 +51,8 @@ const UserCreate = ({ onSubmit }: UserCreateProps) => {
     setLoading(true);
 
     try {
-      const result = await onSubmit(form);
+      onSubmit(form);
 
-      // optional: only navigate if success
       navigate("/users/");
     } catch (err) {
       console.error(err);

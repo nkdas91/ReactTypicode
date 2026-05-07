@@ -40,7 +40,7 @@ const Pagination = ({
   };
 
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex justify-end items-center flex-wrap gap-2">
       {totalRecords === 0 || dataLength === 0 ? (
         <label>No records found</label>
       ) : (

@@ -32,7 +32,7 @@ const UserList = ({ users, isLoading, onDelete }: UserListProps) => {
       {users?.map((user) => (
         <div
           key={user?.id}
-          className="pr-4 border border-gray-100 flex justify-between items-center gap-2"
+          className="border border-gray-100 flex justify-between items-center flex-wrap gap-2"
         >
           <Link
             key={user?.id}
@@ -41,7 +41,7 @@ const UserList = ({ users, isLoading, onDelete }: UserListProps) => {
           >
             {user?.name}
           </Link>
-          <div className="flex gap-2">
+          <div className="flex justify-end ml-auto gap-2 px-4 py-2">
             <Link
               to={`/posts?userId=${user?.id}`}
               className="bg-indigo-100 px-4 py-2 text-indigo-700 rounded-full cursor-pointer hover:bg-indigo-200"

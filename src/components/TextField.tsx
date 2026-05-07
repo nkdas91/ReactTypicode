@@ -22,7 +22,7 @@ const TextField = ({
         name={name}
         value={value || ""}
         onChange={(e) => handleChange(e.target.name, e.target.value)}
-        className="px-4 py-2 border border-gray-100 rounded-md"
+        className="px-4 py-2 border border-gray-100 rounded-md w-full"
       />
     </div>
   );
