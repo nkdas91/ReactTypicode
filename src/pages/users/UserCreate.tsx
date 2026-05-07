@@ -51,7 +51,7 @@ const UserCreate = ({ onSubmit }: UserCreateProps) => {
     setLoading(true);
 
     try {
-      onSubmit(form);
+      await onSubmit(form);
 
       navigate("/users/");
     } catch (err) {
