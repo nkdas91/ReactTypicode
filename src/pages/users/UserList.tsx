@@ -20,7 +20,15 @@ const UserList = ({ users, isLoading, onDelete }: UserListProps) => {
 
   return (
     <div className="max-w-5xl mx-auto">
-      <h1 className="text-3xl mb-4">Users</h1>
+      <div className="flex justify-between items-center gap-4">
+        <h1 className="text-3xl mb-4">Users</h1>
+        <Link
+          to="/users/create"
+          className="bg-indigo-700 px-4 py-2 text-white rounded-full cursor-pointer hover:bg-indigo-600"
+        >
+          Add
+        </Link>
+      </div>
       {users?.map((user) => (
         <div
           key={user?.id}

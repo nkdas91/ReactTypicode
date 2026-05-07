@@ -11,8 +11,9 @@ import PostList from "./pages/posts/PostList";
 import UserDetails from "./pages/users/UserDetails";
 import UserEdit from "./pages/users/UserEdit";
 import UserList from "./pages/users/UserList";
-import { deleteUser, updateUser } from "./services/userService";
+import { createUser, deleteUser, updateUser } from "./services/userService";
 import type { User } from "./types/User";
+import UserCreate from "./pages/users/UserCreate";
 
 function App() {
   const [users, setUsers] = useState<User[]>([]);
@@ -80,6 +81,19 @@ function App() {
     }
   };
 
+  const handleCreate = async (form: User | null) => {
+    if (!form) return;
+
+    const res = await createUser(form);
+
+    if (res.data) {
+      const newUser = res.data;
+      setUsers((prev) => [...prev, newUser]);
+    } else if (res.error) {
+      console.log(res.error);
+    }
+  };
+
   return (
     <>
       <Navbar favouriteCount={favourites.length} />
@@ -95,6 +109,10 @@ function App() {
                 onDelete={handleDelete}
               />
             }
+          />
+          <Route
+            path="/users/create"
+            element={<UserCreate onSubmit={handleCreate} />}
           />
           <Route
             path="/users/:id"
