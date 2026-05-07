@@ -2,23 +2,26 @@ import { useEffect, useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import "./App.css";
 import Navbar from "./components/Navbar";
+import { useNotification } from "./context/NotificationContext";
 import useUsers from "./hooks/useUsers";
 import Home from "./pages/Home";
 import FavouritePosts from "./pages/posts/FavouritePosts";
 import PostDetails from "./pages/posts/PostDetails";
 import PostEdit from "./pages/posts/PostEdit";
 import PostList from "./pages/posts/PostList";
+import UserCreate from "./pages/users/UserCreate";
 import UserDetails from "./pages/users/UserDetails";
 import UserEdit from "./pages/users/UserEdit";
 import UserList from "./pages/users/UserList";
 import { createUser, deleteUser, updateUser } from "./services/userService";
 import type { User } from "./types/User";
-import UserCreate from "./pages/users/UserCreate";
 
 function App() {
   const [users, setUsers] = useState<User[]>([]);
+
   const [favourites, setFavourites] = useState<number[]>([]);
   const { data: usersFromApi, loading } = useUsers();
+  const { showNotification } = useNotification();
 
   useEffect(() => {
     const saved = localStorage.getItem("favourites");
@@ -57,18 +60,13 @@ function App() {
 
     if (res.data) {
       setUsers((prev) => prev?.filter((u) => u.id !== id) ?? []);
+      showNotification("User deleted");
     } else if (res.error) {
-      console.log(res.error);
+      showNotification(res.error, "error");
     }
   };
 
-  const handleSubmit = async (
-    e: React.SubmitEvent,
-    form: User | null,
-    id: number,
-  ) => {
-    e.preventDefault();
-
+  const handleSubmit = async (form: User | null, id: number) => {
     if (!form || !users) return;
 
     const res = await updateUser(id, form);
@@ -76,8 +74,9 @@ function App() {
     if (res.data) {
       const updatedUser = res.data;
       setUsers((prev) => prev.map((u) => (u.id === id ? updatedUser : u)));
+      showNotification("User updated");
     } else if (res.error) {
-      console.log(res.error);
+      showNotification(res.error, "error");
     }
   };
 
@@ -89,8 +88,9 @@ function App() {
     if (res.data) {
       const newUser = res.data;
       setUsers((prev) => [...prev, newUser]);
+      showNotification("User added");
     } else if (res.error) {
-      console.log(res.error);
+      showNotification(res.error, "error");
     }
   };
 

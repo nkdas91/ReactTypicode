@@ -1,9 +1,9 @@
-import axios, { AxiosError } from "axios";
+import axios from "axios";
 import type { User } from "../types/User";
 
 interface APIResponse<T> {
   data?: T;
-  error?: AxiosError | string;
+  error?: string;
 }
 
 export const createUser = async (
