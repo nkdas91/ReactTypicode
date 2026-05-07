@@ -4,6 +4,7 @@ import type { Comment } from "../../types/Comment";
 import Spinner from "../Spinner";
 import TextField from "../TextField";
 import { MinusCircleIcon, PlusCircleIcon } from "@heroicons/react/24/solid";
+import { useNotification } from "../../context/NotificationContext";
 
 interface CommentsProps {
   id: number;
@@ -20,21 +21,18 @@ const Comments = ({ id }: CommentsProps) => {
     email: "",
   } as Comment);
   const [formVisible, setFormVisibility] = useState(false);
+  const { showNotification } = useNotification();
 
   useEffect(() => {
     const localComments = localStorage.getItem(`comments_${id}`);
     if (localComments) {
       setsavedComments((prev) => [...prev, ...JSON.parse(localComments)]);
     }
-  }, []);
+  }, [id]);
 
   useEffect(() => {
     localStorage.setItem(`comments_${id}`, JSON.stringify(savedComments));
-  }, [savedComments]);
-
-  const handleChange = (name: string, value: string) => {
-    setForm((prev) => (prev ? { ...prev, [name]: value } : prev));
-  };
+  }, [savedComments, id]);
 
   if (loading) {
     return <Spinner />;
@@ -44,16 +42,39 @@ const Comments = ({ id }: CommentsProps) => {
     return <div>This post doesn't have any comments.</div>;
   }
 
+  const allComments = [...savedComments, ...comments];
+
+  const handleChange = (name: string, value: string) => {
+    setForm((prev) => (prev ? { ...prev, [name]: value } : prev));
+  };
+
   const handleSubmit = (e: React.SubmitEvent) => {
     e.preventDefault();
 
-    form.id = comments.length + savedComments.length + 1;
     if (!form) return;
-    setsavedComments((prev) => [...prev, form]);
+
+    const newComment = {
+      ...form,
+      id: comments.length + savedComments.length + 1,
+    };
+
+    setsavedComments((prev) => [...prev, newComment]);
+
+    setForm({
+      postId: id,
+      id: 0,
+      name: "",
+      body: "",
+      email: "",
+    });
+
+    setFormVisibility(false);
+
+    showNotification("Comment added successfully");
   };
 
   return (
-    <div>
+    <div className="max-w-5xl mx-auto">
       <div className="flex justify-between items-center gap-4 mb-2">
         <h2 className="text-xl mb-2">Comments</h2>
         {!formVisible && (
@@ -71,7 +92,7 @@ const Comments = ({ id }: CommentsProps) => {
       </div>
 
       <div
-        className={`${formVisible ? "block" : "hidden"} max-w-3xl mx-auto mb-4 p-6 border border-gray-100 rounded-lg`}
+        className={`${formVisible ? "block" : "hidden"} max-w-5xl mx-auto mb-4 p-6 border border-gray-100 rounded-lg`}
       >
         <form onSubmit={handleSubmit}>
           <TextField
@@ -103,24 +124,9 @@ const Comments = ({ id }: CommentsProps) => {
           </div>
         </form>
       </div>
-      {savedComments &&
-        savedComments.map((c) => (
-          <div
-            className="max-w-3xl mx-auto mb-4 p-6 border border-gray-100 rounded-lg"
-            key={c.id}
-          >
-            <h3 className="text-lg">{c.name}</h3>
-            <label className="text-sm text-gray-500 italic block mb-3">
-              {c.email}
-            </label>
-            <p className="text-gray-500">{c.body}</p>
-          </div>
-        ))}
-      {comments.map((c) => (
-        <div
-          className="max-w-3xl mx-auto mb-4 p-6 border border-gray-100 rounded-lg"
-          key={c.id}
-        >
+
+      {allComments.map((c) => (
+        <div className="mb-4 p-6 border border-gray-100 rounded-lg" key={c.id}>
           <h3 className="text-lg">{c.name}</h3>
           <label className="text-sm text-gray-500 italic block mb-3">
             {c.email}

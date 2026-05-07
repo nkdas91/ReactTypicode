@@ -36,7 +36,7 @@ const PostDetails = ({ favourites, toggleFavourite }: PropDetailsProp) => {
 
   return (
     <>
-      <div className="max-w-3xl mx-auto mb-5 p-6 border border-gray-100 rounded-lg">
+      <div className="max-w-5xl mx-auto mb-5 p-6 border border-gray-100 rounded-lg">
         <div className="flex justify-between aligh-center gap-4">
           <BackButton />
 
