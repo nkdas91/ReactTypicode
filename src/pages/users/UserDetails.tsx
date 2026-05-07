@@ -1,24 +1,27 @@
 import { Link, useNavigate, useParams } from "react-router-dom";
-import useUser from "../../hooks/useUser";
-import { deleteUser } from "../../services/userService";
 import BackButton from "../../components/BackButton";
+import Spinner from "../../components/Spinner";
+import type { User } from "../../types/User";
 
-const UserDetails = () => {
+interface UserDetailsProps {
+  users: User[];
+  isLoading: boolean;
+  onDelete: (e: React.MouseEvent, id: number) => void;
+}
+
+const UserDetails = ({ users, isLoading, onDelete }: UserDetailsProps) => {
   const { id } = useParams();
-  const { data: user } = useUser(id ? parseInt(id) : null);
   const navigate = useNavigate();
 
-  const handleDelete = async (e: React.MouseEvent, id: number | undefined) => {
-    e.preventDefault();
+  if (isLoading) {
+    return <Spinner />;
+  }
 
-    const res = await deleteUser(id ?? null);
+  const user = users.find((u) => u.id === Number(id));
 
-    if (res.data) {
-      navigate("/users");
-    } else {
-      console.log(res.error);
-    }
-  };
+  if (!user && !isLoading) {
+    return <div className="text-center">User not found</div>;
+  }
 
   return (
     <div className="max-w-3xl mx-auto p-6 border border-gray-100 rounded-lg">
@@ -62,7 +65,10 @@ const UserDetails = () => {
           Edit
         </Link>
         <button
-          onClick={(e) => handleDelete(e, user?.id)}
+          onClick={(e) => {
+            onDelete(e, Number(id));
+            navigate("/users");
+          }}
           className="bg-rose-100 text-red-700 px-4 py-2 rounded-full cursor-pointer hover:bg-rose-200"
         >
           Delete

@@ -1,23 +1,22 @@
 import { PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
-import { Link, useNavigate } from "react-router-dom";
-import useUsers from "../../hooks/useUsers";
-import { deleteUser } from "../../services/userService";
+import { Link } from "react-router-dom";
+import Spinner from "../../components/Spinner";
+import type { User } from "../../types/User";
 
-const UserList = () => {
-  const { data: users } = useUsers();
-  const navigate = useNavigate();
+interface UserListProps {
+  users: User[];
+  isLoading: boolean;
+  onDelete: (e: React.MouseEvent, id: number) => void;
+}
 
-  const handleDelete = async (e: React.MouseEvent, id: number) => {
-    e.preventDefault();
+const UserList = ({ users, isLoading, onDelete }: UserListProps) => {
+  if (isLoading) {
+    return <Spinner />;
+  }
 
-    const res = await deleteUser(id);
-
-    if (res.data) {
-      navigate("/users");
-    } else {
-      console.log(res.error);
-    }
-  };
+  if ((!users || users.length === 0) && !isLoading) {
+    return <div className="text-center">No users at the moment!</div>;
+  }
 
   return (
     <div className="max-w-5xl mx-auto">
@@ -48,7 +47,7 @@ const UserList = () => {
               <PencilIcon className="size-6" />
             </Link>
             <button
-              onClick={(e) => handleDelete(e, user?.id)}
+              onClick={(e) => onDelete(e, user?.id)}
               className="bg-rose-100 p-2 text-rose-700 rounded-full cursor-pointer hover:bg-rose-200"
             >
               <TrashIcon className="size-6" />

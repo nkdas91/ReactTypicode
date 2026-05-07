@@ -1,21 +1,37 @@
-import { useParams } from "react-router-dom";
-import useUser from "../../hooks/useUser";
-import type { User } from "../../types/User";
 import { useEffect, useState } from "react";
-import TextField from "../../components/TextField";
-import axios from "axios";
+import { useNavigate, useParams } from "react-router-dom";
 import BackButton from "../../components/BackButton";
+import Spinner from "../../components/Spinner";
+import TextField from "../../components/TextField";
+import type { User } from "../../types/User";
 
-const UserEdit = () => {
+interface UserEditProps {
+  users: User[];
+  isLoading: boolean;
+  onSubmit: (e: React.SubmitEvent, form: User | null, id: number) => void;
+}
+
+const UserEdit = ({ users, isLoading, onSubmit }: UserEditProps) => {
   const { id } = useParams();
-  const { data: user } = useUser(id ? parseInt(id) : null);
+  const navigate = useNavigate();
+
   const [form, setForm] = useState<User | null>(null);
+
+  const user = users.find((u) => u.id === Number(id));
 
   useEffect(() => {
     if (user) {
       setForm(user);
     }
   }, [user]);
+
+  if (isLoading) {
+    return <Spinner />;
+  }
+
+  if (!user && !isLoading) {
+    return <div className="text-center">User not found</div>;
+  }
 
   const handleChange = (name: string, value: string) => {
     setForm((prev) => (prev ? { ...prev, [name]: value } : prev));
@@ -35,25 +51,16 @@ const UserEdit = () => {
     );
   };
 
-  const handleSubmit = (e: React.SubmitEvent) => {
-    e.preventDefault();
-
-    if (!form) return;
-
-    try {
-      axios
-        .put(`https://jsonplaceholder.typicode.com/users/${id}`, form)
-        .then((res) => console.log(res.data));
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
   return (
     <div className="max-w-3xl mx-auto p-6 border border-gray-100 rounded-lg">
       <BackButton />
 
-      <form onSubmit={handleSubmit}>
+      <form
+        onSubmit={(e) => {
+          onSubmit(e, form, Number(id));
+          navigate(`/users/${id}`);
+        }}
+      >
         <div className="mb-6 mt-4 grid md:grid-cols-2">
           <TextField
             label="Name"
