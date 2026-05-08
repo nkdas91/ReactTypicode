@@ -1,6 +1,8 @@
 import { PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import Spinner from "../../components/Spinner";
+import TextField from "../../components/TextField";
 import type { User } from "../../types/User";
 
 interface UserListProps {
@@ -10,26 +12,52 @@ interface UserListProps {
 }
 
 const UserList = ({ users, isLoading, onDelete }: UserListProps) => {
+  const [query, setQuery] = useState("");
+
+  const filteredUsers = users.filter((u) =>
+    u.name.toLowerCase().includes(query.toLowerCase()),
+  );
+
   if (isLoading) {
     return <Spinner />;
   }
 
-  if ((!users || users.length === 0) && !isLoading) {
-    return <div className="text-center">No users at the moment!</div>;
-  }
+  const handleSearch = (name: string, value: string) => {
+    setQuery(value);
+  };
 
   return (
     <div className="max-w-5xl mx-auto">
-      <div className="flex justify-between items-center gap-4">
-        <h1 className="text-3xl mb-4">Users</h1>
-        <Link
-          to="/users/create"
-          className="bg-indigo-700 px-4 py-2 text-white rounded-full cursor-pointer hover:bg-indigo-600"
-        >
-          Add
-        </Link>
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <div className="flex justify-between items-start gap-4">
+          <h1 className="text-3xl">Users</h1>
+
+          <Link
+            to="/users/create"
+            className="bg-indigo-700 px-4 py-2 text-white rounded-full cursor-pointer hover:bg-indigo-600"
+          >
+            Add
+          </Link>
+        </div>
+
+        <div>
+          <TextField
+            placeholder="Search"
+            name="search"
+            type="search"
+            value={query}
+            handleChange={handleSearch}
+          />
+        </div>
       </div>
-      {users?.map((user) => (
+
+      {(!filteredUsers || filteredUsers.length === 0) && !isLoading ? (
+        <div className="text-center p-2">No users to display!</div>
+      ) : (
+        ""
+      )}
+
+      {filteredUsers?.map((user) => (
         <div
           key={user?.id}
           className="border border-gray-100 flex justify-between items-center flex-wrap gap-2"

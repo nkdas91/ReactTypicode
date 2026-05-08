@@ -1,5 +1,6 @@
 interface TextFieldProps {
-  label: string;
+  label?: string;
+  placeholder?: string;
   type: string;
   name: string;
   value: string | undefined;
@@ -8,6 +9,7 @@ interface TextFieldProps {
 
 const TextField = ({
   label,
+  placeholder,
   type,
   name,
   value,
@@ -19,6 +21,7 @@ const TextField = ({
       <label className="block">{label}</label>
       <input
         type={type}
+        placeholder={placeholder}
         name={name}
         value={value || ""}
         onChange={(e) => handleChange(e.target.name, e.target.value)}
