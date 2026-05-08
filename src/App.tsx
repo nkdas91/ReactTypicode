@@ -51,7 +51,7 @@ function App() {
     });
   };
 
-  const handleDelete = async (e: React.MouseEvent, id: number) => {
+  const handleDeleteUser = async (e: React.MouseEvent, id: number) => {
     e.preventDefault();
 
     if (!users) return;
@@ -66,7 +66,7 @@ function App() {
     }
   };
 
-  const handleSubmit = async (form: User | null, id: number) => {
+  const handleUpdateUser = async (form: User | null, id: number) => {
     if (!form || !users) return;
 
     const res = await updateUser(id, form);
@@ -80,7 +80,7 @@ function App() {
     }
   };
 
-  const handleCreate = async (form: User | null) => {
+  const handleCreateUser = async (form: User | null) => {
     if (!form) return;
 
     const res = await createUser(form);
@@ -106,13 +106,13 @@ function App() {
               <UserList
                 users={users}
                 isLoading={loading}
-                onDelete={handleDelete}
+                onDelete={handleDeleteUser}
               />
             }
           />
           <Route
             path="/users/create"
-            element={<UserCreate onSubmit={handleCreate} />}
+            element={<UserCreate onSubmit={handleCreateUser} />}
           />
           <Route
             path="/users/:id"
@@ -120,7 +120,7 @@ function App() {
               <UserDetails
                 users={users}
                 isLoading={loading}
-                onDelete={handleDelete}
+                onDelete={handleDeleteUser}
               />
             }
           />
@@ -130,7 +130,7 @@ function App() {
               <UserEdit
                 users={users}
                 isLoading={loading}
-                onSubmit={handleSubmit}
+                onSubmit={handleUpdateUser}
               />
             }
           />
