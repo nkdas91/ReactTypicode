@@ -1,12 +1,13 @@
 import { ChevronDownIcon } from "@heroicons/react/24/solid";
+import { useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import Pagination from "../../components/Pagination";
 import PostCard from "../../components/posts/PostCard";
+import TextField from "../../components/TextField";
+import { useNotification } from "../../context/NotificationContext";
 import { usePosts } from "../../hooks/usePosts";
 import useUsers from "../../hooks/useUsers";
 import { deletePost } from "../../services/postService";
-import { useState } from "react";
-import TextField from "../../components/TextField";
 
 interface PropListProp {
   favourites: number[];
@@ -16,6 +17,7 @@ interface PropListProp {
 const PostList = ({ favourites, toggleFavourite }: PropListProp) => {
   const [query, setQuery] = useState("");
   const [searchParams] = useSearchParams();
+  const { showNotification } = useNotification();
   const userId = searchParams.get("userId");
   const page = Number(searchParams.get("page") || 1);
   const limit = Number(searchParams.get("limit") || 5);
@@ -40,9 +42,10 @@ const PostList = ({ favourites, toggleFavourite }: PropListProp) => {
     const res = await deletePost(id);
 
     if (res.data) {
+      showNotification("Post deleted");
       navigate("/posts");
     } else {
-      console.log(res.error);
+      showNotification("Error deleting post");
     }
   };
 

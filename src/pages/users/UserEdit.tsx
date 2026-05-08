@@ -162,7 +162,7 @@ const UserEdit = ({ users, isLoading, onSubmit }: UserEditProps) => {
         <div className="flex justify-end gap-2">
           <button
             disabled={loading}
-            className={`px-4 py-2 rounded-full transition
+            className={`px-4 py-2 rounded-full transition cursor-pointer
               ${
                 loading
                   ? "bg-gray-300 cursor-not-allowed"

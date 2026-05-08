@@ -1,7 +1,9 @@
+import { useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import BackButton from "../../components/BackButton";
 import FavouriteButton from "../../components/FavouriteButton";
 import Comments from "../../components/posts/Comments";
+import { useNotification } from "../../context/NotificationContext";
 import usePost from "../../hooks/usePost";
 import useUser from "../../hooks/useUser";
 import { deletePost } from "../../services/postService";
@@ -14,7 +16,8 @@ interface PropDetailsProp {
 const PostDetails = ({ favourites, toggleFavourite }: PropDetailsProp) => {
   const { id } = useParams();
   const navigate = useNavigate();
-
+  const [loading, setLoading] = useState(false);
+  const { showNotification } = useNotification();
   const { data: post } = usePost(id ? parseInt(id) : null);
   const { data: user } = useUser(post?.userId ? post.userId : null);
 
@@ -24,13 +27,16 @@ const PostDetails = ({ favourites, toggleFavourite }: PropDetailsProp) => {
 
   const handleDelete = async (e: React.MouseEvent, id: number | undefined) => {
     e.preventDefault();
-
+    setLoading(true);
     const res = await deletePost(id ?? null);
 
     if (res.data) {
+      setLoading(false);
+      showNotification("Post deleted");
       navigate("/posts");
     } else {
-      console.log(res.error);
+      setLoading(false);
+      showNotification("Error deleting post");
     }
   };
 
@@ -67,11 +73,19 @@ const PostDetails = ({ favourites, toggleFavourite }: PropDetailsProp) => {
           >
             Edit
           </Link>
+
           <button
             onClick={(e) => handleDelete(e, post?.id)}
-            className="bg-rose-100 text-rose-700 px-4 py-2 rounded-full cursor-pointer hover:bg-rose-200"
+            disabled={loading}
+            className={`px-4 py-2 rounded-full transition cursor-pointer
+              ${
+                loading
+                  ? "bg-gray-300 cursor-not-allowed"
+                  : "bg-rose-100 text-rose-700 hover:bg-rose-200"
+              }
+            `}
           >
-            Delete
+            {loading ? "Deleting..." : "Delete"}
           </button>
         </div>
       </div>

@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import BackButton from "../../components/BackButton";
 import TextField from "../../components/TextField";
+import { useNotification } from "../../context/NotificationContext";
 import usePost from "../../hooks/usePost";
 import type { Post } from "../../types/Post";
 
@@ -10,6 +11,8 @@ const UserEdit = () => {
   const { id } = useParams();
   const { data: post } = usePost(id ? parseInt(id) : null);
   const [form, setForm] = useState<Post | null>(null);
+  const [loading, setLoading] = useState(false);
+  const { showNotification } = useNotification();
 
   useEffect(() => {
     if (post) {
@@ -23,15 +26,23 @@ const UserEdit = () => {
 
   const handleSubmit = (e: React.SubmitEvent) => {
     e.preventDefault();
-
+    setLoading(true);
     if (!form) return;
 
     try {
       axios
         .put(`https://jsonplaceholder.typicode.com/posts/${id}`, form)
-        .then((res) => console.log(res.data));
-    } catch (err) {
-      console.error(err);
+        .then(() => {
+          showNotification("Post updated");
+          setLoading(false);
+        });
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        showNotification(error.message, "error");
+      }
+
+      showNotification("Unexpected error occurred", "error");
+      setLoading(false);
     }
   };
 
@@ -62,8 +73,17 @@ const UserEdit = () => {
         </div>
 
         <div className="flex justify-end gap-2">
-          <button className="bg-indigo-100 text-indigo-700 px-4 py-2 rounded-full cursor-pointer hover:bg-indigo-200">
-            Save
+          <button
+            disabled={loading}
+            className={`px-4 py-2 rounded-full transition cursor-pointer
+              ${
+                loading
+                  ? "bg-gray-300 cursor-not-allowed"
+                  : "bg-indigo-100 text-indigo-700 hover:bg-indigo-200"
+              }
+            `}
+          >
+            {loading ? "Saving..." : "Save"}
           </button>
         </div>
       </form>
