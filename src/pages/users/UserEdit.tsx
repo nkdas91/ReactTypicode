@@ -73,7 +73,7 @@ const UserEdit = ({ users, isLoading, onSubmit }: UserEditProps) => {
       <BackButton />
 
       <form onSubmit={handleSubmit}>
-        <div className="mb-6 mt-4 grid md:grid-cols-2">
+        <div className="mb-6 mt-4 grid md:grid-cols-2 gap-2">
           <TextField
             label="Name"
             type="text"
@@ -93,7 +93,7 @@ const UserEdit = ({ users, isLoading, onSubmit }: UserEditProps) => {
 
         <div className="mb-6">
           <h2 className="text-lg font-medium mb-2">Contact</h2>
-          <div className="grid md:grid-cols-2">
+          <div className="grid md:grid-cols-2 gap-2">
             <TextField
               label="Email"
               type="email"
@@ -123,7 +123,7 @@ const UserEdit = ({ users, isLoading, onSubmit }: UserEditProps) => {
         {user?.address && (
           <div>
             <h2 className="text-lg font-medium mb-2">Address</h2>
-            <div className="grid md:grid-cols-2">
+            <div className="grid md:grid-cols-2 gap-2">
               <TextField
                 label="Suite"
                 type="text"

@@ -12,7 +12,7 @@ const Home = ({ favouritePosts }: HomeProps) => {
   const pieData = useLikedPostsChart(posts, favouritePosts);
 
   return (
-    <div className="max-w-5xl max-w-100 ">
+    <div className="max-w-5xl mx-auto max-w-100 ">
       <div className="border border-gray-100 rounded-3xl p-4 ">
         <h2 className="text-xl">Posts</h2>
         <LikesPieChart data={pieData} />

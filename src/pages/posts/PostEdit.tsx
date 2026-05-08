@@ -1,10 +1,10 @@
+import axios from "axios";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import BackButton from "../../components/BackButton";
+import TextField from "../../components/TextField";
 import usePost from "../../hooks/usePost";
 import type { Post } from "../../types/Post";
-import { useEffect, useState } from "react";
-import TextField from "../../components/TextField";
-import axios from "axios";
-import BackButton from "../../components/BackButton";
 
 const UserEdit = () => {
   const { id } = useParams();

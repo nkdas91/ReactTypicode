@@ -1,10 +1,10 @@
+import { MinusCircleIcon, PlusCircleIcon } from "@heroicons/react/24/solid";
 import { useEffect, useState } from "react";
+import { useNotification } from "../../context/NotificationContext";
 import useComments from "../../hooks/useComments";
 import type { Comment } from "../../types/Comment";
 import Spinner from "../Spinner";
 import TextField from "../TextField";
-import { MinusCircleIcon, PlusCircleIcon } from "@heroicons/react/24/solid";
-import { useNotification } from "../../context/NotificationContext";
 
 interface CommentsProps {
   id: number;

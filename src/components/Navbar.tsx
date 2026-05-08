@@ -30,10 +30,10 @@ const Navbar = ({ favouriteCount }: NavbarProps) => {
 
           <Link
             to="/posts/favourites"
-            className="nav-link flex items-center gap-2"
+            className="nav-link flex items-center gap-1"
           >
             Favourite Posts
-            <span className="inline-flex rounded-md bg-indigo-700 px-2 py-1 text-xs font-medium text-white">
+            <span className="inline-flex rounded-lg bg-indigo-700 text-white px-2 py-1 text-xs font-medium">
               {favouriteCount || 0}
             </span>
           </Link>
@@ -74,7 +74,7 @@ const Navbar = ({ favouriteCount }: NavbarProps) => {
           <Link
             onClick={() => setOpen(false)}
             to="/posts/favourites"
-            className="mobile-link flex justify-between"
+            className="mobile-link flex gap-1 items-center"
           >
             Favourite Posts
             <span className="inline-flex rounded-md bg-indigo-700 px-2 py-1 text-xs font-medium text-white">

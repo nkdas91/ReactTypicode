@@ -1,12 +1,12 @@
+import type { PieLabelRenderProps, PieSectorShapeProps } from "recharts";
 import {
-  PieChart,
-  Pie,
-  Tooltip,
   Legend,
+  Pie,
+  PieChart,
   ResponsiveContainer,
   Sector,
+  Tooltip,
 } from "recharts";
-import type { PieLabelRenderProps, PieSectorShapeProps } from "recharts";
 import type { PieDataItem } from "../../types/PieDataItem";
 
 interface LikesPieChartProps {

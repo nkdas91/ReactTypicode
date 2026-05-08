@@ -31,6 +31,7 @@ const FavouritePosts = ({
 
   return (
     <div className="max-w-5xl mx-auto">
+      <h1 className="text-3xl mb-4">Favourite Posts</h1>
       {favouritePosts?.map((post) => (
         <PostCard
           key={post.id}
