@@ -46,7 +46,7 @@ A demo project created to practice my learnings in React and TypeScript.
 ### Implementation
 
 - User-related functionalities use local state in App.tsx along with props drilling to share state and functions across components. As a result, actions such as add, edit, and delete are immediately reflected in the UI.
-- Post-related functionalities do not use shared local state. Each page fetches its required data directly from the API using custom hooks. Therefore, actions like edit and delete are not reflected in the UI. This behavior is intentional for experimentation and learning purposes. It can be improved using React / TanStack Query.
+- Post-related functionalities do not use shared local state. Each page fetches its required data directly from the API using custom hooks. Actions like edit and delete send requests successfully, but the changes are not reflected in the UI because the application redirects to the Post View page after an update and to the Post List page after a delete operation, where the data is fetched again from the API. Since the demo API is read-only and does not persist updates, the original data is displayed again. This behavior is intentional for learning purposes and could be improved using shared state management or tools like React / TanStack Query.
 - Favourite posts are stored in local storage and managed using local state in App.tsx. This state is shared across the Post List, Post View, Navbar (for displaying count), and Home page (for pie chart generation).
 - Notifications are displayed using toast messages. React Context is used to share notification state and related functions.
 - Pie charts are implemented using the recharts package.
