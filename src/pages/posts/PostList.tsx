@@ -32,7 +32,7 @@ const PostList = ({ favourites, toggleFavourite }: PropListProp) => {
     p.title.toLowerCase().includes(query.toLowerCase()),
   );
 
-  const handleSearch = (name: string, value: string) => {
+  const handleSearch = (_name: string, value: string) => {
     setQuery(value);
   };
 

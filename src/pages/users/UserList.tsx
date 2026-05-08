@@ -22,7 +22,7 @@ const UserList = ({ users, isLoading, onDelete }: UserListProps) => {
     return <Spinner />;
   }
 
-  const handleSearch = (name: string, value: string) => {
+  const handleSearch = (_name: string, value: string) => {
     setQuery(value);
   };
 
