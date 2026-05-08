@@ -10,6 +10,7 @@ A demo project created to practice my learnings in React and TypeScript.
     - A link to edit the user
     - A button to delete the user
     - A link to add a new user
+    - A search box to search for users
   - User view: Displays all user details along with:
     - A link to edit the user
     - A button to delete the user
@@ -24,6 +25,7 @@ A demo project created to practice my learnings in React and TypeScript.
     - A button to delete the post
     - A dropdown to filter posts by user
     - A dropdown to select the number of records displayed
+    - A search box to search for posts
     - A text indicator showing the current record range and total records
     - Pagination controls
   - Post view: Displays the post title, body, and user's name along with:

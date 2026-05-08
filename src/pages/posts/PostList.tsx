@@ -5,6 +5,8 @@ import PostCard from "../../components/posts/PostCard";
 import { usePosts } from "../../hooks/usePosts";
 import useUsers from "../../hooks/useUsers";
 import { deletePost } from "../../services/postService";
+import { useState } from "react";
+import TextField from "../../components/TextField";
 
 interface PropListProp {
   favourites: number[];
@@ -12,6 +14,7 @@ interface PropListProp {
 }
 
 const PostList = ({ favourites, toggleFavourite }: PropListProp) => {
+  const [query, setQuery] = useState("");
   const [searchParams] = useSearchParams();
   const userId = searchParams.get("userId");
   const page = Number(searchParams.get("page") || 1);
@@ -22,6 +25,14 @@ const PostList = ({ favourites, toggleFavourite }: PropListProp) => {
   const { data: users } = useUsers();
 
   const navigate = useNavigate();
+
+  const filteredPosts = posts.filter((p) =>
+    p.title.toLowerCase().includes(query.toLowerCase()),
+  );
+
+  const handleSearch = (name: string, value: string) => {
+    setQuery(value);
+  };
 
   const handleDelete = async (e: React.MouseEvent, id: number) => {
     e.preventDefault();
@@ -63,12 +74,21 @@ const PostList = ({ favourites, toggleFavourite }: PropListProp) => {
 
   return (
     <div className="max-w-5xl mx-auto">
-      <div className="flex justify-between items-center flex-wrap gap-2 mb-4">
-        <h1 className="text-3xl mb-4">Posts</h1>
+      <h1 className="text-3xl mb-4">Posts</h1>
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end md:items-center gap-3">
+        <div className="order-2 sm:order-1">
+          <TextField
+            placeholder="Search"
+            name="search"
+            type="search"
+            value={query}
+            handleChange={handleSearch}
+          />
+        </div>
 
-        <div className="flex flex-wrap gap-4">
-          <div className="flex items-center gap-2">
-            <label>Posts by </label>
+        <div className="order-1 sm:order-2 flex flex-col md:flex-row items-end md:items-center self-end gap-3 mb-2">
+          <div className="flex items-center gap-1">
+            <label>Posts by</label>
             <div className="grid grid-cols-1">
               <select
                 value={selectedUserId}
@@ -87,8 +107,8 @@ const PostList = ({ favourites, toggleFavourite }: PropListProp) => {
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
-            <label>Show </label>
+          <div className="flex items-center gap-1">
+            <label>Show</label>
             <div className="grid grid-cols-1">
               <select
                 value={limit}
@@ -107,7 +127,14 @@ const PostList = ({ favourites, toggleFavourite }: PropListProp) => {
           </div>
         </div>
       </div>
-      {posts?.map((post) => (
+
+      {!filteredPosts || filteredPosts.length === 0 ? (
+        <div className="text-center p-2">No posts to display!</div>
+      ) : (
+        ""
+      )}
+
+      {filteredPosts?.map((post) => (
         <PostCard
           key={post.id}
           post={post}
@@ -117,15 +144,19 @@ const PostList = ({ favourites, toggleFavourite }: PropListProp) => {
         />
       ))}
 
-      <div className="flex justify-end items-center gap-2 mt-4">
-        <Pagination
-          totalRecords={total}
-          currentPage={page}
-          limit={limit}
-          dataLength={posts.length}
-          onPageChange={handlePageChange}
-        />
-      </div>
+      {filteredPosts.length ? (
+        <div className="flex justify-end items-center gap-2 mt-4">
+          <Pagination
+            totalRecords={total}
+            currentPage={page}
+            limit={limit}
+            dataLength={posts.length}
+            onPageChange={handlePageChange}
+          />
+        </div>
+      ) : (
+        ""
+      )}
     </div>
   );
 };
