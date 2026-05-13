@@ -5,6 +5,7 @@ import Spinner from "../../components/Spinner";
 import TextField from "../../components/TextField";
 import { userSchema } from "../../schemas/userSchema";
 import type { User } from "../../types/User";
+import { validateSchema } from "../../utils/validateSchema";
 
 interface UserEditProps {
   users: User[];
@@ -59,19 +60,15 @@ const UserEdit = ({ users, isLoading, onSubmit }: UserEditProps) => {
 
     setLoading(true);
 
-    const result = userSchema.safeParse(form);
+    const validation = validateSchema(userSchema, form);
 
-    if (!result.success) {
-      const formattedErrors: Record<string, string> = {};
-
-      result.error.issues.forEach((issue) => {
-        formattedErrors[issue.path.join(".")] = issue.message;
-      });
-
-      setErrors(formattedErrors);
+    if (!validation.success) {
+      setErrors(validation.errors);
       setLoading(false);
       return;
     }
+
+    setErrors({});
 
     try {
       await onSubmit(form, Number(id));

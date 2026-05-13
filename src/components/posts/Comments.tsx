@@ -4,6 +4,7 @@ import { useNotification } from "../../context/NotificationContext";
 import useComments from "../../hooks/useComments";
 import { commentSchema } from "../../schemas/commentSchema";
 import type { Comment } from "../../types/Comment";
+import { validateSchema } from "../../utils/validateSchema";
 import Spinner from "../Spinner";
 import TextField from "../TextField";
 
@@ -55,16 +56,10 @@ const Comments = ({ id }: CommentsProps) => {
 
     if (!form) return;
 
-    const result = commentSchema.safeParse(form);
+    const validation = validateSchema(commentSchema, form);
 
-    if (!result.success) {
-      const formattedErrors: Record<string, string> = {};
-
-      result.error.issues.forEach((issue) => {
-        formattedErrors[issue.path.join(".")] = issue.message;
-      });
-
-      setErrors(formattedErrors);
+    if (!validation.success) {
+      setErrors(validation.errors);
 
       return;
     }

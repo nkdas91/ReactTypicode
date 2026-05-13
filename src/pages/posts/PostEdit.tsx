@@ -5,8 +5,9 @@ import BackButton from "../../components/BackButton";
 import TextField from "../../components/TextField";
 import { useNotification } from "../../context/NotificationContext";
 import usePost from "../../hooks/usePost";
-import type { Post } from "../../types/Post";
 import { postSchema } from "../../schemas/postSchema";
+import type { Post } from "../../types/Post";
+import { validateSchema } from "../../utils/validateSchema";
 
 const UserEdit = () => {
   const { id } = useParams();
@@ -31,18 +32,11 @@ const UserEdit = () => {
     setLoading(true);
     if (!form) return;
 
-    const result = postSchema.safeParse(form);
+    const validation = validateSchema(postSchema, form);
 
-    if (!result.success) {
-      const formattedErrors: Record<string, string> = {};
-
-      result.error.issues.forEach((issue) => {
-        formattedErrors[issue.path.join(".")] = issue.message;
-      });
-
-      setErrors(formattedErrors);
+    if (!validation.success) {
+      setErrors(validation.errors);
       setLoading(false);
-
       return;
     }
 
