@@ -6,12 +6,14 @@ import TextField from "../../components/TextField";
 import { useNotification } from "../../context/NotificationContext";
 import usePost from "../../hooks/usePost";
 import type { Post } from "../../types/Post";
+import { postSchema } from "../../schemas/postSchema";
 
 const UserEdit = () => {
   const { id } = useParams();
   const { data: post } = usePost(id ? parseInt(id) : null);
   const [form, setForm] = useState<Post | null>(null);
   const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState<Record<string, string>>({});
   const { showNotification } = useNotification();
 
   useEffect(() => {
@@ -28,6 +30,23 @@ const UserEdit = () => {
     e.preventDefault();
     setLoading(true);
     if (!form) return;
+
+    const result = postSchema.safeParse(form);
+
+    if (!result.success) {
+      const formattedErrors: Record<string, string> = {};
+
+      result.error.issues.forEach((issue) => {
+        formattedErrors[issue.path.join(".")] = issue.message;
+      });
+
+      setErrors(formattedErrors);
+      setLoading(false);
+
+      return;
+    }
+
+    setErrors({});
 
     try {
       axios
@@ -57,6 +76,7 @@ const UserEdit = () => {
             type="text"
             name="title"
             value={form?.title}
+            error={errors?.title}
             handleChange={handleChange}
           />
 
@@ -69,6 +89,7 @@ const UserEdit = () => {
               className="px-4 py-2 border border-gray-100 rounded-md w-full"
               rows={10}
             />
+            <label className="text-rose-500">{errors?.body}</label>
           </div>
         </div>
 
