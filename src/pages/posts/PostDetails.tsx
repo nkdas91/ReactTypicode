@@ -44,7 +44,7 @@ const PostDetails = ({ favourites, toggleFavourite }: PropDetailsProp) => {
     <>
       <div className="max-w-5xl mx-auto mb-5 p-6 border border-gray-100 rounded-lg">
         <div className="flex justify-between aligh-center gap-4">
-          <BackButton url="/users" label="Back to Posts" />
+          <BackButton url="/posts" label="Back to Posts" />
 
           <FavouriteButton
             isFavourite={isFavourite}
