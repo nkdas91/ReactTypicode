@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import BackButton from "../../components/BackButton";
 import TextField from "../../components/TextField";
 import type { User } from "../../types/User";
+import { userSchema } from "../../schemas/userSchema";
 
 interface UserCreateProps {
   onSubmit: (form: User) => void;
@@ -24,6 +25,7 @@ const UserCreate = ({ onSubmit }: UserCreateProps) => {
   } as User);
 
   const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
   const navigate = useNavigate();
 
@@ -50,6 +52,20 @@ const UserCreate = ({ onSubmit }: UserCreateProps) => {
 
     setLoading(true);
 
+    const result = userSchema.safeParse(form);
+
+    if (!result.success) {
+      const formattedErrors: Record<string, string> = {};
+
+      result.error.issues.forEach((issue) => {
+        formattedErrors[issue.path.join(".")] = issue.message;
+      });
+
+      setErrors(formattedErrors);
+      setLoading(false);
+      return;
+    }
+
     try {
       await onSubmit(form);
 
@@ -66,12 +82,13 @@ const UserCreate = ({ onSubmit }: UserCreateProps) => {
       <BackButton />
 
       <form onSubmit={handleSubmit}>
-        <div className="mb-6 mt-4 grid md:grid-cols-2">
+        <div className="mb-6 mt-4 grid md:grid-cols-2 gap-2">
           <TextField
             label="Name"
             type="text"
             name="name"
             value={form?.name}
+            error={errors?.name}
             handleChange={handleChange}
           />
 
@@ -80,18 +97,20 @@ const UserCreate = ({ onSubmit }: UserCreateProps) => {
             type="text"
             name="username"
             value={form?.username}
+            error={errors?.username}
             handleChange={handleChange}
           />
         </div>
 
         <div className="mb-6">
           <h2 className="text-lg font-medium mb-2">Contact</h2>
-          <div className="grid md:grid-cols-2">
+          <div className="grid md:grid-cols-2 gap-2">
             <TextField
               label="Email"
               type="email"
               name="email"
               value={form?.email}
+              error={errors?.email}
               handleChange={handleChange}
             />
 
@@ -100,6 +119,7 @@ const UserCreate = ({ onSubmit }: UserCreateProps) => {
               type="text"
               name="phone"
               value={form?.phone}
+              error={errors?.phone}
               handleChange={handleChange}
             />
 
@@ -108,6 +128,7 @@ const UserCreate = ({ onSubmit }: UserCreateProps) => {
               type="text"
               name="website"
               value={form?.website}
+              error={errors?.website}
               handleChange={handleChange}
             />
           </div>
@@ -115,12 +136,13 @@ const UserCreate = ({ onSubmit }: UserCreateProps) => {
 
         <div>
           <h2 className="text-lg font-medium mb-2">Address</h2>
-          <div className="grid md:grid-cols-2">
+          <div className="grid md:grid-cols-2 gap-2">
             <TextField
               label="Suite"
               type="text"
               name="suite"
               value={form?.address?.suite}
+              error={errors["address.suite"]}
               handleChange={handleAddressChange}
             />
 
@@ -129,6 +151,7 @@ const UserCreate = ({ onSubmit }: UserCreateProps) => {
               type="text"
               name="street"
               value={form?.address?.street}
+              error={errors["address.street"]}
               handleChange={handleAddressChange}
             />
 
@@ -137,6 +160,7 @@ const UserCreate = ({ onSubmit }: UserCreateProps) => {
               type="text"
               name="city"
               value={form?.address?.city}
+              error={errors["address.city"]}
               handleChange={handleAddressChange}
             />
 
@@ -145,6 +169,7 @@ const UserCreate = ({ onSubmit }: UserCreateProps) => {
               type="text"
               name="zipcode"
               value={form?.address?.zipcode}
+              error={errors["address.zipcode"]}
               handleChange={handleAddressChange}
             />
           </div>
