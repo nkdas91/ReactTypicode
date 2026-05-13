@@ -1,12 +1,20 @@
 import { ArrowLeftCircleIcon } from "@heroicons/react/24/outline";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
-const BackButton = () => {
-  const navigate = useNavigate();
+interface BackButtonProps {
+  url: string;
+  label: string;
+}
+
+const BackButton = ({ url, label }: BackButtonProps) => {
   return (
-    <button onClick={() => navigate(-1) || navigate("/")}>
-      <ArrowLeftCircleIcon className="size-12 cursor-pointer text-gray-400 hover:text-indigo-500" />
-    </button>
+    <Link
+      to={url}
+      className="flex items-center text-gray-500 hover:text-indigo-500"
+    >
+      <ArrowLeftCircleIcon className="size-12" />
+      {label}
+    </Link>
   );
 };
 

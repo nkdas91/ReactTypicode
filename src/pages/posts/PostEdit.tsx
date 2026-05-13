@@ -61,7 +61,7 @@ const UserEdit = () => {
 
   return (
     <div className="max-w-3xl mx-auto p-6 border border-gray-100 rounded-lg">
-      <BackButton />
+      <BackButton url="/users" label="Back to Posts" />
 
       <form onSubmit={handleSubmit}>
         <div className="mb-6 mt-4">

@@ -14,7 +14,7 @@ A demo project created to practice my learnings in React and TypeScript.
   - User view: Displays all user details along with:
     - A link to edit the user
     - A button to delete the user
-    - A back button that navigates one step back in browser history
+    - A back button to navigate back to Users list
   - User edit: Displays a form to edit a user
 
 - **Posts**

@@ -25,7 +25,7 @@ const UserDetails = ({ users, isLoading, onDelete }: UserDetailsProps) => {
 
   return (
     <div className="max-w-3xl mx-auto p-6 border border-gray-100 rounded-lg">
-      <BackButton />
+      <BackButton url="/users" label="Back to Users" />
 
       <div className="mb-6 mt-4">
         <h1 className="text-3xl">{user?.name}</h1>

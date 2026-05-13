@@ -76,7 +76,7 @@ const UserCreate = ({ onSubmit }: UserCreateProps) => {
 
   return (
     <div className="max-w-3xl mx-auto p-6 border border-gray-100 rounded-lg">
-      <BackButton />
+      <BackButton url="/users" label="Back to Users" />
 
       <form onSubmit={handleSubmit}>
         <div className="mb-6 mt-4 grid md:grid-cols-2 gap-2">
@@ -175,7 +175,7 @@ const UserCreate = ({ onSubmit }: UserCreateProps) => {
         <div className="flex justify-end gap-2">
           <button
             disabled={loading}
-            className={`px-4 py-2 rounded-full transition
+            className={`px-4 py-2 rounded-full transition cursor-pointer
               ${
                 loading
                   ? "bg-gray-300 cursor-not-allowed"
