@@ -2,8 +2,8 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import BackButton from "../../components/BackButton";
 import TextField from "../../components/TextField";
-import type { User } from "../../types/User";
 import { userSchema } from "../../schemas/userSchema";
+import type { User } from "../../types/User";
 
 interface UserCreateProps {
   onSubmit: (form: User) => void;

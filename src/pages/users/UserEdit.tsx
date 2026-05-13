@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import BackButton from "../../components/BackButton";
 import Spinner from "../../components/Spinner";
 import TextField from "../../components/TextField";
+import { userSchema } from "../../schemas/userSchema";
 import type { User } from "../../types/User";
 
 interface UserEditProps {
@@ -17,6 +18,7 @@ const UserEdit = ({ users, isLoading, onSubmit }: UserEditProps) => {
 
   const [form, setForm] = useState<User | null>(null);
   const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
   const user = users.find((u) => u.id === Number(id));
 
@@ -57,6 +59,20 @@ const UserEdit = ({ users, isLoading, onSubmit }: UserEditProps) => {
 
     setLoading(true);
 
+    const result = userSchema.safeParse(form);
+
+    if (!result.success) {
+      const formattedErrors: Record<string, string> = {};
+
+      result.error.issues.forEach((issue) => {
+        formattedErrors[issue.path.join(".")] = issue.message;
+      });
+
+      setErrors(formattedErrors);
+      setLoading(false);
+      return;
+    }
+
     try {
       await onSubmit(form, Number(id));
 
@@ -79,6 +95,7 @@ const UserEdit = ({ users, isLoading, onSubmit }: UserEditProps) => {
             type="text"
             name="name"
             value={form?.name}
+            error={errors?.name}
             handleChange={handleChange}
           />
 
@@ -87,6 +104,7 @@ const UserEdit = ({ users, isLoading, onSubmit }: UserEditProps) => {
             type="text"
             name="username"
             value={form?.username}
+            error={errors?.username}
             handleChange={handleChange}
           />
         </div>
@@ -99,6 +117,7 @@ const UserEdit = ({ users, isLoading, onSubmit }: UserEditProps) => {
               type="email"
               name="email"
               value={form?.email}
+              error={errors?.email}
               handleChange={handleChange}
             />
 
@@ -107,6 +126,7 @@ const UserEdit = ({ users, isLoading, onSubmit }: UserEditProps) => {
               type="text"
               name="phone"
               value={form?.phone}
+              error={errors?.phone}
               handleChange={handleChange}
             />
 
@@ -115,6 +135,7 @@ const UserEdit = ({ users, isLoading, onSubmit }: UserEditProps) => {
               type="text"
               name="website"
               value={form?.website}
+              error={errors?.website}
               handleChange={handleChange}
             />
           </div>
@@ -129,6 +150,7 @@ const UserEdit = ({ users, isLoading, onSubmit }: UserEditProps) => {
                 type="text"
                 name="suite"
                 value={form?.address?.suite}
+                error={errors["address.suite"]}
                 handleChange={handleAddressChange}
               />
 
@@ -137,6 +159,7 @@ const UserEdit = ({ users, isLoading, onSubmit }: UserEditProps) => {
                 type="text"
                 name="street"
                 value={form?.address?.street}
+                error={errors["address.street"]}
                 handleChange={handleAddressChange}
               />
 
@@ -145,6 +168,7 @@ const UserEdit = ({ users, isLoading, onSubmit }: UserEditProps) => {
                 type="text"
                 name="city"
                 value={form?.address?.city}
+                error={errors["address.city"]}
                 handleChange={handleAddressChange}
               />
 
@@ -153,6 +177,7 @@ const UserEdit = ({ users, isLoading, onSubmit }: UserEditProps) => {
                 type="text"
                 name="zipcode"
                 value={form?.address?.zipcode}
+                error={errors["address.zipcode"]}
                 handleChange={handleAddressChange}
               />
             </div>
