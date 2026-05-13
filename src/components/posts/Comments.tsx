@@ -2,6 +2,7 @@ import { MinusCircleIcon, PlusCircleIcon } from "@heroicons/react/24/solid";
 import { useEffect, useState } from "react";
 import { useNotification } from "../../context/NotificationContext";
 import useComments from "../../hooks/useComments";
+import { commentSchema } from "../../schemas/commentSchema";
 import type { Comment } from "../../types/Comment";
 import Spinner from "../Spinner";
 import TextField from "../TextField";
@@ -22,6 +23,7 @@ const Comments = ({ id }: CommentsProps) => {
   } as Comment);
   const [formVisible, setFormVisibility] = useState(false);
   const { showNotification } = useNotification();
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
   useEffect(() => {
     const localComments = localStorage.getItem(`comments_${id}`);
@@ -52,6 +54,22 @@ const Comments = ({ id }: CommentsProps) => {
     e.preventDefault();
 
     if (!form) return;
+
+    const result = commentSchema.safeParse(form);
+
+    if (!result.success) {
+      const formattedErrors: Record<string, string> = {};
+
+      result.error.issues.forEach((issue) => {
+        formattedErrors[issue.path.join(".")] = issue.message;
+      });
+
+      setErrors(formattedErrors);
+
+      return;
+    }
+
+    setErrors({});
 
     const newComment = {
       ...form,
@@ -100,6 +118,7 @@ const Comments = ({ id }: CommentsProps) => {
             type="text"
             name="name"
             value={form?.name}
+            error={errors?.name}
             handleChange={handleChange}
           />
           <TextField
@@ -107,6 +126,7 @@ const Comments = ({ id }: CommentsProps) => {
             type="email"
             name="email"
             value={form?.email}
+            error={errors?.email}
             handleChange={handleChange}
           />
           <label>Comment</label>
@@ -117,6 +137,7 @@ const Comments = ({ id }: CommentsProps) => {
             className="px-4 py-2 border border-gray-100 rounded-md w-full"
             rows={5}
           />
+          <label className="text-rose-500">{errors?.body}</label>
           <div className="flex justify-end gap-2">
             <button className="bg-indigo-100 text-indigo-700 px-4 py-2 rounded-full cursor-pointer hover:bg-indigo-200">
               Save
