@@ -56,7 +56,15 @@ A demo project created to practice my learnings in React and TypeScript.
 
 ---
 
-### Setup
+### Run
+
+```terminal
+cd ReactTypicode
+npm install
+npm run dev
+```
+
+### Setup (for reference)
 
 **Install React + TypeScript + Vite**
 
