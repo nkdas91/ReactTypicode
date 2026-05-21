@@ -15,6 +15,7 @@ import UserEdit from "./pages/users/UserEdit";
 import UserList from "./pages/users/UserList";
 import { createUser, deleteUser, updateUser } from "./services/userService";
 import type { User } from "./types/User";
+import NotFound from "./pages/NotFound";
 
 function App() {
   const [favourites, setFavourites] = useState<number[]>(() => {
@@ -159,6 +160,8 @@ function App() {
               />
             }
           />
+
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </div>
     </>
