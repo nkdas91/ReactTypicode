@@ -3,13 +3,13 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import BackButton from "../../components/BackButton";
 import TextField from "../../components/TextField";
-import { useNotification } from "../../context/NotificationContext";
+import useNotification from "../../context/useNotification";
 import usePost from "../../hooks/usePost";
 import { postSchema } from "../../schemas/postSchema";
 import type { Post } from "../../types/Post";
 import { validateSchema } from "../../utils/validateSchema";
 
-const UserEdit = () => {
+const PostEdit = () => {
   const { id } = useParams();
   const { data: post } = usePost(id ? parseInt(id) : null);
   const [form, setForm] = useState<Post | null>(null);
@@ -18,10 +18,11 @@ const UserEdit = () => {
   const { showNotification } = useNotification();
 
   useEffect(() => {
-    if (post) {
+    if (post && !form) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setForm(post);
     }
-  }, [post]);
+  }, [post, form]);
 
   const handleChange = (name: string, value: string) => {
     setForm((prev) => (prev ? { ...prev, [name]: value } : prev));
@@ -106,4 +107,4 @@ const UserEdit = () => {
   );
 };
 
-export default UserEdit;
+export default PostEdit;

@@ -15,7 +15,7 @@ const useComments = (id: number) => {
       })
       .catch((err) => console.error(err))
       .finally(() => setLoading(false));
-  }, []);
+  }, [id]);
 
   return {
     data,

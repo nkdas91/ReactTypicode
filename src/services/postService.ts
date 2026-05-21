@@ -1,11 +1,15 @@
 import axios, { AxiosError } from "axios";
 
-interface APIResponse {
-  data?: {};
+type EmptyObject = Record<string, never>;
+
+interface APIResponse<T> {
+  data?: T;
   error?: AxiosError | string;
 }
 
-export const deletePost = async (id: number | null): Promise<APIResponse> => {
+export const deletePost = async (
+  id: number | null,
+): Promise<APIResponse<EmptyObject>> => {
   if (!id) return { error: "Id is missing." };
 
   try {

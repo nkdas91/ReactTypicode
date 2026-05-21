@@ -16,7 +16,7 @@ export const usePosts = (
 ) => {
   const [data, setData] = useState<Post[]>([]);
   const [total, setTotal] = useState(0);
-  const { data: users } = useUsers();
+  const { users } = useUsers();
 
   useEffect(() => {
     const params: Params = {
@@ -30,7 +30,9 @@ export const usePosts = (
         params,
       })
       .then((res) => {
-        setTotal(Number(res.headers["x-total-count"]) ?? 0);
+        const total = Number(res.headers["x-total-count"]);
+
+        setTotal(Number.isNaN(total) ? 0 : total);
 
         if (!users) {
           setData(res.data);

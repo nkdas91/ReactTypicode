@@ -1,6 +1,6 @@
 import { MinusCircleIcon, PlusCircleIcon } from "@heroicons/react/24/solid";
 import { useEffect, useState } from "react";
-import { useNotification } from "../../context/NotificationContext";
+import useNotification from "../../context/useNotification";
 import useComments from "../../hooks/useComments";
 import { commentSchema } from "../../schemas/commentSchema";
 import type { Comment } from "../../types/Comment";
@@ -14,7 +14,21 @@ interface CommentsProps {
 
 const Comments = ({ id }: CommentsProps) => {
   const { data: comments, loading } = useComments(id);
-  const [savedComments, setsavedComments] = useState<Comment[]>([]);
+
+  const [savedComments, setSavedComments] = useState<Comment[]>(() => {
+    const localComments = localStorage.getItem(`comments_${id}`);
+
+    if (!localComments) {
+      return [];
+    }
+
+    try {
+      return JSON.parse(localComments);
+    } catch {
+      return [];
+    }
+  });
+
   const [form, setForm] = useState<Comment>({
     postId: id,
     id: 0,
@@ -25,13 +39,6 @@ const Comments = ({ id }: CommentsProps) => {
   const [formVisible, setFormVisibility] = useState(false);
   const { showNotification } = useNotification();
   const [errors, setErrors] = useState<Record<string, string>>({});
-
-  useEffect(() => {
-    const localComments = localStorage.getItem(`comments_${id}`);
-    if (localComments) {
-      setsavedComments((prev) => [...prev, ...JSON.parse(localComments)]);
-    }
-  }, [id]);
 
   useEffect(() => {
     localStorage.setItem(`comments_${id}`, JSON.stringify(savedComments));
@@ -71,7 +78,7 @@ const Comments = ({ id }: CommentsProps) => {
       id: comments.length + savedComments.length + 1,
     };
 
-    setsavedComments((prev) => [...prev, newComment]);
+    setSavedComments((prev) => [...prev, newComment]);
 
     setForm({
       postId: id,

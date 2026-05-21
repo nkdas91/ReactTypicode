@@ -3,7 +3,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import BackButton from "../../components/BackButton";
 import FavouriteButton from "../../components/FavouriteButton";
 import Comments from "../../components/posts/Comments";
-import { useNotification } from "../../context/NotificationContext";
+import useNotification from "../../context/useNotification";
 import usePost from "../../hooks/usePost";
 import useUser from "../../hooks/useUser";
 import { deletePost } from "../../services/postService";

@@ -24,10 +24,11 @@ const UserEdit = ({ users, isLoading, onSubmit }: UserEditProps) => {
   const user = users.find((u) => u.id === Number(id));
 
   useEffect(() => {
-    if (user) {
+    if (user && !form) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setForm(user);
     }
-  }, [user]);
+  }, [user, form]);
 
   if (isLoading) {
     return <Spinner />;

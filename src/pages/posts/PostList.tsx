@@ -4,7 +4,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import Pagination from "../../components/Pagination";
 import PostCard from "../../components/posts/PostCard";
 import TextField from "../../components/TextField";
-import { useNotification } from "../../context/NotificationContext";
+import useNotification from "../../context/useNotification";
 import { usePosts } from "../../hooks/usePosts";
 import useUsers from "../../hooks/useUsers";
 import { deletePost } from "../../services/postService";
@@ -24,7 +24,7 @@ const PostList = ({ favourites, toggleFavourite }: PropListProp) => {
   const selectedUserId = userId ?? "";
 
   const { data: posts, total } = usePosts(selectedUserId, page, limit);
-  const { data: users } = useUsers();
+  const { users } = useUsers();
 
   const navigate = useNavigate();
 
@@ -45,7 +45,7 @@ const PostList = ({ favourites, toggleFavourite }: PropListProp) => {
       showNotification("Post deleted");
       navigate("/posts");
     } else {
-      showNotification("Error deleting post");
+      showNotification("Error deleting post", "error");
     }
   };
 

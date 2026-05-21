@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import "./App.css";
 import Navbar from "./components/Navbar";
-import { useNotification } from "./context/NotificationContext";
+import useNotification from "./context/useNotification";
 import useUsers from "./hooks/useUsers";
 import Home from "./pages/Home";
 import FavouritePosts from "./pages/posts/FavouritePosts";
@@ -17,30 +17,27 @@ import { createUser, deleteUser, updateUser } from "./services/userService";
 import type { User } from "./types/User";
 
 function App() {
-  const [users, setUsers] = useState<User[]>([]);
-
-  const [favourites, setFavourites] = useState<number[]>([]);
-  const { data: usersFromApi, loading } = useUsers();
-  const { showNotification } = useNotification();
-
-  useEffect(() => {
+  const [favourites, setFavourites] = useState<number[]>(() => {
     const saved = localStorage.getItem("favourites");
-    if (saved) {
-      try {
-        setFavourites((prev) => [...prev, ...JSON.parse(saved)]);
-      } catch {
-        setFavourites([]);
-      }
+
+    if (!saved) {
+      return [];
     }
-  }, []);
+
+    try {
+      return JSON.parse(saved);
+    } catch {
+      return [];
+    }
+  });
+
+  const { users, setUsers, loading } = useUsers();
+
+  const { showNotification } = useNotification();
 
   useEffect(() => {
     localStorage.setItem("favourites", JSON.stringify(favourites));
   }, [favourites]);
-
-  useEffect(() => {
-    setUsers(usersFromApi);
-  }, [usersFromApi]);
 
   const toggleFavourite = (id: number) => {
     setFavourites((prev) => {
