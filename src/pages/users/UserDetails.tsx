@@ -1,27 +1,30 @@
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import BackButton from "../../components/BackButton";
+import Button from "../../components/Button";
 import Spinner from "../../components/Spinner";
-import type { User } from "../../types/User";
+import useDeleteUser from "../../hooks/useDeleteUser";
+import useUser from "../../hooks/useUser";
 
-interface UserDetailsProps {
-  users: User[];
-  isLoading: boolean;
-  onDelete: (e: React.MouseEvent, id: number) => void;
-}
-
-const UserDetails = ({ users, isLoading, onDelete }: UserDetailsProps) => {
+const UserDetails = () => {
   const { id } = useParams();
-  const navigate = useNavigate();
+  const { data: user, error, isLoading, refetch } = useUser(Number(id));
+  const deleteUser = useDeleteUser(refetch);
 
   if (isLoading) {
     return <Spinner />;
   }
 
-  const user = users.find((u) => u.id === Number(id));
+  if (error) return <p role="alert">{error.message}</p>;
 
   if (!user && !isLoading) {
     return <div className="text-center">User not found</div>;
   }
+
+  const handleDelete = async (e: React.MouseEvent, id: number) => {
+    e.preventDefault();
+
+    await deleteUser(id);
+  };
 
   return (
     <div className="max-w-3xl mx-auto p-6 border border-gray-100 rounded-lg">
@@ -58,21 +61,16 @@ const UserDetails = ({ users, isLoading, onDelete }: UserDetailsProps) => {
       )}
 
       <div className="flex justify-end gap-2">
-        <Link
-          to={`/users/${id}/edit`}
-          className="bg-indigo-100 text-indigo-700 px-4 py-2 rounded-full cursor-pointer hover:bg-indigo-200"
-        >
+        <Button to={`/users/${id}/edit`} variant="secondary">
           Edit
-        </Link>
-        <button
-          onClick={(e) => {
-            onDelete(e, Number(id));
-            navigate("/users");
-          }}
-          className="bg-rose-100 text-red-700 px-4 py-2 rounded-full cursor-pointer hover:bg-rose-200"
+        </Button>
+        <Button
+          type="button"
+          variant="danger"
+          onClick={(e) => handleDelete(e, Number(id))}
         >
           Delete
-        </button>
+        </Button>
       </div>
     </div>
   );

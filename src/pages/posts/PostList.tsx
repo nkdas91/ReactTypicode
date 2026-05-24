@@ -24,7 +24,7 @@ const PostList = ({ favourites, toggleFavourite }: PropListProp) => {
   const selectedUserId = userId ?? "";
 
   const { data: posts, total } = usePosts(selectedUserId, page, limit);
-  const { users } = useUsers();
+  const { data: users } = useUsers();
 
   const navigate = useNavigate();
 
@@ -85,7 +85,7 @@ const PostList = ({ favourites, toggleFavourite }: PropListProp) => {
             name="search"
             type="search"
             value={query}
-            handleChange={handleSearch}
+            onChange={handleSearch}
           />
         </div>
 

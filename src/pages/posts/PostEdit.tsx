@@ -72,7 +72,7 @@ const PostEdit = () => {
             name="title"
             value={form?.title}
             error={errors?.title}
-            handleChange={handleChange}
+            onChange={handleChange}
           />
 
           <div>

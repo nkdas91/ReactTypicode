@@ -19,7 +19,7 @@ const PostDetails = ({ favourites, toggleFavourite }: PropDetailsProp) => {
   const [loading, setLoading] = useState(false);
   const { showNotification } = useNotification();
   const { data: post } = usePost(id ? parseInt(id) : null);
-  const { data: user } = useUser(post?.userId ? post.userId : null);
+  const { data: user } = useUser(post?.userId ?? null);
 
   if (!post) return <label>Post not found!</label>;
 

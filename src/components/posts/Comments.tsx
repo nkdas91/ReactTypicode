@@ -121,7 +121,7 @@ const Comments = ({ id }: CommentsProps) => {
             name="name"
             value={form?.name}
             error={errors?.name}
-            handleChange={handleChange}
+            onChange={handleChange}
           />
           <TextField
             label="email"
@@ -129,7 +129,7 @@ const Comments = ({ id }: CommentsProps) => {
             name="email"
             value={form?.email}
             error={errors?.email}
-            handleChange={handleChange}
+            onChange={handleChange}
           />
           <label>Comment</label>
           <textarea

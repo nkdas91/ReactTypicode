@@ -5,33 +5,35 @@ import TextField from "../../components/TextField";
 import { userSchema } from "../../schemas/userSchema";
 import type { User } from "../../types/User";
 import { validateSchema } from "../../utils/validateSchema";
+import userService from "../../services/userService";
+import useNotification from "../../context/useNotification";
+import Button from "../../components/Button";
 
-interface UserCreateProps {
-  onSubmit: (form: User) => void;
-}
+const INITIAL_USER_FORM = {
+  name: "",
+  username: "",
+  email: "",
+  phone: "",
+  website: "",
+  address: {
+    suite: "",
+    street: "",
+    city: "",
+    zipcode: "",
+  },
+};
 
-const UserCreate = ({ onSubmit }: UserCreateProps) => {
-  const [form, setForm] = useState<User>({
-    name: "",
-    username: "",
-    email: "",
-    phone: "",
-    website: "",
-    address: {
-      suite: "",
-      street: "",
-      city: "",
-      zipcode: "",
-    },
-  } as User);
+const UserCreate = () => {
+  const [form, setForm] = useState<User>(INITIAL_USER_FORM as User);
 
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   const navigate = useNavigate();
+  const { showNotification } = useNotification();
 
   const handleChange = (name: string, value: string) => {
-    setForm((prev) => (prev ? { ...prev, [name]: value } : prev));
+    setForm((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleAddressChange = (name: string, value: string) => {
@@ -64,11 +66,16 @@ const UserCreate = ({ onSubmit }: UserCreateProps) => {
     setErrors({});
 
     try {
-      await onSubmit(form);
+      await userService.post(form);
 
-      navigate("/users/");
-    } catch (err) {
-      console.error(err);
+      showNotification("User added");
+
+      navigate("/users");
+    } catch (error) {
+      showNotification(
+        error instanceof Error ? error.message : "Failed to create user",
+        "error",
+      );
     } finally {
       setLoading(false);
     }
@@ -84,18 +91,18 @@ const UserCreate = ({ onSubmit }: UserCreateProps) => {
             label="Name"
             type="text"
             name="name"
-            value={form?.name}
+            value={form.name}
             error={errors?.name}
-            handleChange={handleChange}
+            onChange={handleChange}
           />
 
           <TextField
             label="Username"
             type="text"
             name="username"
-            value={form?.username}
+            value={form.username}
             error={errors?.username}
-            handleChange={handleChange}
+            onChange={handleChange}
           />
         </div>
 
@@ -106,27 +113,27 @@ const UserCreate = ({ onSubmit }: UserCreateProps) => {
               label="Email"
               type="email"
               name="email"
-              value={form?.email}
+              value={form.email}
               error={errors?.email}
-              handleChange={handleChange}
+              onChange={handleChange}
             />
 
             <TextField
               label="Phone"
               type="text"
               name="phone"
-              value={form?.phone}
+              value={form.phone}
               error={errors?.phone}
-              handleChange={handleChange}
+              onChange={handleChange}
             />
 
             <TextField
               label="Website"
               type="text"
               name="website"
-              value={form?.website}
+              value={form.website}
               error={errors?.website}
-              handleChange={handleChange}
+              onChange={handleChange}
             />
           </div>
         </div>
@@ -138,53 +145,44 @@ const UserCreate = ({ onSubmit }: UserCreateProps) => {
               label="Suite"
               type="text"
               name="suite"
-              value={form?.address?.suite}
+              value={form.address?.suite}
               error={errors["address.suite"]}
-              handleChange={handleAddressChange}
+              onChange={handleAddressChange}
             />
 
             <TextField
               label="Street"
               type="text"
               name="street"
-              value={form?.address?.street}
+              value={form.address?.street}
               error={errors["address.street"]}
-              handleChange={handleAddressChange}
+              onChange={handleAddressChange}
             />
 
             <TextField
               label="City"
               type="text"
               name="city"
-              value={form?.address?.city}
+              value={form.address?.city}
               error={errors["address.city"]}
-              handleChange={handleAddressChange}
+              onChange={handleAddressChange}
             />
 
             <TextField
               label="Zip"
               type="text"
               name="zipcode"
-              value={form?.address?.zipcode}
+              value={form.address?.zipcode}
               error={errors["address.zipcode"]}
-              handleChange={handleAddressChange}
+              onChange={handleAddressChange}
             />
           </div>
         </div>
 
         <div className="flex justify-end gap-2">
-          <button
-            disabled={loading}
-            className={`px-4 py-2 rounded-full transition cursor-pointer
-              ${
-                loading
-                  ? "bg-gray-300 cursor-not-allowed"
-                  : "bg-indigo-100 text-indigo-700 hover:bg-indigo-200"
-              }
-            `}
-          >
+          <Button type="submit" disabled={loading} variant="secondary">
             {loading ? "Saving..." : "Save"}
-          </button>
+          </Button>
         </div>
       </form>
     </div>

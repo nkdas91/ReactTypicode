@@ -1,19 +1,17 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import BackButton from "../../components/BackButton";
+import Button from "../../components/Button";
 import Spinner from "../../components/Spinner";
 import TextField from "../../components/TextField";
+import useNotification from "../../context/useNotification";
+import useUser from "../../hooks/useUser";
 import { userSchema } from "../../schemas/userSchema";
+import userService from "../../services/userService";
 import type { User } from "../../types/User";
 import { validateSchema } from "../../utils/validateSchema";
 
-interface UserEditProps {
-  users: User[];
-  isLoading: boolean;
-  onSubmit: (form: User | null, id: number) => void;
-}
-
-const UserEdit = ({ users, isLoading, onSubmit }: UserEditProps) => {
+const UserEdit = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -21,7 +19,8 @@ const UserEdit = ({ users, isLoading, onSubmit }: UserEditProps) => {
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
 
-  const user = users.find((u) => u.id === Number(id));
+  const { data: user, error, isLoading } = useUser(Number(id));
+  const { showNotification } = useNotification();
 
   useEffect(() => {
     if (user && !form) {
@@ -33,6 +32,8 @@ const UserEdit = ({ users, isLoading, onSubmit }: UserEditProps) => {
   if (isLoading) {
     return <Spinner />;
   }
+
+  if (error) return <p role="alert">{error.message}</p>;
 
   if (!user && !isLoading) {
     return <div className="text-center">User not found</div>;
@@ -59,24 +60,33 @@ const UserEdit = ({ users, isLoading, onSubmit }: UserEditProps) => {
   const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    if (!form) {
+      return;
+    }
+
     setLoading(true);
 
     const validation = validateSchema(userSchema, form);
 
     if (!validation.success) {
       setErrors(validation.errors);
-      setLoading(false);
+      setLoading(true);
       return;
     }
 
     setErrors({});
 
     try {
-      await onSubmit(form, Number(id));
+      await userService.patch(Number(id), form);
+
+      showNotification("User updated");
 
       navigate(`/users/${id}`);
-    } catch (err) {
-      console.error(err);
+    } catch (error) {
+      showNotification(
+        error instanceof Error ? error.message : "Failed to update user",
+        "error",
+      );
     } finally {
       setLoading(false);
     }
@@ -94,7 +104,7 @@ const UserEdit = ({ users, isLoading, onSubmit }: UserEditProps) => {
             name="name"
             value={form?.name}
             error={errors?.name}
-            handleChange={handleChange}
+            onChange={handleChange}
           />
 
           <TextField
@@ -103,7 +113,7 @@ const UserEdit = ({ users, isLoading, onSubmit }: UserEditProps) => {
             name="username"
             value={form?.username}
             error={errors?.username}
-            handleChange={handleChange}
+            onChange={handleChange}
           />
         </div>
 
@@ -116,7 +126,7 @@ const UserEdit = ({ users, isLoading, onSubmit }: UserEditProps) => {
               name="email"
               value={form?.email}
               error={errors?.email}
-              handleChange={handleChange}
+              onChange={handleChange}
             />
 
             <TextField
@@ -125,7 +135,7 @@ const UserEdit = ({ users, isLoading, onSubmit }: UserEditProps) => {
               name="phone"
               value={form?.phone}
               error={errors?.phone}
-              handleChange={handleChange}
+              onChange={handleChange}
             />
 
             <TextField
@@ -134,12 +144,12 @@ const UserEdit = ({ users, isLoading, onSubmit }: UserEditProps) => {
               name="website"
               value={form?.website}
               error={errors?.website}
-              handleChange={handleChange}
+              onChange={handleChange}
             />
           </div>
         </div>
 
-        {user?.address && (
+        {form?.address && (
           <div>
             <h2 className="text-lg font-medium mb-2">Address</h2>
             <div className="grid md:grid-cols-2 gap-2">
@@ -149,7 +159,7 @@ const UserEdit = ({ users, isLoading, onSubmit }: UserEditProps) => {
                 name="suite"
                 value={form?.address?.suite}
                 error={errors["address.suite"]}
-                handleChange={handleAddressChange}
+                onChange={handleAddressChange}
               />
 
               <TextField
@@ -158,7 +168,7 @@ const UserEdit = ({ users, isLoading, onSubmit }: UserEditProps) => {
                 name="street"
                 value={form?.address?.street}
                 error={errors["address.street"]}
-                handleChange={handleAddressChange}
+                onChange={handleAddressChange}
               />
 
               <TextField
@@ -167,7 +177,7 @@ const UserEdit = ({ users, isLoading, onSubmit }: UserEditProps) => {
                 name="city"
                 value={form?.address?.city}
                 error={errors["address.city"]}
-                handleChange={handleAddressChange}
+                onChange={handleAddressChange}
               />
 
               <TextField
@@ -176,25 +186,16 @@ const UserEdit = ({ users, isLoading, onSubmit }: UserEditProps) => {
                 name="zipcode"
                 value={form?.address?.zipcode}
                 error={errors["address.zipcode"]}
-                handleChange={handleAddressChange}
+                onChange={handleAddressChange}
               />
             </div>
           </div>
         )}
 
         <div className="flex justify-end gap-2">
-          <button
-            disabled={loading}
-            className={`px-4 py-2 rounded-full transition cursor-pointer
-              ${
-                loading
-                  ? "bg-gray-300 cursor-not-allowed"
-                  : "bg-indigo-100 text-indigo-700 hover:bg-indigo-200"
-              }
-            `}
-          >
+          <Button type="submit" disabled={loading} variant="secondary">
             {loading ? "Saving..." : "Save"}
-          </button>
+          </Button>
         </div>
       </form>
     </div>
