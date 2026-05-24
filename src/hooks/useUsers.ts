@@ -1,20 +1,15 @@
-import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import userService from "../services/userService";
 import type { User } from "../types/User";
-import { apiClient } from "../services/apiService";
 
-const useUser = () => {
-  const [users, setUsers] = useState<User[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    apiClient
-      .get(`/users`)
-      .then((res) => setUsers(res.data))
-      .catch((err) => console.error(err))
-      .finally(() => setLoading(false));
-  }, []);
-
-  return { users, setUsers, loading };
+const useUsers = () => {
+  return useQuery<User[], Error>({
+    queryKey: ["users"],
+    queryFn: () => {
+      return userService.getAll();
+    },
+    staleTime: 1000 * 60 * 5,
+  });
 };
 
-export default useUser;
+export default useUsers;

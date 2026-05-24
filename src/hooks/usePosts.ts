@@ -16,7 +16,7 @@ export const usePosts = (
 ) => {
   const [data, setData] = useState<Post[]>([]);
   const [total, setTotal] = useState(0);
-  const { users } = useUsers();
+  const { data: users } = useUsers();
 
   useEffect(() => {
     const params: Params = {
