@@ -1,85 +1,17 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import BackButton from "../../components/BackButton";
-import TextField from "../../components/TextField";
-import { userSchema } from "../../schemas/userSchema";
-import type { User } from "../../types/User";
-import { validateSchema } from "../../utils/validateSchema";
-import userService from "../../services/userService";
-import useNotification from "../../context/useNotification";
 import Button from "../../components/Button";
-
-const INITIAL_USER_FORM = {
-  name: "",
-  username: "",
-  email: "",
-  phone: "",
-  website: "",
-  address: {
-    suite: "",
-    street: "",
-    city: "",
-    zipcode: "",
-  },
-};
+import TextField from "../../components/TextField";
+import useCreateUserForm from "../../hooks/useCreateUserForm";
 
 const UserCreate = () => {
-  const [form, setForm] = useState<User>(INITIAL_USER_FORM as User);
-
-  const [loading, setLoading] = useState(false);
-  const [errors, setErrors] = useState<Record<string, string>>({});
-
-  const navigate = useNavigate();
-  const { showNotification } = useNotification();
-
-  const handleChange = (name: string, value: string) => {
-    setForm((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleAddressChange = (name: string, value: string) => {
-    setForm((prev) =>
-      prev
-        ? {
-            ...prev,
-            address: {
-              ...prev.address,
-              [name]: value,
-            },
-          }
-        : prev,
-    );
-  };
-
-  const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    setLoading(true);
-
-    const validation = validateSchema(userSchema, form);
-
-    if (!validation.success) {
-      setErrors(validation.errors);
-      setLoading(false);
-      return;
-    }
-
-    setErrors({});
-
-    try {
-      await userService.post(form);
-
-      showNotification("User added");
-
-      navigate("/users");
-    } catch (error) {
-      showNotification(
-        error instanceof Error ? error.message : "Failed to create user",
-        "error",
-      );
-    } finally {
-      setLoading(false);
-    }
-  };
+  const {
+    form,
+    errors,
+    loading,
+    handleChange,
+    handleAddressChange,
+    handleSubmit,
+  } = useCreateUserForm();
 
   return (
     <div className="max-w-3xl mx-auto p-6 border border-gray-100 rounded-lg">
