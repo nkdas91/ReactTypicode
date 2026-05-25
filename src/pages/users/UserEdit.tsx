@@ -1,96 +1,34 @@
-import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import BackButton from "../../components/BackButton";
 import Button from "../../components/Button";
 import Spinner from "../../components/Spinner";
 import TextField from "../../components/TextField";
-import useNotification from "../../context/useNotification";
+import useUpdateUserForm from "../../hooks/useUpdateUserForm";
 import useUser from "../../hooks/useUser";
-import { userSchema } from "../../schemas/userSchema";
-import userService from "../../services/userService";
-import type { User } from "../../types/User";
-import { validateSchema } from "../../utils/validateSchema";
 
 const UserEdit = () => {
   const { id } = useParams();
-  const navigate = useNavigate();
-
-  const [form, setForm] = useState<User | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [errors, setErrors] = useState<Record<string, string>>({});
 
   const { data: user, error, isLoading } = useUser(Number(id));
-  const { showNotification } = useNotification();
 
-  useEffect(() => {
-    if (user && !form) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setForm(user);
-    }
-  }, [user, form]);
+  const {
+    form,
+    errors,
+    loading,
+    handleChange,
+    handleAddressChange,
+    handleSubmit,
+  } = useUpdateUserForm(Number(id), user);
 
   if (isLoading) {
     return <Spinner />;
   }
 
-  if (error) return <p role="alert">{error.message}</p>;
-
-  if (!user && !isLoading) {
+  if (!user) {
     return <div className="text-center">User not found</div>;
   }
 
-  const handleChange = (name: string, value: string) => {
-    setForm((prev) => (prev ? { ...prev, [name]: value } : prev));
-  };
-
-  const handleAddressChange = (name: string, value: string) => {
-    setForm((prev) =>
-      prev
-        ? {
-            ...prev,
-            address: {
-              ...prev.address,
-              [name]: value,
-            },
-          }
-        : prev,
-    );
-  };
-
-  const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    if (!form) {
-      return;
-    }
-
-    setLoading(true);
-
-    const validation = validateSchema(userSchema, form);
-
-    if (!validation.success) {
-      setErrors(validation.errors);
-      setLoading(true);
-      return;
-    }
-
-    setErrors({});
-
-    try {
-      await userService.patch(Number(id), form);
-
-      showNotification("User updated");
-
-      navigate(`/users/${id}`);
-    } catch (error) {
-      showNotification(
-        error instanceof Error ? error.message : "Failed to update user",
-        "error",
-      );
-    } finally {
-      setLoading(false);
-    }
-  };
+  if (error) return <p role="alert">{error.message}</p>;
 
   return (
     <div className="max-w-3xl mx-auto p-6 border border-gray-100 rounded-lg">
