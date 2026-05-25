@@ -5,7 +5,7 @@ import FavouriteButton from "../../components/FavouriteButton";
 import Comments from "../../components/posts/Comments";
 import useNotification from "../../context/useNotification";
 import usePost from "../../hooks/usePost";
-import useUser from "../../hooks/useUser";
+import useUser from "../../hooks/users/useUser";
 import { deletePost } from "../../services/postService";
 
 interface PropDetailsProp {

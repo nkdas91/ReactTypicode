@@ -3,8 +3,8 @@ import BackButton from "../../components/BackButton";
 import Button from "../../components/Button";
 import Spinner from "../../components/Spinner";
 import TextField from "../../components/TextField";
-import useUpdateUserForm from "../../hooks/useUpdateUserForm";
-import useUser from "../../hooks/useUser";
+import useUpdateUserForm from "../../hooks/users/useUpdateUserForm";
+import useUser from "../../hooks/users/useUser";
 
 const UserEdit = () => {
   const { id } = useParams();

@@ -2,8 +2,8 @@ import { useParams } from "react-router-dom";
 import BackButton from "../../components/BackButton";
 import Button from "../../components/Button";
 import Spinner from "../../components/Spinner";
-import useDeleteUser from "../../hooks/useDeleteUser";
-import useUser from "../../hooks/useUser";
+import useDeleteUser from "../../hooks/users/useDeleteUser";
+import useUser from "../../hooks/users/useUser";
 
 const UserDetails = () => {
   const { id } = useParams();

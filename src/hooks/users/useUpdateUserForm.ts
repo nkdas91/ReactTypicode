@@ -1,28 +1,11 @@
 import { useNavigate } from "react-router-dom";
-import useNotification from "../context/useNotification";
-import userService from "../services/userService";
-import type { User } from "../types/User";
+import useNotification from "../../context/useNotification";
+import userService from "../../services/userService";
+import type { User } from "../../types/User";
 import useUserForm from "./useUserForm";
 
 /**
- * Initial empty form state for creating users.
- */
-const initialUserForm: User = {
-  name: "",
-  username: "",
-  email: "",
-  phone: "",
-  website: "",
-  address: {
-    suite: "",
-    street: "",
-    city: "",
-    zipcode: "",
-  },
-} as User;
-
-/**
- * Hook for handling create user form logic.
+ * Hook for handling update user form logic.
  *
  * Responsibilities:
  * - form state
@@ -31,7 +14,10 @@ const initialUserForm: User = {
  * - notifications
  * - navigation
  */
-export default function useCreateUserForm() {
+export default function useUpdateUserForm(
+  id: number,
+  initialForm?: User | null,
+) {
   const navigate = useNavigate();
 
   const { showNotification } = useNotification();
@@ -47,10 +33,10 @@ export default function useCreateUserForm() {
     handleChange,
     handleAddressChange,
     validateForm,
-  } = useUserForm(initialUserForm);
+  } = useUserForm(initialForm ?? null);
 
   /**
-   * Handles form submission for creating a user.
+   * Handles form submission for updating a user.
    */
   const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -66,19 +52,19 @@ export default function useCreateUserForm() {
 
     try {
       /**
-       * Create new user.
+       * Update existing user.
        */
-      await userService.post(form);
+      await userService.patch(id, form);
 
-      showNotification("User created");
+      showNotification("User updated");
 
       /**
-       * Redirect to user list page.
+       * Redirect back to user details page.
        */
-      navigate("/users");
+      navigate(`/users/${id}`);
     } catch (error) {
       showNotification(
-        error instanceof Error ? error.message : "Failed to create user",
+        error instanceof Error ? error.message : "Failed to update user",
         "error",
       );
     } finally {
@@ -87,11 +73,7 @@ export default function useCreateUserForm() {
   };
 
   return {
-    /**
-     * Non-null assertion is safe here because
-     * create form always starts with initial values.
-     */
-    form: form!,
+    form,
     errors,
     loading,
     handleChange,

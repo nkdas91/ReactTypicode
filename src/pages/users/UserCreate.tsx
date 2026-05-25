@@ -1,7 +1,7 @@
 import BackButton from "../../components/BackButton";
 import Button from "../../components/Button";
 import TextField from "../../components/TextField";
-import useCreateUserForm from "../../hooks/useCreateUserForm";
+import useCreateUserForm from "../../hooks/users/useCreateUserForm";
 
 const UserCreate = () => {
   const {

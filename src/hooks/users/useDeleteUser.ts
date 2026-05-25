@@ -1,5 +1,5 @@
-import useNotification from "../context/useNotification";
-import userService from "../services/userService";
+import useNotification from "../../context/useNotification";
+import userService from "../../services/userService";
 
 export default function useDeleteUser(refetch: () => void) {
   const { showNotification } = useNotification();

@@ -6,7 +6,7 @@ import PostCard from "../../components/posts/PostCard";
 import TextField from "../../components/TextField";
 import useNotification from "../../context/useNotification";
 import { usePosts } from "../../hooks/usePosts";
-import useUsers from "../../hooks/useUsers";
+import useUsers from "../../hooks/users/useUsers";
 import { deletePost } from "../../services/postService";
 
 interface PropListProp {

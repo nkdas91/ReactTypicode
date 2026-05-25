@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
-import userService from "../services/userService";
-import type { User } from "../types/User";
+import userService from "../../services/userService";
+import type { User } from "../../types/User";
 
 const useUser = (id: number | null) => {
   return useQuery<User, Error>({

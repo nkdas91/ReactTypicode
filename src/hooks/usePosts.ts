@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import type { Post } from "../types/Post";
 import { apiClient } from "../services/apiService";
-import useUsers from "./useUsers";
+import useUsers from "./users/useUsers";
 
 type Params = {
   _page?: number;

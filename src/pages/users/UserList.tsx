@@ -3,8 +3,8 @@ import Button from "../../components/Button";
 import Spinner from "../../components/Spinner";
 import TextField from "../../components/TextField";
 import UserListItem from "../../components/users/UserListItem";
-import useDeleteUser from "../../hooks/useDeleteUser";
-import useUsers from "../../hooks/useUsers";
+import useDeleteUser from "../../hooks/users/useDeleteUser";
+import useUsers from "../../hooks/users/useUsers";
 
 const UserList = () => {
   const [query, setQuery] = useState("");

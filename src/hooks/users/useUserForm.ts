@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { userSchema } from "../schemas/userSchema";
-import type { User } from "../types/User";
-import { validateSchema } from "../utils/validateSchema";
+import { userSchema } from "../../schemas/userSchema";
+import type { User } from "../../types/User";
+import { validateSchema } from "../../utils/validateSchema";
 
 /**
  * Shared hook for managing user form state and validation.
