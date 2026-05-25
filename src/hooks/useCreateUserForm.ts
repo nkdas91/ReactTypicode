@@ -5,7 +5,24 @@ import type { User } from "../types/User";
 import useUserForm from "./useUserForm";
 
 /**
- * Hook for handling update user form logic.
+ * Initial empty form state for creating users.
+ */
+const initialUserForm: User = {
+  name: "",
+  username: "",
+  email: "",
+  phone: "",
+  website: "",
+  address: {
+    suite: "",
+    street: "",
+    city: "",
+    zipcode: "",
+  },
+} as User;
+
+/**
+ * Hook for handling create user form logic.
  *
  * Responsibilities:
  * - form state
@@ -14,10 +31,7 @@ import useUserForm from "./useUserForm";
  * - notifications
  * - navigation
  */
-export default function useUpdateUserForm(
-  id: number,
-  initialForm?: User | null,
-) {
+export default function useCreateUserForm() {
   const navigate = useNavigate();
 
   const { showNotification } = useNotification();
@@ -33,10 +47,10 @@ export default function useUpdateUserForm(
     handleChange,
     handleAddressChange,
     validateForm,
-  } = useUserForm(initialForm ?? null);
+  } = useUserForm(initialUserForm);
 
   /**
-   * Handles form submission for updating a user.
+   * Handles form submission for creating a user.
    */
   const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -52,19 +66,19 @@ export default function useUpdateUserForm(
 
     try {
       /**
-       * Update existing user.
+       * Create new user.
        */
-      await userService.patch(id, form);
+      await userService.post(form);
 
-      showNotification("User updated");
+      showNotification("User created");
 
       /**
-       * Redirect back to user details page.
+       * Redirect to user list page.
        */
-      navigate(`/users/${id}`);
+      navigate("/users");
     } catch (error) {
       showNotification(
-        error instanceof Error ? error.message : "Failed to update user",
+        error instanceof Error ? error.message : "Failed to create user",
         "error",
       );
     } finally {
@@ -73,7 +87,11 @@ export default function useUpdateUserForm(
   };
 
   return {
-    form,
+    /**
+     * Non-null assertion is safe here because
+     * create form always starts with initial values.
+     */
+    form: form!,
     errors,
     loading,
     handleChange,
