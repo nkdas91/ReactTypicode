@@ -1,4 +1,5 @@
 import axios, { AxiosError, type AxiosRequestConfig } from "axios";
+import type { APIListResponse } from "../types/APIListResponse";
 
 const axiosInstance = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
@@ -25,10 +26,13 @@ class APIClient<T> {
     this.endpoint = endpoint;
   }
 
-  getAll = async (config?: AxiosRequestConfig): Promise<T[]> => {
+  getAll = async (config?: AxiosRequestConfig): Promise<APIListResponse<T>> => {
     const response = await axiosInstance.get<T[]>(this.endpoint, config);
 
-    return response.data;
+    return {
+      data: response.data,
+      total: Number(response.headers["x-total-count"]),
+    };
   };
 
   get = async (
