@@ -1,18 +1,18 @@
 import LikesPieChart from "../components/charts/LikesPieChart";
-import { useLikedPostsChart } from "../hooks/useLikedPostChart";
-import usePosts from "../hooks/usePosts";
+import { useLikedPostsPieData } from "../hooks/posts/useLikedPostsPieData";
+import usePosts from "../hooks/posts/usePosts";
 
 interface HomeProps {
-  favouritePosts: number[];
+  likedPostIds: number[];
 }
 
-const Home = ({ favouritePosts }: HomeProps) => {
-  const { data: posts } = usePosts();
+const Home = ({ likedPostIds }: HomeProps) => {
+  const { data: postsResponse } = usePosts();
 
-  const pieData = useLikedPostsChart(posts, favouritePosts);
+  const pieData = useLikedPostsPieData(postsResponse?.data, likedPostIds);
 
   return (
-    <div className="max-w-5xl mx-auto max-w-100 ">
+    <div className="max-w-5xl mx-auto">
       <div className="border border-gray-100 rounded-3xl p-4 ">
         <h2 className="text-xl">Posts</h2>
         <LikesPieChart data={pieData} />

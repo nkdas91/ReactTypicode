@@ -1,7 +1,6 @@
-import { useNavigate } from "react-router-dom";
-import PostCard from "../../components/posts/PostCard";
-import usePosts from "../../hooks/usePosts";
-import { deletePost } from "../../services/postService";
+import PostListItem from "../../components/posts/PostListItem";
+import useDeletePost from "../../hooks/posts/useDeletePost";
+import usePosts from "../../hooks/posts/usePosts";
 
 interface FavouritePostsProps {
   favourites: number[];
@@ -12,35 +11,30 @@ const FavouritePosts = ({
   favourites,
   toggleFavourite,
 }: FavouritePostsProps) => {
-  const { data: posts } = usePosts();
-  const navigate = useNavigate();
+  const { data: postsResponse, refetch } = usePosts();
+  const deletePost = useDeletePost(refetch);
 
-  const favouritePosts = posts.filter((p) => favourites.includes(p.id));
+  const posts = postsResponse?.data;
+  const favouritePosts = posts?.filter((p) => favourites.includes(p.id));
 
-  const handleDelete = async (e: React.MouseEvent, id: number) => {
-    e.preventDefault();
-
-    const res = await deletePost(id);
-
-    if (res.data) {
-      navigate("/posts/favourites");
-    } else {
-      console.log(res.error);
-    }
+  const handleDelete = async (id: number) => {
+    await deletePost(id);
   };
 
   return (
     <div className="max-w-5xl mx-auto">
       <h1 className="text-3xl mb-4">Favourite Posts</h1>
-      {favouritePosts?.map((post) => (
-        <PostCard
-          key={post.id}
-          post={post}
-          favourites={favourites}
-          toggleFavourite={() => toggleFavourite(post.id)}
-          handleDelete={(e) => handleDelete(e, post.id)}
-        />
-      ))}
+      <ul>
+        {favouritePosts?.map((post) => (
+          <PostListItem
+            key={post.id}
+            post={post}
+            favourites={favourites}
+            toggleFavourite={() => toggleFavourite(post.id)}
+            onDelete={() => handleDelete(post.id)}
+          />
+        ))}
+      </ul>
     </div>
   );
 };
