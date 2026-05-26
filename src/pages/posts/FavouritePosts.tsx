@@ -1,4 +1,5 @@
 import PostListItem from "../../components/posts/PostListItem";
+import PostListSkeleton from "../../components/posts/skeletons/PostListSkeleton";
 import useDeletePost from "../../hooks/posts/useDeletePost";
 import usePosts from "../../hooks/posts/usePosts";
 
@@ -11,11 +12,15 @@ const FavouritePosts = ({
   favourites,
   toggleFavourite,
 }: FavouritePostsProps) => {
-  const { data: postsResponse, refetch } = usePosts();
+  const { data: postsResponse, isLoading, refetch } = usePosts();
   const deletePost = useDeletePost(refetch);
 
   const posts = postsResponse?.data;
   const favouritePosts = posts?.filter((p) => favourites.includes(p.id));
+
+  if (isLoading) {
+    return <PostListSkeleton />;
+  }
 
   const handleDelete = async (id: number) => {
     await deletePost(id);

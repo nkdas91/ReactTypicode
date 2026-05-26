@@ -1,6 +1,6 @@
 import { MinusCircleIcon, PlusCircleIcon } from "@heroicons/react/24/solid";
 import usePostComments from "../../hooks/posts/usePostComments";
-import Spinner from "../Spinner";
+import CommentsSkeleton from "./skeletons/CommentsSkeleton";
 import CommentForm from "./CommentForm";
 import CommentList from "./CommentList";
 
@@ -21,7 +21,7 @@ const Comments = ({ id }: CommentsProps) => {
   } = usePostComments(id);
 
   if (isLoading) {
-    return <Spinner />;
+    return <CommentsSkeleton />;
   }
 
   return (

@@ -1,8 +1,8 @@
 import { useMemo, useState } from "react";
 import Button from "../../components/Button";
-import Spinner from "../../components/Spinner";
 import TextField from "../../components/TextField";
 import UserListItem from "../../components/users/UserListItem";
+import UserListSkeleton from "../../components/users/skeletons/UserListSkeleton";
 import useDeleteUser from "../../hooks/users/useDeleteUser";
 import useUsers from "../../hooks/users/useUsers";
 
@@ -20,7 +20,7 @@ const UserList = () => {
   }, [users, query]);
 
   if (isLoading) {
-    return <Spinner />;
+    return <UserListSkeleton />;
   }
 
   if (error) {

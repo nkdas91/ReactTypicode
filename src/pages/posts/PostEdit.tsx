@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import BackButton from "../../components/BackButton";
 import Button from "../../components/Button";
-import Spinner from "../../components/Spinner";
+import PostFormSkeleton from "../../components/posts/skeletons/PostFormSkeleton";
 import TextField from "../../components/TextField";
 import usePost from "../../hooks/posts/usePost";
 import useUpdatePostForm from "../../hooks/posts/useUpdatePostForm";
@@ -14,7 +14,7 @@ const PostEdit = () => {
     useUpdatePostForm(Number(id), post);
 
   if (isLoading) {
-    return <Spinner />;
+    return <PostFormSkeleton />;
   }
 
   if (!post) {

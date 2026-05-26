@@ -1,8 +1,8 @@
 import { useParams } from "react-router-dom";
 import BackButton from "../../components/BackButton";
 import Button from "../../components/Button";
-import Spinner from "../../components/Spinner";
 import TextField from "../../components/TextField";
+import UserFormSkeleton from "../../components/users/skeletons/UserFormSkeleton";
 import useUpdateUserForm from "../../hooks/users/useUpdateUserForm";
 import useUser from "../../hooks/users/useUser";
 
@@ -21,7 +21,7 @@ const UserEdit = () => {
   } = useUpdateUserForm(Number(id), user);
 
   if (isLoading) {
-    return <Spinner />;
+    return <UserFormSkeleton />;
   }
 
   if (!user) {

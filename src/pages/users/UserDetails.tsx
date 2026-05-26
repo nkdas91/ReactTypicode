@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import BackButton from "../../components/BackButton";
 import Button from "../../components/Button";
-import Spinner from "../../components/Spinner";
+import UserDetailsSkeleton from "../../components/users/skeletons/UserDetailsSkeleton";
 import useDeleteUser from "../../hooks/users/useDeleteUser";
 import useUser from "../../hooks/users/useUser";
 
@@ -11,7 +11,7 @@ const UserDetails = () => {
   const deleteUser = useDeleteUser(refetch);
 
   if (isLoading) {
-    return <Spinner />;
+    return <UserDetailsSkeleton />;
   }
 
   if (error) return <p role="alert">{error.message}</p>;

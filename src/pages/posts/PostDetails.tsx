@@ -3,7 +3,7 @@ import BackButton from "../../components/BackButton";
 import Button from "../../components/Button";
 import FavouriteButton from "../../components/FavouriteButton";
 import Comments from "../../components/posts/Comments";
-import Spinner from "../../components/Spinner";
+import PostDetailsSkeleton from "../../components/posts/skeletons/PostDetailsSkeleton";
 import useDeletePost from "../../hooks/posts/useDeletePost";
 import usePost from "../../hooks/posts/usePost";
 import useUser from "../../hooks/users/useUser";
@@ -21,7 +21,7 @@ const PostDetails = ({ favourites, toggleFavourite }: PropDetailsProp) => {
   const deletePost = useDeletePost(refetch);
 
   if (isLoading) {
-    return <Spinner />;
+    return <PostDetailsSkeleton />;
   }
 
   if (error) return <p role="alert">{error.message}</p>;

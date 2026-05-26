@@ -1,8 +1,8 @@
 import { useMemo, useState } from "react";
 import Pagination from "../../components/Pagination";
 import PostListItem from "../../components/posts/PostListItem";
+import PostListSkeleton from "../../components/posts/skeletons/PostListSkeleton";
 import SelectField from "../../components/SelectField";
-import Spinner from "../../components/Spinner";
 import TextField from "../../components/TextField";
 import useDeletePost from "../../hooks/posts/useDeletePost";
 import usePostFilters from "../../hooks/posts/usePostFilters";
@@ -42,7 +42,7 @@ const PostList = ({ favourites, toggleFavourite }: PropListProp) => {
   }, [posts, query]);
 
   if (isLoading) {
-    return <Spinner />;
+    return <PostListSkeleton />;
   }
 
   if (error) {
