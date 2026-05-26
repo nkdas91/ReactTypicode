@@ -1,5 +1,5 @@
 import LikesPieChart from "../components/charts/LikesPieChart";
-import useLikedPostsPieData from "../hooks/posts/useLikedPostsPieData";
+import getLikedPostsPieData from "../utils/charts/getLikedPostsPieData";
 import usePosts from "../hooks/posts/usePosts";
 
 interface HomeProps {
@@ -9,7 +9,10 @@ interface HomeProps {
 const Home = ({ likedPostIds }: HomeProps) => {
   const { data: postsResponse } = usePosts();
 
-  const pieData = useLikedPostsPieData(postsResponse?.data, likedPostIds);
+  const pieData = getLikedPostsPieData(
+    postsResponse?.total,
+    likedPostIds.length,
+  );
 
   return (
     <div className="max-w-5xl mx-auto">
