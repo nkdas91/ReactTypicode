@@ -4,6 +4,7 @@ import PostListItem from "../../components/posts/PostListItem";
 import PostListSkeleton from "../../components/posts/skeletons/PostListSkeleton";
 import SelectField from "../../components/SelectField";
 import TextField from "../../components/TextField";
+import { LIMITS } from "../../constants/pagination";
 import useDeletePost from "../../hooks/posts/useDeletePost";
 import usePostFilters from "../../hooks/posts/usePostFilters";
 import usePosts from "../../hooks/posts/usePosts";
@@ -93,16 +94,7 @@ const PostList = ({ favourites, toggleFavourite }: PropListProp) => {
 
           <div className="flex items-center gap-1">
             <label>Show</label>
-            <SelectField
-              value={limit}
-              onChange={setLimit}
-              options={[
-                { label: "5", value: 5 },
-                { label: "10", value: 10 },
-                { label: "15", value: 15 },
-                { label: "20", value: 20 },
-              ]}
-            />
+            <SelectField value={limit} onChange={setLimit} options={LIMITS} />
             <label> Records</label>
           </div>
         </div>

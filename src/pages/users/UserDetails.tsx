@@ -52,10 +52,10 @@ const UserDetails = () => {
         <div>
           <h2 className="text-lg font-medium mb-2">Address</h2>
           <p>
-            {user.address?.suite}, {user.address?.street}
+            {user.address.suite}, {user.address.street}
           </p>
           <p>
-            {user.address?.city} - {user.address?.zipcode}
+            {user.address.city} - {user.address.zipcode}
           </p>
         </div>
       )}

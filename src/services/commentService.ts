@@ -1,7 +1,8 @@
+import { API_ENDPOINTS } from "../constants/apiEndpoints";
 import type { Comment } from "../types/Comment";
 import APIClient from "./apiClient";
 
-const commentService = new APIClient<Comment>("/comments");
+const commentService = new APIClient<Comment>(API_ENDPOINTS.comments);
 
 export default {
   getByPost(postId: number) {

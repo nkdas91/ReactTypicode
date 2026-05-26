@@ -1,5 +1,5 @@
 import LikesPieChart from "../components/charts/LikesPieChart";
-import { useLikedPostsPieData } from "../hooks/posts/useLikedPostsPieData";
+import useLikedPostsPieData from "../hooks/posts/useLikedPostsPieData";
 import usePosts from "../hooks/posts/usePosts";
 
 interface HomeProps {

@@ -1,4 +1,5 @@
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { DEFAULT_LIMIT, DEFAULT_PAGE } from "../../constants/pagination";
 
 export default function usePostFilters() {
   const [searchParams] = useSearchParams();
@@ -7,9 +8,9 @@ export default function usePostFilters() {
 
   const userId = searchParams.get("userId") ?? "";
 
-  const page = Number(searchParams.get("page") || 1);
+  const page = Number(searchParams.get("page") || DEFAULT_PAGE);
 
-  const limit = Number(searchParams.get("limit") || 5);
+  const limit = Number(searchParams.get("limit") || DEFAULT_LIMIT);
 
   const updateParams = (paramsToUpdate: Record<string, string>) => {
     const params = new URLSearchParams(searchParams);
@@ -28,7 +29,7 @@ export default function usePostFilters() {
   const setUserId = (id: string) => {
     updateParams({
       userId: id,
-      page: "1",
+      page: DEFAULT_PAGE.toString(),
     });
   };
 
@@ -41,7 +42,7 @@ export default function usePostFilters() {
   const setLimit = (newLimit: string) => {
     updateParams({
       limit: newLimit,
-      page: "1",
+      page: DEFAULT_PAGE.toString(),
     });
   };
 

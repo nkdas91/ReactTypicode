@@ -1,15 +1,21 @@
 import { useQuery } from "@tanstack/react-query";
+import { DEFAULT_STALE_TIME } from "../../config/queryClient";
+import { QUERY_KEYS } from "../../constants/queryKeys";
 import postService from "../../services/postService";
 import type { Post } from "../../types/Post";
 
 const usePost = (id: number | null) => {
   return useQuery<Post, Error>({
-    queryKey: ["posts", id],
+    queryKey: QUERY_KEYS.post(id ?? 0),
     queryFn: () => {
-      return postService.get(id!);
+      if (id === null) {
+        throw new Error("Post ID is required");
+      }
+
+      return postService.get(id);
     },
     enabled: id !== null,
-    staleTime: 1000 * 60 * 5,
+    staleTime: DEFAULT_STALE_TIME,
   });
 };
 

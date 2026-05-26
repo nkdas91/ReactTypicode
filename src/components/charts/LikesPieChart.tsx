@@ -8,16 +8,19 @@ import {
   Tooltip,
 } from "recharts";
 import type { PieDataItem } from "../../types/PieDataItem";
+import { PIE_CHART_COLORS, RADIAN } from "../../constants/chart";
 
 interface LikesPieChartProps {
   data: PieDataItem[];
 }
 
-const COLORS = ["#f6339a", "#432dd7"];
-const RADIAN = Math.PI / 180;
-
 const CustomPieSlice = (props: PieSectorShapeProps) => {
-  return <Sector {...props} fill={COLORS[props.index % COLORS.length]} />;
+  return (
+    <Sector
+      {...props}
+      fill={PIE_CHART_COLORS[props.index % PIE_CHART_COLORS.length]}
+    />
+  );
 };
 
 const renderLabel = ({

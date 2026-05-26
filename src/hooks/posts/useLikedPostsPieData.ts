@@ -1,18 +1,18 @@
 import { useMemo } from "react";
+import { CHART_COLORS } from "../../constants/chart";
 import type { PieDataItem } from "../../types/PieDataItem";
 import type { Post } from "../../types/Post";
 
-const COLORS = ["#f6339a", "#432dd7"];
-
-export const useLikedPostsPieData = (
-  posts?: Post[],
+export default function useLikedPostsPieData(
+  posts: Post[] = [],
   likedPostIds: number[] = [],
-): PieDataItem[] => {
+): PieDataItem[] {
   return useMemo(() => {
-    const totalPosts = posts?.length ?? 0;
+    const likedPostSet = new Set(likedPostIds);
 
-    const likedCount =
-      posts?.filter((post) => likedPostIds.includes(post.id)).length ?? 0;
+    const totalPosts = posts.length;
+
+    const likedCount = posts.filter((post) => likedPostSet.has(post.id)).length;
 
     const notLikedCount = totalPosts - likedCount;
 
@@ -20,13 +20,13 @@ export const useLikedPostsPieData = (
       {
         name: "Liked",
         value: likedCount,
-        fill: COLORS[0],
+        fill: CHART_COLORS.likedPosts.liked,
       },
       {
         name: "Not Liked",
         value: notLikedCount,
-        fill: COLORS[1],
+        fill: CHART_COLORS.likedPosts.notLiked,
       },
     ];
   }, [posts, likedPostIds]);
-};
+}

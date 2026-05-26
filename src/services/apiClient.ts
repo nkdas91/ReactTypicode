@@ -1,23 +1,6 @@
-import axios, { AxiosError, type AxiosRequestConfig } from "axios";
+import type { AxiosRequestConfig } from "axios";
+import { axiosInstance } from "../config/axios";
 import type { APIListResponse } from "../types/APIListResponse";
-
-const axiosInstance = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL,
-  timeout: 10000,
-});
-
-axiosInstance.interceptors.response.use(
-  (response) => response,
-
-  (error: AxiosError) => {
-    const message =
-      (error.response?.data as { message?: string })?.message ||
-      error.message ||
-      "Something went wrong";
-
-    return Promise.reject(new Error(message));
-  },
-);
 
 class APIClient<T> {
   private endpoint: string;

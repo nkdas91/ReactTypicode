@@ -1,23 +1,63 @@
 import { z } from "zod";
+import { VALIDATION } from "../constants/validation";
+
+const USER = VALIDATION.USER;
 
 export const userSchema = z.object({
-  name: z.string().min(1, "Name is required"),
+  name: z
+    .string()
+    .trim()
+    .min(USER.NAME.MIN, "Name is too short")
+    .max(USER.NAME.MAX, "Name is too long"),
 
-  username: z.string().min(1, "Username is required"),
+  username: z
+    .string()
+    .trim()
+    .min(USER.USERNAME.MIN, "Username is too short")
+    .max(USER.USERNAME.MAX, "Username is too long")
+    .regex(
+      USER.USERNAME.REGEX,
+      "Username can only contain letters, numbers, and underscores",
+    ),
 
-  email: z.email("Invalid email"),
+  email: z.email("Invalid email address"),
 
-  phone: z.string().min(10, "Invalid phone number"),
+  phone: z
+    .string()
+    .trim()
+    .min(USER.PHONE.MIN, "Phone number is too short")
+    .max(USER.PHONE.MAX, "Phone number is too long")
+    .regex(USER.PHONE.REGEX, "Invalid phone number"),
 
-  website: z.string(),
+  website: z
+    .url("Invalid website URL")
+    .max(USER.WEBSITE.MAX, "Website URL is too long")
+    .or(z.literal("")),
 
   address: z.object({
-    suite: z.string().min(1, "Suite is required"),
+    suite: z
+      .string()
+      .trim()
+      .min(1, "Suite is required")
+      .max(USER.ADDRESS.SUITE_MAX, "Suite is too long"),
 
-    street: z.string().min(1, "Street is required"),
+    street: z
+      .string()
+      .trim()
+      .min(1, "Street is required")
+      .max(USER.ADDRESS.STREET_MAX, "Street is too long"),
 
-    city: z.string().min(1, "City is required"),
+    city: z
+      .string()
+      .trim()
+      .min(1, "City is required")
+      .max(USER.ADDRESS.CITY_MAX, "City is too long"),
 
-    zipcode: z.string().min(1, "Zipcode is required"),
+    zipcode: z
+      .string()
+      .trim()
+      .min(1, "Zipcode is required")
+      .max(USER.ADDRESS.ZIPCODE_MAX, "Zipcode is too long")
+      .regex(USER.ADDRESS.ZIPCODE_REGEX, "Invalid zipcode"),
   }),
 });

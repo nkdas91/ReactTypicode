@@ -1,10 +1,8 @@
 import { useMemo, useState } from "react";
-
-import useComments from "./useComments";
-import useCommentForm from "./useCommentForm";
-import useLocalStorage from "./useLocalStorage";
-
 import type { Comment } from "../../types/Comment";
+import useCommentForm from "./useCommentForm";
+import useComments from "./useComments";
+import useLocalStorage from "./useLocalStorage";
 
 export default function usePostComments(postId: number) {
   /**
