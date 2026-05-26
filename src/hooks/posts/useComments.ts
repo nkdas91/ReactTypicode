@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { apiClient } from "../services/apiService";
-import type { Comment } from "../types/Comment";
+import { apiClient } from "../../services/apiService";
+import type { Comment } from "../../types/Comment";
 
 const useComments = (id: number) => {
   const [data, setData] = useState<Comment[]>([]);

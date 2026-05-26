@@ -1,20 +1,19 @@
 import { useEffect, useState } from "react";
-import { userSchema } from "../../schemas/userSchema";
-import type { User } from "../../types/User";
+import { postSchema } from "../../schemas/postSchema";
+import type { Post } from "../../types/Post";
 import { validateSchema } from "../../utils/validateSchema";
 
 /**
- * Shared hook for managing user form state and validation.
+ * Shared hook for managing post form state and validation.
  *
  * Used by:
- * - useCreateUserForm
- * - useUpdateUserForm
+ * - useUpdatePostForm
  */
-export default function useUserForm(initialForm: User | null) {
+export default function usePostForm(initialForm: Post | null) {
   /**
    * Stores the current form values.
    */
-  const [form, setForm] = useState<User | null>(initialForm);
+  const [form, setForm] = useState<Post | null>(initialForm);
 
   /**
    * Sync async-loaded form data.
@@ -31,7 +30,7 @@ export default function useUserForm(initialForm: User | null) {
    *
    * Example:
    * {
-   *   name: "Name is required"
+   *   title: "Title is required"
    * }
    */
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -45,7 +44,7 @@ export default function useUserForm(initialForm: User | null) {
    * Updates top-level form fields.
    *
    * Example:
-   * handleChange("name", "John")
+   * handleChange("title", "What is typescript")
    */
   const handleChange = (name: string, value: string) => {
     setForm((prev) =>
@@ -59,27 +58,7 @@ export default function useUserForm(initialForm: User | null) {
   };
 
   /**
-   * Updates nested address fields.
-   *
-   * Example:
-   * handleAddressChange("city", "London")
-   */
-  const handleAddressChange = (name: string, value: string) => {
-    setForm((prev) =>
-      prev
-        ? {
-            ...prev,
-            address: {
-              ...prev.address,
-              [name]: value,
-            },
-          }
-        : prev,
-    );
-  };
-
-  /**
-   * Validates the form using the user schema.
+   * Validates the form using the post schema.
    *
    * Returns:
    * - true  => validation passed
@@ -90,7 +69,7 @@ export default function useUserForm(initialForm: User | null) {
       return false;
     }
 
-    const validation = validateSchema(userSchema, form);
+    const validation = validateSchema(postSchema, form);
 
     if (!validation.success) {
       setErrors(validation.errors);
@@ -110,7 +89,6 @@ export default function useUserForm(initialForm: User | null) {
     loading,
     setLoading,
     handleChange,
-    handleAddressChange,
     validateForm,
   };
 }
