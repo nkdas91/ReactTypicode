@@ -1,162 +1,60 @@
 import { MinusCircleIcon, PlusCircleIcon } from "@heroicons/react/24/solid";
-import { useEffect, useState } from "react";
-import useNotification from "../../context/useNotification";
-import useComments from "../../hooks/posts/useComments";
-import { commentSchema } from "../../schemas/commentSchema";
-import type { Comment } from "../../types/Comment";
-import { validateSchema } from "../../utils/validateSchema";
+import usePostComments from "../../hooks/posts/usePostComments";
 import Spinner from "../Spinner";
-import TextField from "../TextField";
+import CommentForm from "./CommentForm";
+import CommentList from "./CommentList";
 
 interface CommentsProps {
   id: number;
 }
 
 const Comments = ({ id }: CommentsProps) => {
-  const { data: comments, loading } = useComments(id);
+  const {
+    comments,
+    isLoading,
+    formVisible,
+    toggleFormVisibility,
+    form,
+    errors,
+    handleChange,
+    handleSubmit,
+  } = usePostComments(id);
 
-  const [savedComments, setSavedComments] = useState<Comment[]>(() => {
-    const localComments = localStorage.getItem(`comments_${id}`);
-
-    if (!localComments) {
-      return [];
-    }
-
-    try {
-      return JSON.parse(localComments);
-    } catch {
-      return [];
-    }
-  });
-
-  const [form, setForm] = useState<Comment>({
-    postId: id,
-    id: 0,
-    name: "",
-    body: "",
-    email: "",
-  } as Comment);
-  const [formVisible, setFormVisibility] = useState(false);
-  const { showNotification } = useNotification();
-  const [errors, setErrors] = useState<Record<string, string>>({});
-
-  useEffect(() => {
-    localStorage.setItem(`comments_${id}`, JSON.stringify(savedComments));
-  }, [savedComments, id]);
-
-  if (loading) {
+  if (isLoading) {
     return <Spinner />;
   }
-
-  if (comments.length === 0) {
-    return <div>This post doesn't have any comments.</div>;
-  }
-
-  const allComments = [...savedComments, ...comments];
-
-  const handleChange = (name: string, value: string) => {
-    setForm((prev) => (prev ? { ...prev, [name]: value } : prev));
-  };
-
-  const handleSubmit = (e: React.SubmitEvent) => {
-    e.preventDefault();
-
-    if (!form) return;
-
-    const validation = validateSchema(commentSchema, form);
-
-    if (!validation.success) {
-      setErrors(validation.errors);
-
-      return;
-    }
-
-    setErrors({});
-
-    const newComment = {
-      ...form,
-      id: comments.length + savedComments.length + 1,
-    };
-
-    setSavedComments((prev) => [...prev, newComment]);
-
-    setForm({
-      postId: id,
-      id: 0,
-      name: "",
-      body: "",
-      email: "",
-    });
-
-    setFormVisibility(false);
-
-    showNotification("Comment added successfully");
-  };
 
   return (
     <div className="max-w-5xl mx-auto">
       <div className="flex justify-between items-center gap-4 mb-2">
         <h2 className="text-xl mb-2">Comments</h2>
-        {!formVisible && (
-          <PlusCircleIcon
-            onClick={() => setFormVisibility((prev) => !prev)}
-            className="size-10 text-indigo-700 cursor-pointer"
-          />
-        )}
-        {formVisible && (
-          <MinusCircleIcon
-            onClick={() => setFormVisibility((prev) => !prev)}
-            className="size-10 text-indigo-700 cursor-pointer"
-          />
-        )}
+
+        <button
+          type="button"
+          onClick={toggleFormVisibility}
+          aria-label={formVisible ? "Hide comment form" : "Show comment form"}
+          className="cursor-pointer"
+        >
+          {formVisible ? (
+            <MinusCircleIcon className="size-10 text-indigo-700" />
+          ) : (
+            <PlusCircleIcon className="size-10 text-indigo-700" />
+          )}
+        </button>
       </div>
 
-      <div
-        className={`${formVisible ? "block" : "hidden"} max-w-5xl mx-auto mb-4 p-6 border border-gray-100 rounded-lg`}
-      >
-        <form onSubmit={handleSubmit}>
-          <TextField
-            label="Title"
-            type="text"
-            name="name"
-            value={form?.name}
-            error={errors?.name}
+      {formVisible && (
+        <div className="max-w-5xl mx-auto mb-4 p-6 border border-gray-100 rounded-lg">
+          <CommentForm
+            form={form}
+            errors={errors}
             onChange={handleChange}
+            onSubmit={handleSubmit}
           />
-          <TextField
-            label="email"
-            type="email"
-            name="email"
-            value={form?.email}
-            error={errors?.email}
-            onChange={handleChange}
-          />
-          <label>Comment</label>
-          <textarea
-            name="body"
-            value={form?.body}
-            onChange={(e) => handleChange(e.target.name, e.target.value)}
-            className="px-4 py-2 border border-gray-100 rounded-md w-full"
-            rows={5}
-          />
-          <label className="text-rose-500">{errors?.body}</label>
-          <div className="flex justify-end gap-2">
-            <button className="bg-indigo-100 text-indigo-700 px-4 py-2 rounded-full cursor-pointer hover:bg-indigo-200">
-              Save
-            </button>
-          </div>
-        </form>
-      </div>
-
-      {allComments.map((c) => (
-        <div className="mb-4 p-6 border border-gray-100 rounded-lg" key={c.id}>
-          <h3 className="text-lg">{c.name}</h3>
-          <label className="text-sm text-gray-500 italic block mb-3">
-            {c.email}
-          </label>
-          <p className="text-gray-500">{c.body}</p>
         </div>
-      ))}
+      )}
+
+      <CommentList comments={comments} />
     </div>
   );
 };
