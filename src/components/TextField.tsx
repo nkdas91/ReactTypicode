@@ -4,6 +4,8 @@ interface TextFieldProps {
   label?: string;
   placeholder?: string;
   type?: HTMLInputTypeAttribute;
+  as?: "input" | "textarea";
+  rows?: number;
   name: string;
   value?: string;
   error?: string;
@@ -14,11 +16,25 @@ export default function TextField({
   label,
   placeholder,
   type = "text",
+  as = "input",
+  rows = 4,
   name,
   value,
   error,
   onChange,
 }: TextFieldProps) {
+  const commonProps = {
+    id: name,
+    name,
+    placeholder,
+    value: value ?? "",
+    onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
+      onChange(e.target.name, e.target.value),
+    "aria-invalid": !!error,
+    "aria-describedby": error ? `${name}-error` : undefined,
+    className: "px-4 py-2 border border-gray-100 rounded-md w-full",
+  };
+
   return (
     <div className="mb-2">
       {label && (
@@ -27,17 +43,11 @@ export default function TextField({
         </label>
       )}
 
-      <input
-        id={name}
-        type={type}
-        placeholder={placeholder}
-        name={name}
-        value={value ?? ""}
-        onChange={(e) => onChange(e.target.name, e.target.value)}
-        aria-invalid={!!error}
-        aria-describedby={error ? `${name}-error` : undefined}
-        className="px-4 py-2 border border-gray-100 rounded-md w-full"
-      />
+      {as === "textarea" ? (
+        <textarea {...commonProps} rows={rows} />
+      ) : (
+        <input {...commonProps} type={type} />
+      )}
 
       {error && (
         <p id={`${name}-error`} className="text-rose-500 text-sm mt-1">
