@@ -1,13 +1,13 @@
-import { ChevronDownIcon } from "@heroicons/react/24/solid";
-import { useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useMemo, useState } from "react";
 import Pagination from "../../components/Pagination";
-import PostCard from "../../components/posts/PostCard";
+import PostListItem from "../../components/posts/PostListItem";
+import SelectField from "../../components/SelectField";
+import Spinner from "../../components/Spinner";
 import TextField from "../../components/TextField";
-import useNotification from "../../context/useNotification";
-import { usePosts } from "../../hooks/usePosts";
+import useDeletePost from "../../hooks/posts/useDeletePost";
+import usePostFilters from "../../hooks/posts/usePostFilters";
+import usePosts from "../../hooks/posts/usePosts";
 import useUsers from "../../hooks/users/useUsers";
-import { deletePost } from "../../services/postService";
 
 interface PropListProp {
   favourites: number[];
@@ -16,63 +16,45 @@ interface PropListProp {
 
 const PostList = ({ favourites, toggleFavourite }: PropListProp) => {
   const [query, setQuery] = useState("");
-  const [searchParams] = useSearchParams();
-  const { showNotification } = useNotification();
-  const userId = searchParams.get("userId");
-  const page = Number(searchParams.get("page") || 1);
-  const limit = Number(searchParams.get("limit") || 5);
-  const selectedUserId = userId ?? "";
 
-  const { data: posts, total } = usePosts(selectedUserId, page, limit);
-  const { data: users } = useUsers();
+  const { userId, page, limit, setUserId, setPage, setLimit } =
+    usePostFilters();
 
-  const navigate = useNavigate();
+  const {
+    data: postsResponse,
+    error,
+    isLoading,
+    refetch,
+  } = usePosts({ page, limit, userId });
 
-  const filteredPosts = posts.filter((p) =>
-    p.title.toLowerCase().includes(query.toLowerCase()),
-  );
+  const { data: usersResponse } = useUsers();
+  const deletePost = useDeletePost(refetch);
+
+  const posts = postsResponse?.data;
+  const total = postsResponse?.total;
+
+  const users = usersResponse?.data;
+
+  const filteredPosts = useMemo(() => {
+    return posts?.filter((p) =>
+      p.title.toLowerCase().includes(query.toLowerCase()),
+    );
+  }, [posts, query]);
+
+  if (isLoading) {
+    return <Spinner />;
+  }
+
+  if (error) {
+    return <p role="alert">{error.message}</p>;
+  }
 
   const handleSearch = (_name: string, value: string) => {
     setQuery(value);
   };
 
-  const handleDelete = async (e: React.MouseEvent, id: number) => {
-    e.preventDefault();
-
-    const res = await deletePost(id);
-
-    if (res.data) {
-      showNotification("Post deleted");
-      navigate("/posts");
-    } else {
-      showNotification("Error deleting post", "error");
-    }
-  };
-
-  const selectUser = (id: string) => {
-    if (!id) {
-      navigate(`/posts`);
-
-      return;
-    }
-
-    navigate(`/posts?userId=${id}`);
-  };
-
-  const handlePageChange = (newPage: number) => {
-    const params = new URLSearchParams(searchParams);
-    params.set("page", newPage.toString());
-
-    navigate(`/posts?${params.toString()}`);
-  };
-
-  const setLimit = (limit: string) => {
-    if (!limit) return;
-
-    const params = new URLSearchParams(searchParams);
-    params.set("limit", limit);
-
-    navigate(`/posts?${params.toString()}`);
+  const handleDelete = async (id: number) => {
+    await deletePost(id);
   };
 
   return (
@@ -92,40 +74,35 @@ const PostList = ({ favourites, toggleFavourite }: PropListProp) => {
         <div className="order-1 sm:order-2 flex flex-col md:flex-row items-end md:items-center self-end gap-3 mb-2">
           <div className="flex items-center gap-1">
             <label>Posts by</label>
-            <div className="grid grid-cols-1">
-              <select
-                value={selectedUserId}
-                onChange={(e) => selectUser(e.target.value)}
-                className="col-start-1 row-start-1 px-4 py-2 border border-gray-100 rounded-md appearance-none"
-              >
-                <option value="">All users</option>
-                {users?.map((user) => (
-                  <option key={user.id} value={user.id}>
-                    {user.name}
-                  </option>
-                ))}
-              </select>
+            <SelectField
+              value={userId}
+              onChange={setUserId}
+              options={[
+                {
+                  label: "All users",
+                  value: "",
+                },
 
-              <ChevronDownIcon className="pointer-events-none col-start-1 row-start-1 mr-2 size-5 self-center justify-self-end text-gray-400 sm:size-4" />
-            </div>
+                ...(users?.map((user) => ({
+                  label: user.name,
+                  value: user.id,
+                })) ?? []),
+              ]}
+            />
           </div>
 
           <div className="flex items-center gap-1">
             <label>Show</label>
-            <div className="grid grid-cols-1">
-              <select
-                value={limit}
-                onChange={(e) => setLimit(e.target.value)}
-                className="col-start-1 row-start-1 px-4 py-2 pr-6 border border-gray-100 rounded-md appearance-none"
-              >
-                <option value="5">5</option>
-                <option value="10">10</option>
-                <option value="15">15</option>
-                <option value="20">20</option>
-              </select>
-
-              <ChevronDownIcon className="pointer-events-none col-start-1 row-start-1 mr-2 size-5 self-center justify-self-end text-gray-400 sm:size-4" />
-            </div>
+            <SelectField
+              value={limit}
+              onChange={setLimit}
+              options={[
+                { label: "5", value: 5 },
+                { label: "10", value: 10 },
+                { label: "15", value: 15 },
+                { label: "20", value: 20 },
+              ]}
+            />
             <label> Records</label>
           </div>
         </div>
@@ -133,33 +110,31 @@ const PostList = ({ favourites, toggleFavourite }: PropListProp) => {
 
       {!filteredPosts || filteredPosts.length === 0 ? (
         <div className="text-center p-2">No posts to display!</div>
-      ) : (
-        ""
-      )}
+      ) : null}
 
-      {filteredPosts?.map((post) => (
-        <PostCard
-          key={post.id}
-          post={post}
-          favourites={favourites}
-          toggleFavourite={() => toggleFavourite(post.id)}
-          handleDelete={(e) => handleDelete(e, post.id)}
-        />
-      ))}
+      <ul>
+        {filteredPosts?.map((post) => (
+          <PostListItem
+            key={post.id}
+            post={post}
+            favourites={favourites}
+            toggleFavourite={() => toggleFavourite(post.id)}
+            onDelete={handleDelete}
+          />
+        ))}
+      </ul>
 
-      {filteredPosts.length ? (
+      {filteredPosts?.length ? (
         <div className="flex justify-end items-center gap-2 mt-4">
           <Pagination
-            totalRecords={total}
+            totalRecords={total ?? 0}
             currentPage={page}
             limit={limit}
-            dataLength={posts.length}
-            onPageChange={handlePageChange}
+            dataLength={posts?.length ?? 0}
+            onPageChange={setPage}
           />
         </div>
-      ) : (
-        ""
-      )}
+      ) : null}
     </div>
   );
 };
