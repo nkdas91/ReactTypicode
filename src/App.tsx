@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import "./App.css";
 import Navbar from "./components/Navbar";
+import useLocalStorage from "./hooks/posts/useLocalStorage";
 import Home from "./pages/Home";
 import NotFound from "./pages/NotFound";
 import FavouritePosts from "./pages/posts/FavouritePosts";
@@ -14,23 +14,10 @@ import UserEdit from "./pages/users/UserEdit";
 import UserList from "./pages/users/UserList";
 
 function App() {
-  const [favourites, setFavourites] = useState<number[]>(() => {
-    const saved = localStorage.getItem("favourites");
-
-    if (!saved) {
-      return [];
-    }
-
-    try {
-      return JSON.parse(saved);
-    } catch {
-      return [];
-    }
-  });
-
-  useEffect(() => {
-    localStorage.setItem("favourites", JSON.stringify(favourites));
-  }, [favourites]);
+  const [favourites, setFavourites] = useLocalStorage<number[]>(
+    "favourites",
+    [],
+  );
 
   const toggleFavourite = (id: number) => {
     setFavourites((prev) => {

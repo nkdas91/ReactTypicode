@@ -1,26 +1,11 @@
-import { useEffect, useState } from "react";
-import { apiClient } from "../../services/apiService";
-import type { Comment } from "../../types/Comment";
+import { useQuery } from "@tanstack/react-query";
+import commentService from "../../services/commentService";
 
-const useComments = (id: number) => {
-  const [data, setData] = useState<Comment[]>([]);
-
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    apiClient
-      .get(`/posts/${id}/comments`)
-      .then((res) => {
-        setData(res.data);
-      })
-      .catch((err) => console.error(err))
-      .finally(() => setLoading(false));
-  }, [id]);
-
-  return {
-    data,
-    loading,
-  };
-};
-
-export default useComments;
+export default function useComments(id: number) {
+  return useQuery({
+    queryKey: ["posts", id, "comments"],
+    queryFn: () => commentService.getByPost(id),
+    enabled: id !== null,
+    staleTime: 1000 * 60 * 5,
+  });
+}
