@@ -29,9 +29,11 @@ class APIClient<T> {
   getAll = async (config?: AxiosRequestConfig): Promise<APIListResponse<T>> => {
     const response = await axiosInstance.get<T[]>(this.endpoint, config);
 
+    const totalHeader = response.headers["x-total-count"];
+
     return {
       data: response.data,
-      total: Number(response.headers["x-total-count"]),
+      total: totalHeader ? Number(totalHeader) : 0,
     };
   };
 

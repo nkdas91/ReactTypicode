@@ -8,8 +8,10 @@ import useUsers from "../../hooks/users/useUsers";
 
 const UserList = () => {
   const [query, setQuery] = useState("");
-  const { data: users, error, isLoading, refetch } = useUsers();
+  const { data: usersResponse, error, isLoading, refetch } = useUsers();
   const deleteUser = useDeleteUser(refetch);
+
+  const users = usersResponse?.data;
 
   const filteredUsers = useMemo(() => {
     return users?.filter((u) =>

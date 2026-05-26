@@ -1,7 +1,7 @@
 import { MinusCircleIcon, PlusCircleIcon } from "@heroicons/react/24/solid";
 import { useEffect, useState } from "react";
 import useNotification from "../../context/useNotification";
-import useComments from "../../hooks/useComments";
+import useComments from "../../hooks/posts/useComments";
 import { commentSchema } from "../../schemas/commentSchema";
 import type { Comment } from "../../types/Comment";
 import { validateSchema } from "../../utils/validateSchema";

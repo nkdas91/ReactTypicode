@@ -1,28 +1,6 @@
-import axios, { AxiosError } from "axios";
+import type { Post } from "../types/Post";
+import APIClient from "./apiClient";
 
-type EmptyObject = Record<string, never>;
+const postService = new APIClient<Post>("/posts");
 
-interface APIResponse<T> {
-  data?: T;
-  error?: AxiosError | string;
-}
-
-export const deletePost = async (
-  id: number | null,
-): Promise<APIResponse<EmptyObject>> => {
-  if (!id) return { error: "Id is missing." };
-
-  try {
-    const res = await axios.delete(
-      `https://jsonplaceholder.typicode.com/posts/${id}`,
-    );
-
-    return { data: res.data };
-  } catch (err) {
-    const error = err as AxiosError;
-
-    return {
-      error: error.message,
-    };
-  }
-};
+export default postService;

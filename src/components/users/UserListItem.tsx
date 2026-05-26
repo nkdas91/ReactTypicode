@@ -3,12 +3,12 @@ import { Link } from "react-router-dom";
 import type { User } from "../../types/User";
 import Button from "../Button";
 
-interface UserCardProps {
+interface UserListItemProps {
   user: User;
   onDelete: (e: React.MouseEvent, id: number) => Promise<void>;
 }
 
-const UserListItem = ({ user, onDelete }: UserCardProps) => {
+const UserListItem = ({ user, onDelete }: UserListItemProps) => {
   return (
     <li className="border border-gray-100 flex justify-between items-center flex-wrap gap-2">
       <Link

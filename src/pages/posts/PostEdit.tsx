@@ -1,64 +1,27 @@
-import axios from "axios";
-import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import BackButton from "../../components/BackButton";
+import Button from "../../components/Button";
+import Spinner from "../../components/Spinner";
 import TextField from "../../components/TextField";
-import useNotification from "../../context/useNotification";
-import usePost from "../../hooks/usePost";
-import { postSchema } from "../../schemas/postSchema";
-import type { Post } from "../../types/Post";
-import { validateSchema } from "../../utils/validateSchema";
+import usePost from "../../hooks/posts/usePost";
+import useUpdatePostForm from "../../hooks/posts/useUpdatePostForm";
 
 const PostEdit = () => {
   const { id } = useParams();
-  const { data: post } = usePost(id ? parseInt(id) : null);
-  const [form, setForm] = useState<Post | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [errors, setErrors] = useState<Record<string, string>>({});
-  const { showNotification } = useNotification();
+  const { data: post, error, isLoading } = usePost(Number(id));
 
-  useEffect(() => {
-    if (post && !form) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setForm(post);
-    }
-  }, [post, form]);
+  const { form, errors, loading, handleChange, handleSubmit } =
+    useUpdatePostForm(Number(id), post);
 
-  const handleChange = (name: string, value: string) => {
-    setForm((prev) => (prev ? { ...prev, [name]: value } : prev));
-  };
+  if (isLoading) {
+    return <Spinner />;
+  }
 
-  const handleSubmit = (e: React.SubmitEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    if (!form) return;
+  if (!post) {
+    return <div className="text-center">Post not found</div>;
+  }
 
-    const validation = validateSchema(postSchema, form);
-
-    if (!validation.success) {
-      setErrors(validation.errors);
-      setLoading(false);
-      return;
-    }
-
-    setErrors({});
-
-    try {
-      axios
-        .put(`https://jsonplaceholder.typicode.com/posts/${id}`, form)
-        .then(() => {
-          showNotification("Post updated");
-          setLoading(false);
-        });
-    } catch (error: unknown) {
-      if (axios.isAxiosError(error)) {
-        showNotification(error.message, "error");
-      }
-
-      showNotification("Unexpected error occurred", "error");
-      setLoading(false);
-    }
-  };
+  if (error) return <p role="alert">{error.message}</p>;
 
   return (
     <div className="max-w-3xl mx-auto p-6 border border-gray-100 rounded-lg">
@@ -75,32 +38,20 @@ const PostEdit = () => {
             onChange={handleChange}
           />
 
-          <div>
-            <label className="block">Body</label>
-            <textarea
-              name="body"
-              value={form?.body}
-              onChange={(e) => handleChange(e.target.name, e.target.value)}
-              className="px-4 py-2 border border-gray-100 rounded-md w-full"
-              rows={10}
-            />
-            <label className="text-rose-500">{errors?.body}</label>
-          </div>
+          <TextField
+            label="Body"
+            name="body"
+            as="textarea"
+            rows={10}
+            value={form?.body}
+            onChange={handleChange}
+          />
         </div>
 
         <div className="flex justify-end gap-2">
-          <button
-            disabled={loading}
-            className={`px-4 py-2 rounded-full transition cursor-pointer
-              ${
-                loading
-                  ? "bg-gray-300 cursor-not-allowed"
-                  : "bg-indigo-100 text-indigo-700 hover:bg-indigo-200"
-              }
-            `}
-          >
+          <Button type="submit" disabled={loading} variant="secondary">
             {loading ? "Saving..." : "Save"}
-          </button>
+          </Button>
         </div>
       </form>
     </div>
