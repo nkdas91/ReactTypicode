@@ -1,6 +1,6 @@
 import { Route, Routes } from "react-router-dom";
 import "./App.css";
-import Navbar from "./components/Navbar";
+import Navbar from "./components/navbar/Navbar";
 import useLocalStorage from "./hooks/posts/useLocalStorage";
 import Home from "./pages/Home";
 import NotFound from "./pages/NotFound";
