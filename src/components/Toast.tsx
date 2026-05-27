@@ -18,14 +18,14 @@ export default function Toast({ message, type, onClose }: ToastProps) {
         flex items-center gap-3
         min-w-[320px] max-w-md
         rounded-xl px-4 py-3
-        shadow-lg border
-        text-white
+        shadow-lg
+        border
         transition-all duration-300
         animate-in slide-in-from-right
         ${
           isSuccess
-            ? "bg-indigo-600 border-indigo-500"
-            : "bg-rose-600 border-rose-500"
+            ? "bg-secondary text-on-secondary border-on-secondary"
+            : "bg-danger text-on-danger border-on-danger"
         }
       `}
     >

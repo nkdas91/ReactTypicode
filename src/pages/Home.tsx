@@ -16,7 +16,7 @@ const Home = ({ likedPostIds }: HomeProps) => {
 
   return (
     <div className="max-w-5xl mx-auto">
-      <div className="border border-gray-100 rounded-3xl p-4 ">
+      <div className="rounded-card p-4 border border-light">
         <h2 className="text-xl">Posts</h2>
         <LikesPieChart data={pieData} />
       </div>

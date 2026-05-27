@@ -17,7 +17,7 @@ const SelectField = ({ value, options, onChange }: SelectFieldProps) => {
       <select
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="col-start-1 row-start-1 px-4 py-2 pr-8 border border-gray-100 rounded-md appearance-none"
+        className="col-start-1 row-start-1 px-4 py-2 pr-8 border border-light rounded-md appearance-none focus-visible:outline-primary"
       >
         {options.map((option) => (
           <option key={option.value} value={option.value}>
@@ -26,7 +26,7 @@ const SelectField = ({ value, options, onChange }: SelectFieldProps) => {
         ))}
       </select>
 
-      <ChevronDownIcon className="pointer-events-none col-start-1 row-start-1 mr-2 size-5 self-center justify-self-end text-gray-400 sm:size-4" />
+      <ChevronDownIcon className="pointer-events-none col-start-1 row-start-1 mr-2 size-5 self-center justify-self-end text-muted sm:size-4" />
     </div>
   );
 };

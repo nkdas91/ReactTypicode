@@ -27,24 +27,24 @@ const UserDetails = () => {
   };
 
   return (
-    <div className="max-w-3xl mx-auto p-6 border border-gray-100 rounded-lg">
+    <div className="max-w-3xl mx-auto p-6 border border-light rounded-lg">
       <BackButton url="/users" label="Back to Users" />
 
       <div className="mb-6 mt-4">
         <h1 className="text-3xl">{user?.name}</h1>
-        <p className="text-gray-500">@{user?.username}</p>
+        <p className="text-muted">@{user?.username}</p>
       </div>
 
       <div className="mb-6">
         <h2 className="text-lg font-medium mb-2">Contact</h2>
         <p>
-          <span className="text-gray-500">Email:</span> {user?.email}
+          <span className="text-muted">Email:</span> {user?.email}
         </p>
         <p>
-          <span className="text-gray-500">Phone:</span> {user?.phone}
+          <span className="text-muted">Phone:</span> {user?.phone}
         </p>
         <p>
-          <span className="text-gray-500">Website:</span> {user?.website}
+          <span className="text-muted">Website:</span> {user?.website}
         </p>
       </div>
 

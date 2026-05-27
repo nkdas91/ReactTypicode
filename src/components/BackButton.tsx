@@ -10,7 +10,7 @@ const BackButton = ({ url, label }: BackButtonProps) => {
   return (
     <Link
       to={url}
-      className="flex items-center text-gray-500 hover:text-indigo-500"
+      className="inline-flex items-center rounded-full pr-2 text-muted hover:text-primary-hover focus-visible:outline-primary-hover focus-visible:outline-2 focus-visible:outline-offset-2"
     >
       <ArrowLeftCircleIcon className="size-12" />
       {label}

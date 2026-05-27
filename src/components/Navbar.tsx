@@ -10,14 +10,14 @@ const Navbar = ({ favouriteCount }: NavbarProps) => {
   const [open, setOpen] = useState(false);
 
   return (
-    <nav className="bg-gray-100 px-7 py-4">
+    <nav className="bg-surface px-7 py-4">
       <div className="mx-auto max-w-5xl flex items-center justify-between">
         <Link to="/" className="font-bold text-lg">
           My App
         </Link>
 
         {/* Desktop Menu */}
-        <div className="hidden sm:flex gap-4">
+        <div className="hidden sm:flex items-center gap-4">
           <Link to="/" className="nav-link">
             Home
           </Link>
@@ -33,9 +33,11 @@ const Navbar = ({ favouriteCount }: NavbarProps) => {
             className="nav-link flex items-center gap-1"
           >
             Favourite Posts
-            <span className="inline-flex rounded-lg bg-indigo-700 text-white px-2 py-1 text-xs font-medium">
-              {favouriteCount || 0}
-            </span>
+            {favouriteCount !== 0 && (
+              <span className="inline-flex rounded-full bg-primary text-on-primary px-2 py-0 text-sm font-semibold">
+                {favouriteCount}
+              </span>
+            )}
           </Link>
         </div>
 
@@ -77,9 +79,11 @@ const Navbar = ({ favouriteCount }: NavbarProps) => {
             className="mobile-link flex gap-1 items-center"
           >
             Favourite Posts
-            <span className="inline-flex rounded-md bg-indigo-700 px-2 py-1 text-xs font-medium text-white">
-              {favouriteCount || 0}
-            </span>
+            {favouriteCount !== 0 && (
+              <span className="inline-flex rounded-full bg-primary text-on-primary px-2 py-0 text-sm font-semibold">
+                {favouriteCount}
+              </span>
+            )}
           </Link>
         </div>
       )}

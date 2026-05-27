@@ -5,6 +5,7 @@ import type {
 } from "react";
 
 import { Link } from "react-router-dom";
+import { classNames } from "../utils/classNames";
 
 type Variant = "primary" | "secondary" | "danger";
 
@@ -20,9 +21,12 @@ type ButtonProps = {
   AnchorHTMLAttributes<HTMLAnchorElement>;
 
 const variantClasses: Record<Variant, string> = {
-  primary: "bg-indigo-700 text-white hover:bg-indigo-600",
-  secondary: "bg-indigo-100 text-indigo-700 hover:bg-indigo-200",
-  danger: "bg-rose-100 text-rose-700 hover:bg-rose-200",
+  primary:
+    "bg-primary text-on-primary hover:bg-primary-hover focus-visible:outline-primary",
+  secondary:
+    "bg-secondary text-on-secondary hover:bg-secondary-hover focus-visible:outline-on-secondary",
+  danger:
+    "bg-danger text-on-danger hover:bg-danger-hover focus-visible:outline-on-danger",
 };
 
 const sizeClasses: Record<Size, string> = {
@@ -39,15 +43,15 @@ export default function Button({
   type,
   ...props
 }: ButtonProps) {
-  const classes = [
+  const classes = classNames(
     "inline-flex items-center justify-center",
     "rounded-full transition cursor-pointer",
-    "focus:outline-none focus:ring-2 focus:ring-indigo-400",
+    "focus-visible:outline-2 focus-visible:outline-offset-2",
     "disabled:opacity-50 disabled:cursor-not-allowed",
     variantClasses[variant],
     sizeClasses[size],
     className,
-  ].join(" ");
+  );
 
   if (to) {
     return (

@@ -1,8 +1,9 @@
-import { MinusCircleIcon, PlusCircleIcon } from "@heroicons/react/24/solid";
+import { MinusIcon, PlusIcon } from "@heroicons/react/24/solid";
 import usePostComments from "../../hooks/posts/usePostComments";
-import CommentsSkeleton from "./skeletons/CommentsSkeleton";
+import Button from "../Button";
 import CommentForm from "./CommentForm";
 import CommentList from "./CommentList";
+import CommentsSkeleton from "./skeletons/CommentsSkeleton";
 
 interface CommentsProps {
   id: number;
@@ -29,22 +30,23 @@ const Comments = ({ id }: CommentsProps) => {
       <div className="flex justify-between items-center gap-4 mb-2">
         <h2 className="text-xl mb-2">Comments</h2>
 
-        <button
+        <Button
           type="button"
           onClick={toggleFormVisibility}
           aria-label={formVisible ? "Hide comment form" : "Show comment form"}
-          className="cursor-pointer"
+          variant="primary"
+          size="icon"
         >
           {formVisible ? (
-            <MinusCircleIcon className="size-10 text-indigo-700" />
+            <MinusIcon className="size-6" />
           ) : (
-            <PlusCircleIcon className="size-10 text-indigo-700" />
+            <PlusIcon className="size-6" />
           )}
-        </button>
+        </Button>
       </div>
 
       {formVisible && (
-        <div className="max-w-5xl mx-auto mb-4 p-6 border border-gray-100 rounded-lg">
+        <div className="max-w-5xl mx-auto mb-4 p-6 border border-light rounded-lg">
           <CommentForm
             form={form}
             errors={errors}

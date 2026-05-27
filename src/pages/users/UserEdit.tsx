@@ -31,7 +31,7 @@ const UserEdit = () => {
   if (error) return <p role="alert">{error.message}</p>;
 
   return (
-    <div className="max-w-3xl mx-auto p-6 border border-gray-100 rounded-lg">
+    <div className="max-w-3xl mx-auto p-6 border border-light rounded-lg">
       <BackButton url="/users" label="Back to Users" />
 
       <form onSubmit={handleSubmit}>

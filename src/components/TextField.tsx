@@ -32,7 +32,8 @@ export default function TextField({
       onChange(e.target.name, e.target.value),
     "aria-invalid": !!error,
     "aria-describedby": error ? `${name}-error` : undefined,
-    className: "px-4 py-2 border border-gray-100 rounded-md w-full",
+    className:
+      "px-4 py-2 border border-light rounded-md w-full focus-visible:outline-primary",
   };
 
   return (
@@ -50,7 +51,7 @@ export default function TextField({
       )}
 
       {error && (
-        <p id={`${name}-error`} className="text-rose-500 text-sm mt-1">
+        <p id={`${name}-error`} className="text-on-danger text-sm mt-1">
           {error}
         </p>
       )}

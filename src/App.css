@@ -1,1 +1,28 @@
 @import "tailwindcss";
+
+@theme {
+  --color-primary: var(--color-indigo-700);
+  --color-on-primary: var(--color-white);
+  --color-primary-hover: var(--color-indigo-600);
+
+  --color-secondary: var(--color-indigo-100);
+  --color-on-secondary: var(--color-indigo-700);
+  --color-secondary-hover: var(--color-indigo-200);
+
+  --color-danger: var(--color-rose-100);
+  --color-on-danger: var(--color-rose-700);
+  --color-danger-hover: var(--color-rose-200);
+
+  --color-accent: var(--color-rose-500);
+  --color-on-accent: var(--color-white);
+
+  --color-surface: var(--color-zinc-100);
+  --color-background: var(--color-white);
+
+  --color-text: var(--color-neutral-800);
+  --color-muted: var(--color-gray-500);
+
+  --color-light: var(--color-gray-100);
+
+  --radius-card: var(--radius-3xl);
+}

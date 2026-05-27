@@ -3,13 +3,13 @@ import Skeleton from "../../skeletons/Skeleton";
 
 export default function PostFormSkeleton() {
   return (
-    <div className="max-w-3xl mx-auto p-6 border border-gray-100 rounded-lg">
+    <div className="max-w-3xl mx-auto p-6 border border-light rounded-lg">
       <Skeleton className="w-30 h-8 rounded-full" />
 
       <div className="mb-6 mt-4">
         <FormFieldSkeleton />
 
-        <div className="border border-gray-100 p-4 rounded-md">
+        <div className="border border-light p-4 rounded-md">
           <Skeleton className="w-40 h-5 rounded-full mb-2" />
           <Skeleton className="w-50 h-5 rounded-full mb-2" />
           <Skeleton className="w-60 h-5 rounded-full" />

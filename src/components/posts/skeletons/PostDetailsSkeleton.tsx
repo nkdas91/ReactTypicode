@@ -2,8 +2,8 @@ import Skeleton from "../../skeletons/Skeleton";
 
 export default function PostDetailsSkeleton() {
   return (
-    <div className="max-w-5xl mx-auto mb-5 p-6 border border-gray-100 rounded-lg">
-      <div className="flex justify-between aligh-center gap-4">
+    <div className="max-w-5xl mx-auto mb-5 p-6 border border-light rounded-lg">
+      <div className="flex justify-between items-center gap-4">
         <Skeleton className="w-30 h-8 rounded-full" />
 
         <Skeleton className="w-10 h-10 rounded-full" />

@@ -1,3 +1,5 @@
+import Button from "./Button";
+
 interface PaginationProps {
   totalRecords: number;
   currentPage: number;
@@ -20,13 +22,6 @@ const Pagination = ({
   const start = totalRecords === 0 ? 0 : (safePage - 1) * limit + 1;
   const end = Math.min(safePage * limit, totalRecords);
 
-  const baseBtn = "border px-4 py-2 rounded-full transition";
-
-  const enabled =
-    "cursor-pointer border-indigo-700 text-indigo-700 hover:bg-indigo-100";
-
-  const disabled = "cursor-not-allowed border-gray-400 text-gray-400";
-
   const handlePrevious = () => {
     if (currentPage > 1) {
       onPageChange(currentPage - 1);
@@ -48,20 +43,20 @@ const Pagination = ({
           <label>
             Showing records {start} to {end} of {totalRecords} records.
           </label>
-          <button
+          <Button
+            type="button"
             onClick={handlePrevious}
             disabled={currentPage === 1}
-            className={`${baseBtn} ${currentPage === 1 ? disabled : enabled}`}
           >
             Previous
-          </button>
-          <button
+          </Button>
+          <Button
+            type="button"
             onClick={handleNext}
             disabled={currentPage === totalPages}
-            className={`${baseBtn} ${currentPage === totalPages ? disabled : enabled}`}
           >
             Next
-          </button>
+          </Button>
         </>
       )}
     </div>

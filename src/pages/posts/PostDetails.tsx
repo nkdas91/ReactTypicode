@@ -38,8 +38,8 @@ const PostDetails = ({ favourites, toggleFavourite }: PropDetailsProp) => {
 
   return (
     <>
-      <div className="max-w-5xl mx-auto mb-5 p-6 border border-gray-100 rounded-lg">
-        <div className="flex justify-between aligh-center gap-4">
+      <div className="max-w-5xl mx-auto mb-5 p-6 border border-light rounded-lg">
+        <div className="flex justify-between items-center gap-4">
           <BackButton url="/posts" label="Back to Posts" />
 
           <FavouriteButton
@@ -52,7 +52,7 @@ const PostDetails = ({ favourites, toggleFavourite }: PropDetailsProp) => {
           <h1 className="text-3xl">{post?.title}</h1>
           <Link
             to={`/users/${post?.userId}`}
-            className="text-sm text-gray-500 italic hover:text-indigo-700 hover:underline"
+            className="text-sm text-muted italic hover:text-primary hover:underline"
           >
             {user?.name}
           </Link>

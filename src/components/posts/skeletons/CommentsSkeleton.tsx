@@ -12,7 +12,7 @@ export default function CommentsSkeleton() {
       {Array.from({ length: 3 }).map((_, index) => (
         <div
           key={index}
-          className="max-w-5xl mx-auto mb-5 p-6 border border-gray-100 rounded-lg"
+          className="max-w-5xl mx-auto mb-5 p-6 border border-light rounded-lg"
         >
           <div className="mb-6 mt-4">
             <Skeleton className="max-w-100 h-8 rounded-full mb-1" />

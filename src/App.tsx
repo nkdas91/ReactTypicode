@@ -31,44 +31,46 @@ function App() {
   return (
     <>
       <Navbar favouriteCount={favourites.length} />
-      <div className="px-10 py-5 ">
-        <Routes>
-          <Route path="/" element={<Home likedPostIds={favourites} />} />
-          <Route path="/users" element={<UserList />} />
-          <Route path="/users/create" element={<UserCreate />} />
-          <Route path="/users/:id" element={<UserDetails />} />
-          <Route path="/users/:id/edit" element={<UserEdit />} />
-          <Route
-            path="/posts"
-            element={
-              <PostList
-                favourites={favourites}
-                toggleFavourite={toggleFavourite}
-              />
-            }
-          />
-          <Route
-            path="/posts/:id"
-            element={
-              <PostDetails
-                favourites={favourites}
-                toggleFavourite={toggleFavourite}
-              />
-            }
-          />
-          <Route path="/posts/:id/edit" element={<PostEdit />} />
-          <Route
-            path="/posts/favourites"
-            element={
-              <FavouritePosts
-                favourites={favourites}
-                toggleFavourite={toggleFavourite}
-              />
-            }
-          />
+      <div className="px-10 py-5">
+        <div className="max-w-5xl mx-auto">
+          <Routes>
+            <Route path="/" element={<Home likedPostIds={favourites} />} />
+            <Route path="/users" element={<UserList />} />
+            <Route path="/users/create" element={<UserCreate />} />
+            <Route path="/users/:id" element={<UserDetails />} />
+            <Route path="/users/:id/edit" element={<UserEdit />} />
+            <Route
+              path="/posts"
+              element={
+                <PostList
+                  favourites={favourites}
+                  toggleFavourite={toggleFavourite}
+                />
+              }
+            />
+            <Route
+              path="/posts/:id"
+              element={
+                <PostDetails
+                  favourites={favourites}
+                  toggleFavourite={toggleFavourite}
+                />
+              }
+            />
+            <Route path="/posts/:id/edit" element={<PostEdit />} />
+            <Route
+              path="/posts/favourites"
+              element={
+                <FavouritePosts
+                  favourites={favourites}
+                  toggleFavourite={toggleFavourite}
+                />
+              }
+            />
 
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </div>
       </div>
     </>
   );

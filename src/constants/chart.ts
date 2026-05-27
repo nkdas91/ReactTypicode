@@ -2,8 +2,8 @@ export const RADIAN = Math.PI / 180;
 
 export const CHART_COLORS = {
   likedPosts: {
-    liked: "#f6339a",
-    notLiked: "#432dd7",
+    liked: "var(--color-accent)",
+    notLiked: "var(--color-primary)",
   },
 };
 
