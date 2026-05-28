@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { Route, Routes } from "react-router-dom";
 import "./App.css";
 import Navbar from "./components/navbar/Navbar";
@@ -24,18 +25,20 @@ function App() {
       <Navbar favouriteCount={favourites.length} />
       <div className="px-10 py-5">
         <div className="max-w-5xl mx-auto">
-          <Routes>
-            {appRoutes({
-              favourites,
-              toggleFavourite,
-            }).map((route) => (
-              <Route
-                key={route.path}
-                path={route.path}
-                element={route.element}
-              />
-            ))}
-          </Routes>
+          <Suspense fallback={<div>Loading page...</div>}>
+            <Routes>
+              {appRoutes({
+                favourites,
+                toggleFavourite,
+              }).map((route) => (
+                <Route
+                  key={route.path}
+                  path={route.path}
+                  element={route.element}
+                />
+              ))}
+            </Routes>
+          </Suspense>
         </div>
       </div>
     </>

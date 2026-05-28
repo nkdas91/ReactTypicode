@@ -24,17 +24,13 @@ export default function usePostComments(postId: number) {
   const [formVisible, setFormVisible] = useState(false);
 
   /**
-   * API comments array.
-   */
-  const comments = commentsResponse?.data ?? [];
-
-  /**
    * Merge local + API comments.
    */
-  const allComments = useMemo(
-    () => [...savedComments, ...comments],
-    [savedComments, comments],
-  );
+  const allComments = useMemo(() => {
+    const comments = commentsResponse?.data ?? [];
+
+    return [...savedComments, ...comments];
+  }, [savedComments, commentsResponse?.data]);
 
   /**
    * Add comment handler.

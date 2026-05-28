@@ -1,21 +1,21 @@
-import type { ReactNode } from "react";
+import { type ReactNode } from "react";
 
 import RouteErrorBoundary from "../components/ErrorBoundary/RouteErrorBoundary";
 
-import Home from "../pages/Home";
-import NotFound from "../pages/NotFound";
-
-import FavouritePosts from "../pages/posts/FavouritePosts";
-import PostDetails from "../pages/posts/PostDetails";
-import PostEdit from "../pages/posts/PostEdit";
-import PostList from "../pages/posts/PostList";
-
-import UserCreate from "../pages/users/UserCreate";
-import UserDetails from "../pages/users/UserDetails";
-import UserEdit from "../pages/users/UserEdit";
-import UserList from "../pages/users/UserList";
-
 import { ROUTES } from "./routePaths";
+
+import {
+  FavouritePosts,
+  Home,
+  NotFound,
+  PostDetails,
+  PostEdit,
+  PostList,
+  UserCreate,
+  UserDetails,
+  UserEdit,
+  UserList,
+} from "./lazyPages";
 
 const withErrorBoundary = (element: ReactNode, fallbackMessage: string) => (
   <RouteErrorBoundary fallbackMessage={fallbackMessage}>
