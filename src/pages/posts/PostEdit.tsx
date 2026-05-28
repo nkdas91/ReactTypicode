@@ -18,12 +18,12 @@ const PostEdit = () => {
     return <PostFormSkeleton />;
   }
 
-  if (!post) {
-    return <div className="text-center">Post not found</div>;
-  }
-
   if (error) {
     return <ErrorMessage message={error.message} />;
+  }
+
+  if (!post) {
+    return <ErrorMessage message="Post not found" />;
   }
 
   return (

@@ -102,7 +102,7 @@ const PostList = ({ favourites, toggleFavourite }: PropListProp) => {
       </div>
 
       {!filteredPosts || filteredPosts.length === 0 ? (
-        <div className="text-center p-2">No posts to display!</div>
+        <ErrorMessage message="No posts to display!" />
       ) : null}
 
       <ul>

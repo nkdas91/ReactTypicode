@@ -20,7 +20,7 @@ const UserDetails = () => {
   }
 
   if (!user && !isLoading) {
-    return <div className="text-center">User not found</div>;
+    return <ErrorMessage message="User not found" />;
   }
 
   const handleDelete = async (e: React.MouseEvent, id: number) => {

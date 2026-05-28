@@ -29,7 +29,9 @@ const PostDetails = ({ favourites, toggleFavourite }: PropDetailsProp) => {
     return <ErrorMessage message={error.message} />;
   }
 
-  if (!post) return <div className="text-center">Post not found!</div>;
+  if (!post) {
+    return <ErrorMessage message="Post not found" />;
+  }
 
   const isFavourite = favourites.includes(post.id);
 

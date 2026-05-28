@@ -30,7 +30,7 @@ const UserEdit = () => {
   }
 
   if (!user) {
-    return <div className="text-center">User not found</div>;
+    return <ErrorMessage message="User not found" />;
   }
 
   return (

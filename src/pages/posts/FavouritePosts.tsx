@@ -27,6 +27,10 @@ const FavouritePosts = ({
     return <ErrorMessage message={error.message} />;
   }
 
+  if (!favouritePosts) {
+    return <ErrorMessage message="You dont have any favourite posts" />;
+  }
+
   const handleDelete = async (id: number) => {
     await deletePost(id);
   };
