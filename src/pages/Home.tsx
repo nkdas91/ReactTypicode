@@ -1,6 +1,9 @@
-import LikesPieChart from "../components/charts/LikesPieChart";
+import { lazy, Suspense } from "react";
+
 import getLikedPostsPieData from "../utils/charts/getLikedPostsPieData";
 import usePosts from "../hooks/posts/usePosts";
+
+const LikesPieChart = lazy(() => import("../components/charts/LikesPieChart"));
 
 interface HomeProps {
   likedPostIds: number[];
@@ -18,7 +21,15 @@ const Home = ({ likedPostIds }: HomeProps) => {
     <div className="max-w-5xl mx-auto">
       <div className="rounded-card p-4 border border-light">
         <h2 className="text-xl">Posts</h2>
-        <LikesPieChart data={pieData} />
+        <Suspense
+          fallback={
+            <div className="flex h-75 items-center justify-center">
+              <p className="text-muted-foreground">Loading chart...</p>
+            </div>
+          }
+        >
+          <LikesPieChart data={pieData} />
+        </Suspense>
       </div>
     </div>
   );
