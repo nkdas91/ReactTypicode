@@ -1,6 +1,7 @@
 import { useParams } from "react-router-dom";
 import BackButton from "../../components/BackButton";
 import Button from "../../components/Button";
+import ErrorMessage from "../../components/ErrorMessage";
 import PostFormSkeleton from "../../components/posts/skeletons/PostFormSkeleton";
 import TextField from "../../components/TextField";
 import usePost from "../../hooks/posts/usePost";
@@ -21,7 +22,9 @@ const PostEdit = () => {
     return <div className="text-center">Post not found</div>;
   }
 
-  if (error) return <p role="alert">{error.message}</p>;
+  if (error) {
+    return <ErrorMessage message={error.message} />;
+  }
 
   return (
     <div className="max-w-3xl mx-auto p-6 border border-light rounded-lg">

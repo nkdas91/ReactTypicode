@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import ErrorMessage from "../../components/ErrorMessage";
 import Pagination from "../../components/Pagination";
 import PostListItem from "../../components/posts/PostListItem";
 import PostListSkeleton from "../../components/posts/skeletons/PostListSkeleton";
@@ -47,7 +48,7 @@ const PostList = ({ favourites, toggleFavourite }: PropListProp) => {
   }
 
   if (error) {
-    return <p role="alert">{error.message}</p>;
+    return <ErrorMessage message={error.message} />;
   }
 
   const handleSearch = (_name: string, value: string) => {

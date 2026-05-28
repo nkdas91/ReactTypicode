@@ -1,6 +1,7 @@
 import { useParams } from "react-router-dom";
 import BackButton from "../../components/BackButton";
 import Button from "../../components/Button";
+import ErrorMessage from "../../components/ErrorMessage";
 import TextField from "../../components/TextField";
 import UserFormSkeleton from "../../components/users/skeletons/UserFormSkeleton";
 import useUpdateUserForm from "../../hooks/users/useUpdateUserForm";
@@ -24,11 +25,13 @@ const UserEdit = () => {
     return <UserFormSkeleton />;
   }
 
+  if (error) {
+    return <ErrorMessage message={error.message} />;
+  }
+
   if (!user) {
     return <div className="text-center">User not found</div>;
   }
-
-  if (error) return <p role="alert">{error.message}</p>;
 
   return (
     <div className="max-w-3xl mx-auto p-6 border border-light rounded-lg">

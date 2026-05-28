@@ -1,3 +1,4 @@
+import ErrorMessage from "../../components/ErrorMessage";
 import PostListItem from "../../components/posts/PostListItem";
 import PostListSkeleton from "../../components/posts/skeletons/PostListSkeleton";
 import useDeletePost from "../../hooks/posts/useDeletePost";
@@ -12,7 +13,7 @@ const FavouritePosts = ({
   favourites,
   toggleFavourite,
 }: FavouritePostsProps) => {
-  const { data: postsResponse, isLoading, refetch } = usePosts();
+  const { data: postsResponse, error, isLoading, refetch } = usePosts();
   const deletePost = useDeletePost(refetch);
 
   const posts = postsResponse?.data;
@@ -20,6 +21,10 @@ const FavouritePosts = ({
 
   if (isLoading) {
     return <PostListSkeleton />;
+  }
+
+  if (error) {
+    return <ErrorMessage message={error.message} />;
   }
 
   const handleDelete = async (id: number) => {

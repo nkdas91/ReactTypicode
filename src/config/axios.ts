@@ -9,27 +9,29 @@ export const axiosInstance = axios.create({
 });
 
 // Intercept every API response globally.
-// This allows centralized error handling instead of
-// repeating try/catch transformation logic everywhere.
 axiosInstance.interceptors.response.use(
-  // Successful responses are returned unchanged.
+  // Return successful responses unchanged.
   (response) => response,
 
   (error: AxiosError) => {
-    // React Query + Axios use AbortController internally
-    // for request cancellation.
+    // React Query + Axios use AbortController internally.
     //
-    // When a request is cancelled, Axios throws an
-    // ERR_CANCELED error.
-    //
-    // We preserve the original cancellation error so
-    // React Query can handle it correctly without
-    // treating it like a real application failure.
+    // Cancelled requests throw ERR_CANCELED.
+    // Preserve the original error so React Query
+    // can handle cancellation correctly.
     if (error.code === "ERR_CANCELED") {
       return Promise.reject(error);
     }
 
-    // Extract a meaningful API error message.
+    // Handle request timeout errors with a
+    // user-friendly message.
+    if (error.code === "ECONNABORTED" && error.message.includes("timeout")) {
+      return Promise.reject(
+        new Error("The request timed out. Please try again."),
+      );
+    }
+
+    // Extract the most meaningful error message.
     //
     // Fallback order:
     // 1. API response message
@@ -40,9 +42,8 @@ axiosInstance.interceptors.response.use(
       error.message ||
       "Something went wrong";
 
-    // Normalize errors into standard Error objects
-    // so the rest of the application receives
-    // consistent error types.
+    // Normalize all errors into standard Error objects
+    // for consistent handling across the app.
     return Promise.reject(new Error(message));
   },
 );

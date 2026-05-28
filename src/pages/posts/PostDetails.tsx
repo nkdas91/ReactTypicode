@@ -1,6 +1,7 @@
 import { Link, useParams } from "react-router-dom";
 import BackButton from "../../components/BackButton";
 import Button from "../../components/Button";
+import ErrorMessage from "../../components/ErrorMessage";
 import FavouriteButton from "../../components/FavouriteButton";
 import Comments from "../../components/posts/Comments";
 import PostDetailsSkeleton from "../../components/posts/skeletons/PostDetailsSkeleton";
@@ -24,7 +25,9 @@ const PostDetails = ({ favourites, toggleFavourite }: PropDetailsProp) => {
     return <PostDetailsSkeleton />;
   }
 
-  if (error) return <p role="alert">{error.message}</p>;
+  if (error) {
+    return <ErrorMessage message={error.message} />;
+  }
 
   if (!post) return <div className="text-center">Post not found!</div>;
 

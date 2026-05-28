@@ -5,6 +5,7 @@ import UserListItem from "../../components/users/UserListItem";
 import UserListSkeleton from "../../components/users/skeletons/UserListSkeleton";
 import useDeleteUser from "../../hooks/users/useDeleteUser";
 import useUsers from "../../hooks/users/useUsers";
+import ErrorMessage from "../../components/ErrorMessage";
 
 const UserList = () => {
   const [query, setQuery] = useState("");
@@ -24,7 +25,7 @@ const UserList = () => {
   }
 
   if (error) {
-    return <p role="alert">{error.message}</p>;
+    return <ErrorMessage message={error.message} />;
   }
 
   const handleSearch = (_name: string, value: string) => {

@@ -1,6 +1,7 @@
 import { useParams } from "react-router-dom";
 import BackButton from "../../components/BackButton";
 import Button from "../../components/Button";
+import ErrorMessage from "../../components/ErrorMessage";
 import UserDetailsSkeleton from "../../components/users/skeletons/UserDetailsSkeleton";
 import useDeleteUser from "../../hooks/users/useDeleteUser";
 import useUser from "../../hooks/users/useUser";
@@ -14,7 +15,9 @@ const UserDetails = () => {
     return <UserDetailsSkeleton />;
   }
 
-  if (error) return <p role="alert">{error.message}</p>;
+  if (error) {
+    return <ErrorMessage message={error.message} />;
+  }
 
   if (!user && !isLoading) {
     return <div className="text-center">User not found</div>;
