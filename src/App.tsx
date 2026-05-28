@@ -1,5 +1,6 @@
 import { Route, Routes } from "react-router-dom";
 import "./App.css";
+import RouteErrorBoundary from "./components/ErrorBoundary/RouteErrorBoundary";
 import Navbar from "./components/navbar/Navbar";
 import useLocalStorage from "./hooks/posts/useLocalStorage";
 import Home from "./pages/Home";
@@ -34,37 +35,86 @@ function App() {
       <div className="px-10 py-5">
         <div className="max-w-5xl mx-auto">
           <Routes>
-            <Route path="/" element={<Home likedPostIds={favourites} />} />
-            <Route path="/users" element={<UserList />} />
-            <Route path="/users/create" element={<UserCreate />} />
-            <Route path="/users/:id" element={<UserDetails />} />
-            <Route path="/users/:id/edit" element={<UserEdit />} />
+            <Route
+              path="/"
+              element={
+                <RouteErrorBoundary fallbackMessage="Failed to load home page.">
+                  <Home likedPostIds={favourites} />
+                </RouteErrorBoundary>
+              }
+            />
+
+            <Route
+              path="/users"
+              element={
+                <RouteErrorBoundary fallbackMessage="Failed to load users.">
+                  <UserList />
+                </RouteErrorBoundary>
+              }
+            />
+            <Route
+              path="/users/create"
+              element={
+                <RouteErrorBoundary fallbackMessage="Failed to load add user form.">
+                  <UserCreate />
+                </RouteErrorBoundary>
+              }
+            />
+            <Route
+              path="/users/:id"
+              element={
+                <RouteErrorBoundary fallbackMessage="Failed to load user.">
+                  <UserDetails />
+                </RouteErrorBoundary>
+              }
+            />
+            <Route
+              path="/users/:id/edit"
+              element={
+                <RouteErrorBoundary fallbackMessage="Failed to load edit user form.">
+                  <UserEdit />
+                </RouteErrorBoundary>
+              }
+            />
             <Route
               path="/posts"
               element={
-                <PostList
-                  favourites={favourites}
-                  toggleFavourite={toggleFavourite}
-                />
+                <RouteErrorBoundary fallbackMessage="Failed to load posts.">
+                  <PostList
+                    favourites={favourites}
+                    toggleFavourite={toggleFavourite}
+                  />
+                </RouteErrorBoundary>
               }
             />
             <Route
               path="/posts/:id"
               element={
-                <PostDetails
-                  favourites={favourites}
-                  toggleFavourite={toggleFavourite}
-                />
+                <RouteErrorBoundary fallbackMessage="Failed to load post.">
+                  <PostDetails
+                    favourites={favourites}
+                    toggleFavourite={toggleFavourite}
+                  />
+                </RouteErrorBoundary>
               }
             />
-            <Route path="/posts/:id/edit" element={<PostEdit />} />
+            <Route
+              path="/posts/:id/edit"
+              element={
+                <RouteErrorBoundary fallbackMessage="Failed to load edit post form.">
+                  <PostEdit />
+                </RouteErrorBoundary>
+              }
+            />
             <Route
               path="/posts/favourites"
               element={
-                <FavouritePosts
-                  favourites={favourites}
-                  toggleFavourite={toggleFavourite}
-                />
+                <RouteErrorBoundary fallbackMessage="Failed to load favourite posts.">
+                  <FavouritePosts
+                    favourites={favourites}
+                    toggleFavourite={toggleFavourite}
+                  />
+                </RouteErrorBoundary>
               }
             />
 
