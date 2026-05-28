@@ -7,14 +7,17 @@ import type { User } from "../../types/User";
 const useUser = (id: number | null) => {
   return useQuery<User, Error>({
     queryKey: QUERY_KEYS.user(id ?? 0),
-    queryFn: () => {
+    queryFn: ({ signal }) => {
       if (id === null) {
         throw new Error("User ID is required");
       }
 
-      return userService.get(id);
+      return userService.get(id, { signal });
     },
+
+    // Only run query when a valid user ID exists
     enabled: id !== null,
+
     staleTime: DEFAULT_STALE_TIME,
   });
 };

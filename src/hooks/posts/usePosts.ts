@@ -26,9 +26,10 @@ const usePosts = ({
   return useQuery<APIListResponse<Post>, Error>({
     queryKey: QUERY_KEYS.posts(page, limit, userId),
 
-    queryFn: () => {
+    queryFn: ({ signal }) => {
       return postService.getAll({
         params,
+        signal,
       });
     },
 

@@ -8,7 +8,7 @@ import type { User } from "../../types/User";
 const useUsers = () => {
   return useQuery<APIListResponse<User>, Error>({
     queryKey: QUERY_KEYS.users,
-    queryFn: userService.getAll,
+    queryFn: ({ signal }) => userService.getAll({ signal }),
     staleTime: DEFAULT_STALE_TIME,
   });
 };

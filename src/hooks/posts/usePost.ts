@@ -7,14 +7,17 @@ import type { Post } from "../../types/Post";
 const usePost = (id: number | null) => {
   return useQuery<Post, Error>({
     queryKey: QUERY_KEYS.post(id ?? 0),
-    queryFn: () => {
+    queryFn: ({ signal }) => {
       if (id === null) {
         throw new Error("Post ID is required");
       }
 
-      return postService.get(id);
+      return postService.get(id, { signal });
     },
+
+    // Only run query when a valid post ID exists
     enabled: id !== null,
+
     staleTime: DEFAULT_STALE_TIME,
   });
 };
