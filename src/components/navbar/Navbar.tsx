@@ -1,7 +1,7 @@
 import { Bars3Icon } from "@heroicons/react/24/outline";
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { navbarItems } from "../../constants/navbarItems";
+import { navbarItems } from "../../config/navigation";
 import NavLink from "./NavbarLink";
 
 interface NavbarProps {
