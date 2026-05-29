@@ -1,3 +1,4 @@
+import { useCallback } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
 export default function useUserFilters() {
@@ -7,25 +8,32 @@ export default function useUserFilters() {
 
   const query = searchParams.get("name_like") ?? "";
 
-  const updateParams = (paramsToUpdate: Record<string, string>) => {
-    const params = new URLSearchParams(searchParams);
+  // Update URL query params safely.
+  const updateParams = useCallback(
+    (paramsToUpdate: Record<string, string>) => {
+      const params = new URLSearchParams(searchParams);
 
-    Object.entries(paramsToUpdate).forEach(([key, value]) => {
-      if (!value) {
-        params.delete(key);
-      } else {
-        params.set(key, value);
-      }
-    });
+      Object.entries(paramsToUpdate).forEach(([key, value]) => {
+        if (!value) {
+          params.delete(key);
+        } else {
+          params.set(key, value);
+        }
+      });
 
-    navigate(`/users?${params.toString()}`);
-  };
+      navigate(`/users?${params.toString()}`);
+    },
+    [searchParams, navigate],
+  );
 
-  const setQuery = (query: string) => {
-    updateParams({
-      name_like: query,
-    });
-  };
+  const setQuery = useCallback(
+    (query: string) => {
+      updateParams({
+        name_like: query,
+      });
+    },
+    [updateParams],
+  );
 
   return {
     query,

@@ -44,8 +44,7 @@ const PostList = ({ favourites, toggleFavourite }: PropListProp) => {
   // navigation + API requests on every keystroke.
   useEffect(() => {
     setQuery(debouncedSearch);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [debouncedSearch]);
+  }, [debouncedSearch, setQuery]);
 
   if (isLoading) {
     return <PostListSkeleton />;
