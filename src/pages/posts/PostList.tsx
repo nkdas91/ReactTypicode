@@ -41,9 +41,10 @@ const PostList = ({ favourites, toggleFavourite }: PropListProp) => {
   const users = usersResponse?.data;
 
   // Debounce search updates to avoid triggering
-  // navigation + API requests on every keystroke
+  // navigation + API requests on every keystroke.
   useEffect(() => {
     setQuery(debouncedSearch);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedSearch]);
 
   if (isLoading) {
@@ -104,8 +105,12 @@ const PostList = ({ favourites, toggleFavourite }: PropListProp) => {
         </div>
       </div>
 
-      {!posts || posts.length === 0 ? (
-        <ErrorMessage message="No posts to display!" />
+      {(!posts || posts.length === 0) && !isLoading ? (
+        <ErrorMessage
+          message={
+            query ? `No posts found matching "${query}"` : "No posts available"
+          }
+        />
       ) : null}
 
       <ul>

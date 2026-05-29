@@ -1,24 +1,38 @@
-import { useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import Button from "../../components/Button";
+import ErrorMessage from "../../components/ErrorMessage";
 import TextField from "../../components/TextField";
 import UserListItem from "../../components/users/UserListItem";
 import UserListSkeleton from "../../components/users/skeletons/UserListSkeleton";
+import useDebouncedValue from "../../hooks/useDebouncedValue";
 import useDeleteUser from "../../hooks/users/useDeleteUser";
+import useUserFilters from "../../hooks/users/useUserFilters";
 import useUsers from "../../hooks/users/useUsers";
-import ErrorMessage from "../../components/ErrorMessage";
 
 const UserList = () => {
-  const [query, setQuery] = useState("");
-  const { data: usersResponse, error, isLoading, refetch } = useUsers();
+  const { query, setQuery } = useUserFilters();
+
+  const [searchInput, setSearchInput] = useState(query);
+
+  const debouncedSearch = useDebouncedValue(searchInput);
+
+  const {
+    data: usersResponse,
+    error,
+    isLoading,
+    refetch,
+  } = useUsers({ query });
+
   const deleteUser = useDeleteUser(refetch);
 
   const users = usersResponse?.data;
 
-  const filteredUsers = useMemo(() => {
-    return users?.filter((u) =>
-      u.name.toLowerCase().includes(query.toLowerCase()),
-    );
-  }, [users, query]);
+  // Debounce search updates to avoid triggering
+  // navigation + API requests on every keystroke.
+  useEffect(() => {
+    setQuery(debouncedSearch);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [debouncedSearch]);
 
   if (isLoading) {
     return <UserListSkeleton />;
@@ -29,7 +43,7 @@ const UserList = () => {
   }
 
   const handleSearch = (_name: string, value: string) => {
-    setQuery(value);
+    setSearchInput(value);
   };
 
   const handleDelete = async (e: React.MouseEvent, id: number) => {
@@ -52,21 +66,23 @@ const UserList = () => {
             placeholder="Search"
             name="search"
             type="search"
-            value={query}
+            value={searchInput}
             onChange={handleSearch}
           />
         </div>
       </div>
 
-      {(!filteredUsers || filteredUsers.length === 0) && !isLoading ? (
-        <div className="text-center p-2">
-          {query ? `No users found matching "${query}"` : "No users available"}
-        </div>
+      {(!users || users.length === 0) && !isLoading ? (
+        <ErrorMessage
+          message={
+            query ? `No users found matching "${query}"` : "No users available"
+          }
+        />
       ) : null}
 
-      {filteredUsers && (
+      {users && (
         <ul>
-          {filteredUsers?.map((user) => (
+          {users.map((user) => (
             <UserListItem key={user.id} user={user} onDelete={handleDelete} />
           ))}
         </ul>
