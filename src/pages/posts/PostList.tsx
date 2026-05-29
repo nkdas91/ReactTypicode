@@ -76,19 +76,21 @@ const PostList = ({ favourites, toggleFavourite }: PropListProp) => {
     <div className="max-w-5xl mx-auto">
       <div className="flex justify-between items-center gap-4 mb-4">
         <h1 className="text-3xl">Posts</h1>
-        <div className="flex items-center gap-2">
-          <input
-            id="show-favourites"
-            type="checkbox"
-            checked={showFavourites}
-            onChange={(e) => setShowFavourites(e.target.checked)}
-            className="cursor-pointer"
-          />
+        {favourites.length ? (
+          <div className="flex items-center gap-2">
+            <input
+              id="show-favourites"
+              type="checkbox"
+              checked={showFavourites}
+              onChange={(e) => setShowFavourites(e.target.checked)}
+              className="cursor-pointer"
+            />
 
-          <label htmlFor="show-favourites" className="cursor-pointer">
-            Show only favourites
-          </label>
-        </div>
+            <label htmlFor="show-favourites" className="cursor-pointer">
+              Show only favourites
+            </label>
+          </div>
+        ) : null}
       </div>
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end md:items-center gap-3">
         <div className="order-2 sm:order-1">
