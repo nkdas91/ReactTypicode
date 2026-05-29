@@ -18,15 +18,6 @@ export const navbarItems: NavbarItem[] = [
   {
     label: "Posts",
     to: ROUTES.posts.list,
-    isActive: (pathname) =>
-      pathname.startsWith(ROUTES.posts.list) &&
-      !pathname.startsWith(ROUTES.posts.favourites),
-  },
-
-  {
-    label: "Favourite Posts",
-    to: ROUTES.posts.favourites,
-    showBadge: true,
-    isActive: (pathname) => pathname.startsWith(ROUTES.posts.favourites),
+    isActive: (pathname) => pathname.startsWith(ROUTES.posts.list),
   },
 ];

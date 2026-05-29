@@ -10,7 +10,6 @@ export const ROUTES = {
 
   posts: {
     list: "/posts",
-    favourites: "/posts/favourites",
     details: (id: string | number = ":id") => `/posts/${id}`,
     edit: (id: string | number = ":id") => `/posts/${id}/edit`,
   },

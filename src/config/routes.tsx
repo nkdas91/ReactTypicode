@@ -5,7 +5,6 @@ import RouteErrorBoundary from "../components/ErrorBoundary/RouteErrorBoundary";
 import { ROUTES } from "./routePaths";
 
 import {
-  FavouritePosts,
   Home,
   NotFound,
   PostDetails,
@@ -76,17 +75,6 @@ export const appRoutes = ({ favourites, toggleFavourite }: AppRoutesProps) => [
   {
     path: ROUTES.posts.edit(),
     element: withErrorBoundary(<PostEdit />, "Failed to load edit post form."),
-  },
-
-  {
-    path: ROUTES.posts.favourites,
-    element: withErrorBoundary(
-      <FavouritePosts
-        favourites={favourites}
-        toggleFavourite={toggleFavourite}
-      />,
-      "Failed to load favourite posts.",
-    ),
   },
 
   {

@@ -11,6 +11,8 @@ export default function usePostFilters() {
 
   const query = searchParams.get("title_like") ?? "";
 
+  const showFavourites = searchParams.get("showFavourites") === "true";
+
   const page = Number(searchParams.get("page") || DEFAULT_PAGE);
 
   const limit = Number(searchParams.get("limit") || DEFAULT_LIMIT);
@@ -36,6 +38,13 @@ export default function usePostFilters() {
   const setUserId = (id: string) => {
     updateParams({
       userId: id,
+      page: DEFAULT_PAGE.toString(),
+    });
+  };
+
+  const setShowFavourites = (showFavourites: boolean) => {
+    updateParams({
+      showFavourites: String(showFavourites),
       page: DEFAULT_PAGE.toString(),
     });
   };
@@ -72,9 +81,11 @@ export default function usePostFilters() {
     page,
     limit,
     query,
+    showFavourites,
     setUserId,
     setPage,
     setLimit,
     setQuery,
+    setShowFavourites,
   };
 }

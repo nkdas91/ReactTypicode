@@ -18,8 +18,18 @@ interface PropListProp {
 }
 
 const PostList = ({ favourites, toggleFavourite }: PropListProp) => {
-  const { userId, page, limit, query, setUserId, setPage, setLimit, setQuery } =
-    usePostFilters();
+  const {
+    userId,
+    page,
+    limit,
+    query,
+    showFavourites,
+    setUserId,
+    setPage,
+    setLimit,
+    setQuery,
+    setShowFavourites,
+  } = usePostFilters();
 
   const [searchInput, setSearchInput] = useState(query);
 
@@ -30,7 +40,7 @@ const PostList = ({ favourites, toggleFavourite }: PropListProp) => {
     error,
     isLoading,
     refetch,
-  } = usePosts({ page, limit, userId, query });
+  } = usePosts({ page, limit, userId, query, showFavourites, favourites });
 
   const { data: usersResponse } = useUsers();
   const deletePost = useDeletePost(refetch);
@@ -64,7 +74,22 @@ const PostList = ({ favourites, toggleFavourite }: PropListProp) => {
 
   return (
     <div className="max-w-5xl mx-auto">
-      <h1 className="text-3xl mb-4">Posts</h1>
+      <div className="flex justify-between items-center gap-4 mb-4">
+        <h1 className="text-3xl">Posts</h1>
+        <div className="flex items-center gap-2">
+          <input
+            id="show-favourites"
+            type="checkbox"
+            checked={showFavourites}
+            onChange={(e) => setShowFavourites(e.target.checked)}
+            className="cursor-pointer"
+          />
+
+          <label htmlFor="show-favourites" className="cursor-pointer">
+            Show only favourites
+          </label>
+        </div>
+      </div>
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end md:items-center gap-3">
         <div className="order-2 sm:order-1">
           <TextField

@@ -11,6 +11,8 @@ interface UsePostsProps {
   limit?: number;
   userId?: string;
   query?: string;
+  showFavourites?: boolean;
+  favourites?: number[];
 }
 
 const usePosts = ({
@@ -18,6 +20,8 @@ const usePosts = ({
   limit = DEFAULT_LIMIT,
   userId,
   query,
+  showFavourites,
+  favourites,
 }: UsePostsProps = {}) => {
   const isSearching = Boolean(query?.trim());
 
@@ -26,13 +30,24 @@ const usePosts = ({
 
     ...(userId ? { userId } : {}),
 
+    ...(showFavourites ? { showFavourites } : {}),
+
+    ...(showFavourites && favourites?.length ? { id: favourites } : {}),
+
     ...(isSearching ? { title_like: query } : {}),
   };
 
   return useQuery<APIListResponse<Post>, Error>({
     queryKey: isSearching
-      ? QUERY_KEYS.postsSearch(page, limit, userId, query)
-      : QUERY_KEYS.posts(page, limit, userId),
+      ? QUERY_KEYS.postsSearch(
+          page,
+          limit,
+          userId,
+          query,
+          showFavourites,
+          favourites,
+        )
+      : QUERY_KEYS.posts(page, limit, userId, showFavourites, favourites),
 
     queryFn: ({ signal }) =>
       postService.getAll({

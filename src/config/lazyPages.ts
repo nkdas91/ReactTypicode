@@ -16,8 +16,4 @@ export const PostDetails = lazy(() => import("../pages/posts/PostDetails"));
 
 export const PostEdit = lazy(() => import("../pages/posts/PostEdit"));
 
-export const FavouritePosts = lazy(
-  () => import("../pages/posts/FavouritePosts"),
-);
-
 export const NotFound = lazy(() => import("../pages/NotFound"));
