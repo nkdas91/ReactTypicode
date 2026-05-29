@@ -22,12 +22,7 @@ const usePosts = ({
   const isSearching = Boolean(query?.trim());
 
   const params = {
-    ...(isSearching
-      ? {}
-      : {
-          _page: page,
-          _limit: limit,
-        }),
+    ...{ _page: page, _limit: limit },
 
     ...(userId ? { userId } : {}),
 
@@ -36,7 +31,7 @@ const usePosts = ({
 
   return useQuery<APIListResponse<Post>, Error>({
     queryKey: isSearching
-      ? QUERY_KEYS.postsSearch(query, userId)
+      ? QUERY_KEYS.postsSearch(page, limit, userId, query)
       : QUERY_KEYS.posts(page, limit, userId),
 
     queryFn: ({ signal }) =>

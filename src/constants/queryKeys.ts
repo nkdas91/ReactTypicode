@@ -5,11 +5,12 @@ export const QUERY_KEYS = {
   posts: (page: number, limit: number, userId?: string) =>
     ["posts", page, limit, userId] as const,
 
-  postsSearch: (query?: string, userId?: string) => [
-    "posts-search",
-    query,
-    userId,
-  ],
+  postsSearch: (
+    page: number,
+    limit: number,
+    userId?: string,
+    query?: string,
+  ) => ["posts-search", page, limit, userId, query],
 
   comments: (postId: number) => ["posts", postId, "comments"] as const,
 

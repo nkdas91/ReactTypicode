@@ -11,16 +11,9 @@ export default function usePostFilters() {
 
   const query = searchParams.get("title_like") ?? "";
 
-  // Ignore pagination params while searching
-  const isSearching = Boolean(query.trim());
+  const page = Number(searchParams.get("page") || DEFAULT_PAGE);
 
-  const page = isSearching
-    ? DEFAULT_PAGE
-    : Number(searchParams.get("page") || DEFAULT_PAGE);
-
-  const limit = isSearching
-    ? DEFAULT_LIMIT
-    : Number(searchParams.get("limit") || DEFAULT_LIMIT);
+  const limit = Number(searchParams.get("limit") || DEFAULT_LIMIT);
 
   // Update URL query params safely.
   const updateParams = useCallback(
@@ -34,12 +27,6 @@ export default function usePostFilters() {
           params.set(key, value);
         }
       });
-
-      // Remove pagination params while searching
-      if (params.get("title_like")) {
-        params.delete("page");
-        params.delete("limit");
-      }
 
       navigate(`/posts?${params.toString()}`);
     },
@@ -67,12 +54,17 @@ export default function usePostFilters() {
   };
 
   const setQuery = useCallback(
-    (query: string) => {
+    (nextQuery: string) => {
+      const isQueryChanged = nextQuery !== query;
+
       updateParams({
-        title_like: query,
+        title_like: nextQuery,
+
+        // Only reset pagination when query actually changes
+        ...(isQueryChanged ? { page: DEFAULT_PAGE.toString() } : {}),
       });
     },
-    [updateParams],
+    [updateParams, query],
   );
 
   return {
