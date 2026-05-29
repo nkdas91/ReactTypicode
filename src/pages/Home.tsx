@@ -1,9 +1,16 @@
-import { lazy, Suspense } from "react";
-
-import getLikedPostsPieData from "../utils/charts/getLikedPostsPieData";
+import { lazy } from "react";
+import ChartContainer from "../components/charts/ChartContainer";
 import usePosts from "../hooks/posts/usePosts";
+import useUsers from "../hooks/users/useUsers";
+import getLikedPostsPieData from "../utils/charts/getLikedPostsPieData";
+import getUsersPostsBarData from "../utils/charts/getUsersPostsBarData";
 
-const LikesPieChart = lazy(() => import("../components/charts/LikesPieChart"));
+const LikedPostsPieChart = lazy(
+  () => import("../components/charts/LikedPostsPieChart"),
+);
+const UsersPostBarChart = lazy(
+  () => import("../components/charts/UsersPostsBarChart"),
+);
 
 interface HomeProps {
   likedPostIds: number[];
@@ -11,26 +18,27 @@ interface HomeProps {
 
 const Home = ({ likedPostIds }: HomeProps) => {
   const { data: postsResponse } = usePosts();
+  const { data: userResponse } = useUsers();
 
   const pieData = getLikedPostsPieData(
     postsResponse?.total,
     likedPostIds.length,
   );
 
+  const barData = getUsersPostsBarData(
+    postsResponse?.total,
+    userResponse?.data.length,
+  );
+
   return (
-    <div className="max-w-5xl mx-auto">
-      <div className="rounded-card p-4 border border-light">
-        <h2 className="text-xl">Posts</h2>
-        <Suspense
-          fallback={
-            <div className="flex h-75 items-center justify-center">
-              <p className="text-muted-foreground">Loading chart...</p>
-            </div>
-          }
-        >
-          <LikesPieChart data={pieData} />
-        </Suspense>
-      </div>
+    <div className="max-w-5xl mx-auto flex flex-wrap gap-4">
+      <ChartContainer>
+        <LikedPostsPieChart data={pieData} />
+      </ChartContainer>
+
+      <ChartContainer>
+        <UsersPostBarChart data={barData} />
+      </ChartContainer>
     </div>
   );
 };

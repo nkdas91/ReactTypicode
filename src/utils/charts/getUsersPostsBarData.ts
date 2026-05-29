@@ -1,21 +1,19 @@
 import { CHART_COLORS } from "../../constants/chart";
 import type { ChartDataItem } from "../../types/ChartDataItem";
 
-export default function getLikedPostsPieData(
-  totalPosts = 0,
-  totalLikedPosts = 0,
+export default function getUsersPostsBarData(
+  posts = 0,
+  users = 0,
 ): ChartDataItem[] {
-  const notLikedCount = totalPosts - totalLikedPosts;
-
   return [
     {
-      name: "Liked",
-      value: totalLikedPosts,
+      name: "Posts",
+      value: posts,
       fill: CHART_COLORS.accent,
     },
     {
-      name: "Not Liked",
-      value: notLikedCount,
+      name: "Users",
+      value: users,
       fill: CHART_COLORS.primary,
     },
   ];

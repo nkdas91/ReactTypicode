@@ -7,20 +7,16 @@ import {
   Sector,
   Tooltip,
 } from "recharts";
-import type { PieDataItem } from "../../types/PieDataItem";
-import { PIE_CHART_COLORS, RADIAN } from "../../constants/chart";
+import { RADIAN } from "../../constants/chart";
+import type { ChartDataItem } from "../../types/ChartDataItem";
 
-interface LikesPieChartProps {
-  data: PieDataItem[];
+interface LikedPostsPieChartProps {
+  data: ChartDataItem[];
 }
 
 const CustomPieSlice = (props: PieSectorShapeProps) => {
-  return (
-    <Sector
-      {...props}
-      fill={PIE_CHART_COLORS[props.index % PIE_CHART_COLORS.length]}
-    />
-  );
+  const { fill } = props;
+  return <Sector {...props} fill={fill} />;
 };
 
 const renderLabel = ({
@@ -54,7 +50,7 @@ const renderLabel = ({
   );
 };
 
-const LikesPieChart = ({ data }: LikesPieChartProps) => {
+const LikedPostsPieChart = ({ data }: LikedPostsPieChartProps) => {
   if (!data.length) return <p>No data available</p>;
 
   return (
@@ -78,4 +74,4 @@ const LikesPieChart = ({ data }: LikesPieChartProps) => {
   );
 };
 
-export default LikesPieChart;
+export default LikedPostsPieChart;

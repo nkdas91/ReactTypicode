@@ -1,4 +1,4 @@
-export interface PieDataItem {
+export interface ChartDataItem {
   name: string;
   value: number;
   fill: string;
