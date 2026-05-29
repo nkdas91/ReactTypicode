@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import ErrorMessage from "../../components/ErrorMessage";
 import Pagination from "../../components/Pagination";
 import PostListItem from "../../components/posts/PostListItem";
@@ -9,6 +9,7 @@ import { LIMITS } from "../../constants/pagination";
 import useDeletePost from "../../hooks/posts/useDeletePost";
 import usePostFilters from "../../hooks/posts/usePostFilters";
 import usePosts from "../../hooks/posts/usePosts";
+import useDebouncedValue from "../../hooks/useDebouncedValue";
 import useUsers from "../../hooks/users/useUsers";
 
 interface PropListProp {
@@ -17,17 +18,19 @@ interface PropListProp {
 }
 
 const PostList = ({ favourites, toggleFavourite }: PropListProp) => {
-  const [query, setQuery] = useState("");
-
-  const { userId, page, limit, setUserId, setPage, setLimit } =
+  const { userId, page, limit, query, setUserId, setPage, setLimit, setQuery } =
     usePostFilters();
+
+  const [searchInput, setSearchInput] = useState(query);
+
+  const debouncedSearch = useDebouncedValue(searchInput);
 
   const {
     data: postsResponse,
     error,
     isLoading,
     refetch,
-  } = usePosts({ page, limit, userId });
+  } = usePosts({ page, limit, userId, query });
 
   const { data: usersResponse } = useUsers();
   const deletePost = useDeletePost(refetch);
@@ -37,11 +40,11 @@ const PostList = ({ favourites, toggleFavourite }: PropListProp) => {
 
   const users = usersResponse?.data;
 
-  const filteredPosts = useMemo(() => {
-    return posts?.filter((p) =>
-      p.title.toLowerCase().includes(query.toLowerCase()),
-    );
-  }, [posts, query]);
+  // Debounce search updates to avoid triggering
+  // navigation + API requests on every keystroke
+  useEffect(() => {
+    setQuery(debouncedSearch);
+  }, [debouncedSearch]);
 
   if (isLoading) {
     return <PostListSkeleton />;
@@ -52,7 +55,7 @@ const PostList = ({ favourites, toggleFavourite }: PropListProp) => {
   }
 
   const handleSearch = (_name: string, value: string) => {
-    setQuery(value);
+    setSearchInput(value);
   };
 
   const handleDelete = async (id: number) => {
@@ -68,7 +71,7 @@ const PostList = ({ favourites, toggleFavourite }: PropListProp) => {
             placeholder="Search"
             name="search"
             type="search"
-            value={query}
+            value={searchInput}
             onChange={handleSearch}
           />
         </div>
@@ -101,12 +104,12 @@ const PostList = ({ favourites, toggleFavourite }: PropListProp) => {
         </div>
       </div>
 
-      {!filteredPosts || filteredPosts.length === 0 ? (
+      {!posts || posts.length === 0 ? (
         <ErrorMessage message="No posts to display!" />
       ) : null}
 
       <ul>
-        {filteredPosts?.map((post) => (
+        {posts?.map((post) => (
           <PostListItem
             key={post.id}
             post={post}
@@ -117,7 +120,7 @@ const PostList = ({ favourites, toggleFavourite }: PropListProp) => {
         ))}
       </ul>
 
-      {filteredPosts?.length ? (
+      {posts?.length ? (
         <div className="flex justify-end items-center gap-2 mt-4">
           <Pagination
             totalRecords={total ?? 0}

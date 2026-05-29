@@ -1,4 +1,5 @@
 import { useNavigate, useSearchParams } from "react-router-dom";
+
 import { DEFAULT_LIMIT, DEFAULT_PAGE } from "../../constants/pagination";
 
 export default function usePostFilters() {
@@ -8,9 +9,18 @@ export default function usePostFilters() {
 
   const userId = searchParams.get("userId") ?? "";
 
-  const page = Number(searchParams.get("page") || DEFAULT_PAGE);
+  const query = searchParams.get("title_like") ?? "";
 
-  const limit = Number(searchParams.get("limit") || DEFAULT_LIMIT);
+  // Ignore pagination params while searching
+  const isSearching = Boolean(query.trim());
+
+  const page = isSearching
+    ? DEFAULT_PAGE
+    : Number(searchParams.get("page") || DEFAULT_PAGE);
+
+  const limit = isSearching
+    ? DEFAULT_LIMIT
+    : Number(searchParams.get("limit") || DEFAULT_LIMIT);
 
   const updateParams = (paramsToUpdate: Record<string, string>) => {
     const params = new URLSearchParams(searchParams);
@@ -22,6 +32,12 @@ export default function usePostFilters() {
         params.set(key, value);
       }
     });
+
+    // Remove pagination params while searching
+    if (params.get("title_like")) {
+      params.delete("page");
+      params.delete("limit");
+    }
 
     navigate(`/posts?${params.toString()}`);
   };
@@ -46,12 +62,20 @@ export default function usePostFilters() {
     });
   };
 
+  const setQuery = (query: string) => {
+    updateParams({
+      title_like: query,
+    });
+  };
+
   return {
     userId,
     page,
     limit,
+    query,
     setUserId,
     setPage,
     setLimit,
+    setQuery,
   };
 }

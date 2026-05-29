@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { DEFAULT_STALE_TIME } from "../../config/queryClient";
 import { DEFAULT_LIMIT, DEFAULT_PAGE } from "../../constants/pagination";
 import { QUERY_KEYS } from "../../constants/queryKeys";
@@ -10,30 +10,44 @@ interface UsePostsProps {
   page?: number;
   limit?: number;
   userId?: string;
+  query?: string;
 }
 
 const usePosts = ({
   page = DEFAULT_PAGE,
   limit = DEFAULT_LIMIT,
   userId,
+  query,
 }: UsePostsProps = {}) => {
+  const isSearching = Boolean(query?.trim());
+
   const params = {
-    _page: page,
-    _limit: limit,
+    ...(isSearching
+      ? {}
+      : {
+          _page: page,
+          _limit: limit,
+        }),
+
     ...(userId ? { userId } : {}),
+
+    ...(isSearching ? { title_like: query } : {}),
   };
 
   return useQuery<APIListResponse<Post>, Error>({
-    queryKey: QUERY_KEYS.posts(page, limit, userId),
+    queryKey: isSearching
+      ? QUERY_KEYS.postsSearch(query, userId)
+      : QUERY_KEYS.posts(page, limit, userId),
 
-    queryFn: ({ signal }) => {
-      return postService.getAll({
+    queryFn: ({ signal }) =>
+      postService.getAll({
         params,
         signal,
-      });
-    },
+      }),
 
     staleTime: DEFAULT_STALE_TIME,
+
+    placeholderData: keepPreviousData,
   });
 };
 
