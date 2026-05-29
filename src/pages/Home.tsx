@@ -32,11 +32,11 @@ const Home = ({ likedPostIds }: HomeProps) => {
 
   return (
     <div className="max-w-5xl mx-auto flex flex-wrap gap-4">
-      <ChartContainer>
+      <ChartContainer title="Posts (Liked vs Not Liked)">
         <LikedPostsPieChart data={pieData} />
       </ChartContainer>
 
-      <ChartContainer>
+      <ChartContainer title="Posts vs Users">
         <UsersPostBarChart data={barData} />
       </ChartContainer>
     </div>
