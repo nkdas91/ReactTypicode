@@ -1,6 +1,12 @@
 export const QUERY_KEYS = {
-  users: ["users"] as const,
-  usersSearch: (query?: string) => ["users-search", query],
+  users: (page: number, limit: number) => ["users", page, limit] as const,
+
+  usersSearch: (page: number, limit: number, query?: string) => [
+    "users-search",
+    page,
+    limit,
+    query,
+  ],
 
   posts: (
     page: number,

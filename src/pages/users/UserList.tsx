@@ -8,9 +8,12 @@ import useDebouncedValue from "../../hooks/useDebouncedValue";
 import useDeleteUser from "../../hooks/users/useDeleteUser";
 import useUserFilters from "../../hooks/users/useUserFilters";
 import useUsers from "../../hooks/users/useUsers";
+import Pagination from "../../components/Pagination";
+import SelectField from "../../components/SelectField";
+import { LIMITS } from "../../constants/pagination";
 
 const UserList = () => {
-  const { query, setQuery } = useUserFilters();
+  const { page, limit, query, setPage, setLimit, setQuery } = useUserFilters();
 
   const [searchInput, setSearchInput] = useState(query);
 
@@ -21,11 +24,12 @@ const UserList = () => {
     error,
     isLoading,
     refetch,
-  } = useUsers({ query });
+  } = useUsers({ page, limit, query });
 
   const deleteUser = useDeleteUser(refetch);
 
   const users = usersResponse?.data;
+  const total = usersResponse?.total;
 
   // Debounce search updates to avoid triggering
   // navigation + API requests on every keystroke.
@@ -53,21 +57,25 @@ const UserList = () => {
 
   return (
     <div className="max-w-5xl mx-auto">
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-        <div className="flex justify-between items-start gap-4">
-          <h1 className="text-3xl">Users</h1>
+      <div className="flex justify-between items-center flex-wrap gap-2 mb-5">
+        <h1 className="text-3xl">Users</h1>
 
-          <Button to="/users/create">Add</Button>
-        </div>
+        <Button to="/users/create">Add new user</Button>
+      </div>
 
-        <div>
-          <TextField
-            placeholder="Search"
-            name="search"
-            type="search"
-            value={searchInput}
-            onChange={handleSearch}
-          />
+      <div className="flex flex-wrap gap-2 justify-between items-center">
+        <TextField
+          placeholder="Search"
+          name="search"
+          type="search"
+          value={searchInput}
+          onChange={handleSearch}
+        />
+
+        <div className="flex items-center gap-1 mb-2">
+          <label>Show</label>
+          <SelectField value={limit} onChange={setLimit} options={LIMITS} />
+          <label> Records</label>
         </div>
       </div>
 
@@ -86,6 +94,18 @@ const UserList = () => {
           ))}
         </ul>
       )}
+
+      {users?.length ? (
+        <div className="flex justify-end items-center gap-2 mt-4">
+          <Pagination
+            totalRecords={total ?? 0}
+            currentPage={page}
+            limit={limit}
+            dataLength={users?.length ?? 0}
+            onPageChange={setPage}
+          />
+        </div>
+      ) : null}
     </div>
   );
 };
