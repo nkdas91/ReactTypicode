@@ -7,7 +7,7 @@ describe("Navbar", () => {
   it("renders navigation links", () => {
     render(
       <BrowserRouter>
-        <Navbar favouriteCount={2} />
+        <Navbar />
       </BrowserRouter>,
     );
 

@@ -5,7 +5,6 @@ import { classNames } from "../../utils/classNames";
 interface NavLinkProps {
   item: NavbarItem;
   pathname: string;
-  favouriteCount: number;
   className: string;
   activeClassName: string;
   onClick?: () => void;
@@ -14,7 +13,6 @@ interface NavLinkProps {
 const NavbarLink = ({
   item,
   pathname,
-  favouriteCount,
   className,
   activeClassName,
   onClick,
@@ -28,12 +26,6 @@ const NavbarLink = ({
       className={classNames(className, isActive && activeClassName)}
     >
       {item.label}
-
-      {item.showBadge && favouriteCount > 0 && (
-        <span className="inline-flex rounded-full bg-primary px-2 py-0 text-sm font-semibold text-on-primary">
-          {favouriteCount}
-        </span>
-      )}
     </Link>
   );
 };

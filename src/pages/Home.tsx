@@ -2,6 +2,7 @@ import { lazy } from "react";
 import ChartContainer from "../components/charts/ChartContainer";
 import usePosts from "../hooks/posts/usePosts";
 import useUsers from "../hooks/users/useUsers";
+import useFavouritesStore from "../stores/favouriteStore";
 import getLikedPostsPieData from "../utils/charts/getLikedPostsPieData";
 import getUsersPostsBarData from "../utils/charts/getUsersPostsBarData";
 
@@ -12,18 +13,13 @@ const UsersPostBarChart = lazy(
   () => import("../components/charts/UsersPostsBarChart"),
 );
 
-interface HomeProps {
-  likedPostIds: number[];
-}
-
-const Home = ({ likedPostIds }: HomeProps) => {
+const Home = () => {
   const { data: postsResponse } = usePosts();
   const { data: userResponse } = useUsers();
 
-  const pieData = getLikedPostsPieData(
-    postsResponse?.total,
-    likedPostIds.length,
-  );
+  const favourites = useFavouritesStore((state) => state.favourites);
+
+  const pieData = getLikedPostsPieData(postsResponse?.total, favourites.length);
 
   const barData = getUsersPostsBarData(
     postsResponse?.total,

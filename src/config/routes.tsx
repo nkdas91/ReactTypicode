@@ -22,18 +22,10 @@ const withErrorBoundary = (element: ReactNode, fallbackMessage: string) => (
   </RouteErrorBoundary>
 );
 
-interface AppRoutesProps {
-  favourites: number[];
-  toggleFavourite: (id: number) => void;
-}
-
-export const appRoutes = ({ favourites, toggleFavourite }: AppRoutesProps) => [
+export const appRoutes = () => [
   {
     path: ROUTES.home,
-    element: withErrorBoundary(
-      <Home likedPostIds={favourites} />,
-      "Failed to load home page.",
-    ),
+    element: withErrorBoundary(<Home />, "Failed to load home page."),
   },
 
   {
@@ -58,18 +50,12 @@ export const appRoutes = ({ favourites, toggleFavourite }: AppRoutesProps) => [
 
   {
     path: ROUTES.posts.list,
-    element: withErrorBoundary(
-      <PostList favourites={favourites} toggleFavourite={toggleFavourite} />,
-      "Failed to load posts.",
-    ),
+    element: withErrorBoundary(<PostList />, "Failed to load posts."),
   },
 
   {
     path: ROUTES.posts.details(),
-    element: withErrorBoundary(
-      <PostDetails favourites={favourites} toggleFavourite={toggleFavourite} />,
-      "Failed to load post.",
-    ),
+    element: withErrorBoundary(<PostDetails />, "Failed to load post."),
   },
 
   {

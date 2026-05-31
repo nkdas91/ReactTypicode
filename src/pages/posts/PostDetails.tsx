@@ -8,18 +8,20 @@ import PostDetailsSkeleton from "../../components/posts/skeletons/PostDetailsSke
 import useDeletePost from "../../hooks/posts/useDeletePost";
 import usePost from "../../hooks/posts/usePost";
 import useUser from "../../hooks/users/useUser";
+import useFavouritesStore from "../../stores/favouriteStore";
 
-interface PropDetailsProp {
-  favourites: number[];
-  toggleFavourite: (id: number) => void;
-}
-
-const PostDetails = ({ favourites, toggleFavourite }: PropDetailsProp) => {
+const PostDetails = () => {
   const { id } = useParams();
 
   const { data: post, error, isLoading, refetch } = usePost(Number(id));
   const { data: user } = useUser(post?.userId ?? null);
   const deletePost = useDeletePost(refetch);
+
+  const isFavourite = useFavouritesStore((state) =>
+    state.isFavourite(Number(id)),
+  );
+
+  const toggleFavourite = useFavouritesStore((state) => state.toggleFavourite);
 
   if (isLoading) {
     return <PostDetailsSkeleton />;
@@ -32,8 +34,6 @@ const PostDetails = ({ favourites, toggleFavourite }: PropDetailsProp) => {
   if (!post) {
     return <ErrorMessage message="Post not found" />;
   }
-
-  const isFavourite = favourites.includes(post.id);
 
   const handleDelete = async (e: React.MouseEvent, id: number) => {
     e.preventDefault();

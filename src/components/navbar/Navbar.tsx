@@ -4,14 +4,10 @@ import { Link, useLocation } from "react-router-dom";
 import { navbarItems } from "../../config/navigation";
 import NavLink from "./NavbarLink";
 
-interface NavbarProps {
-  favouriteCount: number;
-}
-
 const activeClasses =
   "active-nav-link text-primary underline underline-offset-4";
 
-const Navbar = ({ favouriteCount }: NavbarProps) => {
+const Navbar = () => {
   const [open, setOpen] = useState(false);
 
   const { pathname } = useLocation();
@@ -30,7 +26,6 @@ const Navbar = ({ favouriteCount }: NavbarProps) => {
               key={item.to}
               item={item}
               pathname={pathname}
-              favouriteCount={favouriteCount}
               className="nav-link flex items-center gap-1"
               activeClassName={activeClasses}
             />
@@ -56,7 +51,6 @@ const Navbar = ({ favouriteCount }: NavbarProps) => {
               key={item.to}
               item={item}
               pathname={pathname}
-              favouriteCount={favouriteCount}
               className="mobile-link flex items-center gap-1"
               activeClassName={activeClasses}
               onClick={() => setOpen(false)}

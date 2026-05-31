@@ -11,13 +11,12 @@ import usePostFilters from "../../hooks/posts/usePostFilters";
 import usePosts from "../../hooks/posts/usePosts";
 import useDebouncedValue from "../../hooks/useDebouncedValue";
 import useUsers from "../../hooks/users/useUsers";
+import useFavouritesStore from "../../stores/favouriteStore";
 
-interface PropListProp {
-  favourites: number[];
-  toggleFavourite: (id: number) => void;
-}
+const PostList = () => {
+  const favourites = useFavouritesStore((state) => state.favourites);
+  const toggleFavourite = useFavouritesStore((state) => state.toggleFavourite);
 
-const PostList = ({ favourites, toggleFavourite }: PropListProp) => {
   const {
     userId,
     page,
