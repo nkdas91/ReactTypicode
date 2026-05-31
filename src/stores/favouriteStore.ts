@@ -12,6 +12,7 @@ const useFavouritesStore = create<FavouritesStore>()(
     (set, get) => ({
       favourites: [],
 
+      // Toggle favourite status for a post.
       toggleFavourite: (id) =>
         set((state) => ({
           favourites: state.favourites.includes(id)
@@ -23,7 +24,9 @@ const useFavouritesStore = create<FavouritesStore>()(
         return get().favourites.includes(id);
       },
     }),
+
     {
+      // Persist store data in localStorage.
       name: "favourites",
     },
   ),
