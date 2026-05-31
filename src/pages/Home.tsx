@@ -23,7 +23,7 @@ const Home = () => {
 
   const barData = getUsersPostsBarData(
     postsResponse?.total,
-    userResponse?.data.length,
+    userResponse?.total,
   );
 
   return (
