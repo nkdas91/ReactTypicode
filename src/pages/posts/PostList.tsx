@@ -5,7 +5,7 @@ import PostListItem from "../../components/posts/PostListItem";
 import PostListSkeleton from "../../components/posts/skeletons/PostListSkeleton";
 import SelectField from "../../components/SelectField";
 import TextField from "../../components/TextField";
-import { LIMITS } from "../../constants/pagination";
+import { LIMITS, NO_LIMIT } from "../../constants/pagination";
 import useDeletePost from "../../hooks/posts/useDeletePost";
 import usePostFilters from "../../hooks/posts/usePostFilters";
 import usePosts from "../../hooks/posts/usePosts";
@@ -41,7 +41,7 @@ const PostList = () => {
     refetch,
   } = usePosts({ page, limit, userId, query, showFavourites, favourites });
 
-  const { data: usersResponse } = useUsers();
+  const { data: usersResponse } = useUsers({ limit: NO_LIMIT });
   const deletePost = useDeletePost(refetch);
 
   const posts = postsResponse?.data;
