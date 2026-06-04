@@ -55,7 +55,7 @@ const UserList = () => {
 
   return (
     <div>
-      <div className="flex justify-between items-center flex-wrap gap-2 mb-5">
+      <div className="flex justify-between items-center flex-wrap gap-field mb-card">
         <h1 className="text-3xl">Users</h1>
 
         <Button to="/users/create">Add new user</Button>
@@ -85,7 +85,7 @@ const UserList = () => {
       )}
 
       {users?.length ? (
-        <div className="flex justify-end items-center gap-2 mt-4">
+        <div className="flex justify-end items-center gap-field mt-card">
           <Pagination
             totalRecords={total ?? 0}
             currentPage={page}

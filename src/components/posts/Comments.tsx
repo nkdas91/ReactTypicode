@@ -27,8 +27,8 @@ const Comments = ({ id }: CommentsProps) => {
 
   return (
     <div>
-      <div className="flex justify-between items-center gap-4 mb-2">
-        <h2 className="text-xl mb-2">Comments</h2>
+      <div className="flex justify-between items-center gap-card my-card">
+        <h2 className="text-xl">Comments</h2>
 
         <Button
           type="button"
@@ -46,7 +46,7 @@ const Comments = ({ id }: CommentsProps) => {
       </div>
 
       {formVisible && (
-        <div className="mb-4 p-6 border border-light rounded-card">
+        <div className="section mb-card">
           <CommentForm
             form={form}
             errors={errors}

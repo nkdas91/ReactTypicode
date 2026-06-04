@@ -30,16 +30,16 @@ const UserDetails = () => {
   };
 
   return (
-    <div className="p-6 border border-light rounded-card">
+    <div className="section">
       <BackButton url="/users" label="Back to Users" />
 
-      <div className="mb-6 mt-4">
+      <div className="form-section mt-card">
         <h1 className="text-3xl">{user?.name}</h1>
         <p className="text-muted">@{user?.username}</p>
       </div>
 
-      <div className="mb-6">
-        <h2 className="text-lg font-medium mb-2">Contact</h2>
+      <div className="form-section">
+        <h2 className="section-title">Contact</h2>
         <p>
           <span className="text-muted">Email:</span> {user?.email}
         </p>
@@ -52,8 +52,8 @@ const UserDetails = () => {
       </div>
 
       {user?.address && (
-        <div>
-          <h2 className="text-lg font-medium mb-2">Address</h2>
+        <div className="form-section">
+          <h2 className="section-title">Address</h2>
           <p>
             {user.address.suite}, {user.address.street}
           </p>
@@ -63,7 +63,7 @@ const UserDetails = () => {
         </div>
       )}
 
-      <div className="flex justify-end gap-2">
+      <div className="flex justify-end gap-field">
         <Button to={`/users/${id}/edit`} variant="secondary">
           Edit
         </Button>

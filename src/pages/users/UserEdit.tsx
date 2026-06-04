@@ -34,11 +34,11 @@ const UserEdit = () => {
   }
 
   return (
-    <div className="p-6 border border-light rounded-card">
+    <div className="section">
       <BackButton url="/users" label="Back to Users" />
 
       <form onSubmit={handleSubmit}>
-        <div className="mb-6 mt-4 grid md:grid-cols-2 gap-2">
+        <div className="form-section form-grid mt-card">
           <TextField
             label="Name"
             type="text"
@@ -58,9 +58,9 @@ const UserEdit = () => {
           />
         </div>
 
-        <div className="mb-6">
-          <h2 className="text-lg font-medium mb-2">Contact</h2>
-          <div className="grid md:grid-cols-2 gap-2">
+        <div className="form-section">
+          <h2 className="section-title">Contact</h2>
+          <div className="form-grid">
             <TextField
               label="Email"
               type="email"
@@ -91,9 +91,9 @@ const UserEdit = () => {
         </div>
 
         {form?.address && (
-          <div>
-            <h2 className="text-lg font-medium mb-2">Address</h2>
-            <div className="grid md:grid-cols-2 gap-2">
+          <div className="form-section">
+            <h2 className="section-title">Address</h2>
+            <div className="form-grid">
               <TextField
                 label="Suite"
                 type="text"
@@ -133,7 +133,7 @@ const UserEdit = () => {
           </div>
         )}
 
-        <div className="flex justify-end gap-2">
+        <div className="flex justify-end">
           <Button type="submit" disabled={loading} variant="secondary">
             {loading ? "Saving..." : "Save"}
           </Button>

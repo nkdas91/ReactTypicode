@@ -27,11 +27,11 @@ const PostEdit = () => {
   }
 
   return (
-    <div className="p-6 border border-light rounded-card">
+    <div className="section">
       <BackButton url="/posts" label="Back to Posts" />
 
       <form onSubmit={handleSubmit}>
-        <div className="mb-6 mt-4">
+        <div className="form-section mt-card">
           <TextField
             label="Title"
             type="text"
@@ -51,7 +51,7 @@ const PostEdit = () => {
           />
         </div>
 
-        <div className="flex justify-end gap-2">
+        <div className="flex justify-end">
           <Button type="submit" disabled={loading} variant="secondary">
             {loading ? "Saving..." : "Save"}
           </Button>

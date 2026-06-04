@@ -43,8 +43,8 @@ const PostDetails = () => {
 
   return (
     <>
-      <div className="mb-5 p-6 border border-light rounded-card">
-        <div className="flex justify-between items-center gap-4">
+      <div className="section">
+        <div className="flex justify-between items-center gap-card">
           <BackButton url="/posts" label="Back to Posts" />
 
           <FavouriteButton
@@ -53,7 +53,7 @@ const PostDetails = () => {
           />
         </div>
 
-        <div className="mb-6 mt-4">
+        <div className="my-card">
           <h1 className="text-3xl">{post?.title}</h1>
           <Link
             to={`/users/${post?.userId}`}
@@ -63,11 +63,11 @@ const PostDetails = () => {
           </Link>
         </div>
 
-        <div className="mb-6">
+        <div>
           <p>{post?.body}</p>
         </div>
 
-        <div className="flex justify-end gap-2">
+        <div className="flex justify-end gap-field">
           <Button to={`/posts/${id}/edit`} variant="secondary">
             Edit
           </Button>

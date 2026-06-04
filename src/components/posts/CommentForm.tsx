@@ -47,7 +47,7 @@ export default function CommentForm({
         onChange={onChange}
       />
 
-      <div className="flex justify-end gap-2">
+      <div className="flex justify-end gap-field">
         <Button type="submit" variant="secondary" disabled={loading}>
           {loading ? "Saving..." : "Save"}
         </Button>
