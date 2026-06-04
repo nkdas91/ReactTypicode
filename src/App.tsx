@@ -9,21 +9,19 @@ function App() {
   return (
     <>
       <Navbar />
-      <div className="px-10 py-5">
-        <div className="max-w-5xl mx-auto">
-          <Suspense fallback={<div>Loading page...</div>}>
-            <Routes>
-              {appRoutes().map((route) => (
-                <Route
-                  key={route.path}
-                  path={route.path}
-                  element={route.element}
-                />
-              ))}
-            </Routes>
-          </Suspense>
-        </div>
-      </div>
+      <main className="max-w-5xl mx-auto px-10 py-5">
+        <Suspense fallback={<div>Loading page...</div>}>
+          <Routes>
+            {appRoutes().map((route) => (
+              <Route
+                key={route.path}
+                path={route.path}
+                element={route.element}
+              />
+            ))}
+          </Routes>
+        </Suspense>
+      </main>
     </>
   );
 }
