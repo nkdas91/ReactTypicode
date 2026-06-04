@@ -1,6 +1,7 @@
 @import "tailwindcss";
 
 @theme {
+  /* Brand Colors */
   --color-primary: var(--color-indigo-700);
   --color-on-primary: var(--color-white);
   --color-primary-hover: var(--color-indigo-600);
@@ -16,6 +17,7 @@
   --color-accent: var(--color-rose-500);
   --color-on-accent: var(--color-white);
 
+  /* Surface & Text */
   --color-surface: var(--color-zinc-100);
   --color-background: var(--color-white);
 
@@ -24,5 +26,120 @@
 
   --color-light: var(--color-gray-100);
 
+  /* Radius */
   --radius-card: var(--radius-3xl);
+  --radius-field: var(--radius-md);
+
+  /* Layout */
+  --container-content: var(--container-5xl);
+
+  /* Spacing */
+  --spacing-section: 2rem;
+  --spacing-card: 1rem;
+  --spacing-field: 0.5rem;
+
+  /* Focus */
+  --color-focus-ring: var(--color-indigo-500);
+
+  /* Motion */
+  --default-transition-duration: 200ms;
+}
+
+/* Button */
+@utility btn {
+  @apply inline-flex items-center justify-center;
+  @apply rounded-full transition cursor-pointer;
+  @apply focus-visible:outline-2 focus-visible:outline-offset-2;
+  @apply disabled:opacity-50 disabled:cursor-not-allowed;
+}
+
+@utility btn-primary {
+  @apply bg-primary text-on-primary hover:bg-primary-hover;
+  @apply focus-visible:outline-primary;
+}
+
+@utility btn-secondary {
+  @apply bg-secondary text-on-secondary hover:bg-secondary-hover;
+  @apply focus-visible:outline-on-secondary;
+}
+
+@utility btn-danger {
+  @apply bg-danger text-on-danger hover:bg-danger-hover;
+  @apply focus-visible:outline-on-danger;
+}
+
+@utility btn-ghost {
+  @apply bg-transparent;
+}
+
+@utility btn-default {
+  @apply px-4 py-2;
+}
+
+@utility btn-icon {
+  @apply p-2;
+}
+
+/* Favourite Button */
+@utility favourite-button {
+  @apply p-1;
+  @apply hover:scale-110;
+  @apply transition;
+  @apply focus-visible:outline-2;
+}
+
+@utility favourite-button-active {
+  @apply focus-visible:outline-accent;
+}
+
+@utility favourite-button-inactive {
+  @apply focus-visible:outline-muted;
+}
+
+@utility favourite-icon-active {
+  @apply size-8 text-accent;
+}
+
+@utility favourite-icon-inactive {
+  @apply size-8 text-muted;
+}
+
+/* TextField and SelectField */
+@utility form-field {
+  @apply w-full px-4 py-2;
+  @apply border border-light;
+  @apply rounded-field;
+  @apply focus-visible:outline-primary;
+}
+
+@utility form-label {
+  @apply block mb-1;
+}
+
+@utility form-error {
+  @apply mt-1 text-sm text-on-danger;
+}
+
+/* Toast */
+@utility toast {
+  @apply fixed top-5 right-5 z-50;
+  @apply flex items-center gap-3;
+  @apply min-w-[320px] max-w-md;
+  @apply rounded-card px-4 py-3;
+  @apply border shadow-lg;
+  @apply transition-all duration-300;
+}
+
+@utility toast-success {
+  @apply bg-secondary text-on-secondary border-on-secondary;
+}
+
+@utility toast-error {
+  @apply bg-danger text-on-danger border-on-danger;
+}
+
+@utility toast-close-button {
+  @apply shrink-0 rounded-full p-1;
+  @apply cursor-pointer transition;
+  @apply hover:bg-white/20;
 }

@@ -2,7 +2,7 @@ import Skeleton from "../../skeletons/Skeleton";
 
 export default function UserDetailsSkeleton() {
   return (
-    <div className="max-w-3xl mx-auto p-6 border border-light rounded-lg">
+    <div className="p-6 border border-light rounded-card">
       <Skeleton className="w-30 h-8 rounded-full" />
 
       <div className="mb-6 mt-4">

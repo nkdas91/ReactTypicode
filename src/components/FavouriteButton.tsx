@@ -1,6 +1,8 @@
 import { HeartIcon } from "@heroicons/react/24/outline";
 import { HeartIcon as HeartSolidIcon } from "@heroicons/react/24/solid";
+
 import Button from "./Button";
+import { classNames } from "../utils/classNames";
 
 interface FavouriteButtonProps {
   isFavourite: boolean;
@@ -13,16 +15,20 @@ const FavouriteButton = ({
 }: FavouriteButtonProps) => {
   return (
     <Button
+      variant="ghost"
       size="icon"
       onClick={toggleFavourite}
       aria-label={isFavourite ? "Remove from favorites" : "Add to favorites"}
       title={isFavourite ? "Remove from favorites" : "Add to favorites"}
-      className={`p-1 bg-white hover:bg-white hover:scale-110 transition focus-visible:outline-2 ${isFavourite ? "focus-visible:outline-accent" : "focus-visible:outline-muted"} `}
+      className={classNames(
+        "favourite-button",
+        isFavourite ? "favourite-button-active" : "favourite-button-inactive",
+      )}
     >
       {isFavourite ? (
-        <HeartSolidIcon className="size-8 text-accent" />
+        <HeartSolidIcon className="favourite-icon-active" />
       ) : (
-        <HeartIcon className="size-8 text-muted" />
+        <HeartIcon className="favourite-icon-inactive" />
       )}
     </Button>
   );

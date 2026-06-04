@@ -3,7 +3,7 @@ import Skeleton from "../../skeletons/Skeleton";
 
 export default function PostListSkeleton() {
   return (
-    <div className="max-w-5xl mx-auto">
+    <div>
       <h1 className="text-3xl mb-4">
         <Skeleton className="h-5 w-20 rounded-full" />
       </h1>
@@ -22,7 +22,7 @@ export default function PostListSkeleton() {
           <div className="flex items-center gap-1">
             <Skeleton className="h-5 w-10 rounded-full" />
 
-            <div className="border border-light p-4 rounded-md flex justify-between items-center">
+            <div className="border border-light p-4 rounded-field flex justify-between items-center">
               <Skeleton className="w-10 h-5 rounded-full" />
             </div>
 

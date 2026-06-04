@@ -30,7 +30,7 @@ const SelectField = (props: SelectFieldProps) => {
   return (
     <div>
       {"label" in props && (
-        <label htmlFor={id} className="mb-1 block text-sm">
+        <label htmlFor={id} className="form-label">
           {props.label}
         </label>
       )}
@@ -41,7 +41,7 @@ const SelectField = (props: SelectFieldProps) => {
           value={value}
           onChange={(e) => onChange(e.target.value)}
           aria-label={"ariaLabel" in props ? props.ariaLabel : undefined}
-          className="col-start-1 row-start-1 px-4 py-2 pr-8 border border-light rounded-md appearance-none focus-visible:outline-primary"
+          className="form-field col-start-1 row-start-1 appearance-none pr-8"
         >
           {options.map((option) => (
             <option key={option.value} value={option.value}>

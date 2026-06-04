@@ -32,14 +32,13 @@ export default function TextField({
       onChange(e.target.name, e.target.value),
     "aria-invalid": !!error,
     "aria-describedby": error ? `${name}-error` : undefined,
-    className:
-      "px-4 py-2 border border-light rounded-md w-full focus-visible:outline-primary",
+    className: "form-field",
   };
 
   return (
     <div className="mb-2">
       {label && (
-        <label htmlFor={name} className="block mb-1">
+        <label htmlFor={name} className="form-label">
           {label}
         </label>
       )}
@@ -51,7 +50,7 @@ export default function TextField({
       )}
 
       {error && (
-        <p id={`${name}-error`} className="text-on-danger text-sm mt-1">
+        <p id={`${name}-error`} className="form-error">
           {error}
         </p>
       )}

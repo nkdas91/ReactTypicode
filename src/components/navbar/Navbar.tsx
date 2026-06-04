@@ -25,7 +25,7 @@ const Navbar = () => {
       </div>
 
       <nav className="bg-surface px-7 py-4">
-        <div className="mx-auto flex max-w-5xl items-center justify-between">
+        <div className="mx-auto flex max-w-(--container-content) items-center justify-between">
           <Link to="/" className="text-lg font-bold">
             My App
           </Link>

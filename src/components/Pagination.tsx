@@ -38,9 +38,9 @@ const Pagination = ({
     <div className="flex justify-end items-center flex-wrap gap-2">
       {totalRecords === 0 || dataLength === 0 ? null : (
         <>
-          <label>
+          <p>
             Showing records {start} to {end} of {totalRecords} records.
-          </label>
+          </p>
           <Button
             type="button"
             onClick={handlePrevious}

@@ -1,4 +1,5 @@
 import { XMarkIcon } from "@heroicons/react/24/solid";
+import { classNames } from "../utils/classNames";
 
 interface ToastProps {
   message: string;
@@ -7,27 +8,14 @@ interface ToastProps {
 }
 
 export default function Toast({ message, type, onClose }: ToastProps) {
-  const isSuccess = type === "success";
-
   return (
     <div
       role="alert"
       aria-live="polite"
-      className={`
-        fixed top-5 right-5 z-50
-        flex items-center gap-3
-        min-w-[320px] max-w-md
-        rounded-xl px-4 py-3
-        shadow-lg
-        border
-        transition-all duration-300
-        animate-in slide-in-from-right
-        ${
-          isSuccess
-            ? "bg-secondary text-on-secondary border-on-secondary"
-            : "bg-danger text-on-danger border-on-danger"
-        }
-      `}
+      className={classNames(
+        "toast",
+        type === "success" ? "toast-success" : "toast-error",
+      )}
     >
       <div className="flex-1">
         <p className="text-sm font-medium">{message}</p>
@@ -38,9 +26,9 @@ export default function Toast({ message, type, onClose }: ToastProps) {
           type="button"
           aria-label="Close notification"
           onClick={onClose}
-          className="shrink-0 rounded-full p-1 transition hover:bg-white/20 cursor-pointer"
+          className="toast-close-button"
         >
-          <XMarkIcon className="h-5 w-5" />
+          <XMarkIcon className="size-5" />
         </button>
       )}
     </div>

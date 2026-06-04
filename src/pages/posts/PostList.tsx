@@ -72,14 +72,14 @@ const PostList = () => {
   };
 
   return (
-    <div className="max-w-5xl mx-auto">
+    <div>
       <div className="flex justify-between items-center flex-wrap gap-2 mb-5">
         <h1 className="text-3xl">Posts</h1>
 
         <div className="flex flex-wrap gap-3">
           <div className="flex items-center gap-1">
+            <span>Posts by </span>
             <SelectField
-              label="Posts by"
               value={userId}
               onChange={setUserId}
               options={[
@@ -93,6 +93,7 @@ const PostList = () => {
                   value: user.id,
                 })) ?? []),
               ]}
+              ariaLabel="Select a user to display their posts"
             />
           </div>
 

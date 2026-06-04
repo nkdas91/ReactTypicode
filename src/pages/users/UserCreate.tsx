@@ -14,7 +14,7 @@ const UserCreate = () => {
   } = useCreateUserForm();
 
   return (
-    <div className="max-w-3xl mx-auto p-6 border border-light rounded-lg">
+    <div className="p-6 border border-light rounded-card">
       <BackButton url="/users" label="Back to Users" />
 
       <form onSubmit={handleSubmit}>

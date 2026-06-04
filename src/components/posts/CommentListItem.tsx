@@ -6,7 +6,7 @@ interface CommentListItemProps {
 
 export default function CommentListItem({ comment }: CommentListItemProps) {
   return (
-    <li className="mb-4 p-6 border border-light rounded-lg">
+    <li className="mb-4 p-6 border border-light rounded-card">
       <h3 className="text-lg">{comment.name}</h3>
 
       <p className="text-sm text-muted italic mb-3">{comment.email}</p>

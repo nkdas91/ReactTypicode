@@ -43,7 +43,7 @@ const PostDetails = () => {
 
   return (
     <>
-      <div className="max-w-5xl mx-auto mb-5 p-6 border border-light rounded-lg">
+      <div className="mb-5 p-6 border border-light rounded-card">
         <div className="flex justify-between items-center gap-4">
           <BackButton url="/posts" label="Back to Posts" />
 

@@ -27,7 +27,7 @@ const PostEdit = () => {
   }
 
   return (
-    <div className="max-w-3xl mx-auto p-6 border border-light rounded-lg">
+    <div className="p-6 border border-light rounded-card">
       <BackButton url="/posts" label="Back to Posts" />
 
       <form onSubmit={handleSubmit}>

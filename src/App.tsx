@@ -9,7 +9,10 @@ function App() {
   return (
     <>
       <Navbar />
-      <main id="main-content" className="max-w-5xl mx-auto px-10 py-5">
+      <main
+        id="main-content"
+        className="max-w-(--container-content) mx-auto px-10 py-5"
+      >
         <Suspense fallback={<div>Loading page...</div>}>
           <Routes>
             {appRoutes().map((route) => (

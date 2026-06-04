@@ -53,7 +53,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
           <Button
             type="button"
             onClick={() => window.location.reload()}
-            className="rounded- bg-primary px-4 py-2 text-on-primary"
+            className="rounded-full bg-primary px-4 py-2 text-on-primary"
           >
             Reload Page
           </Button>

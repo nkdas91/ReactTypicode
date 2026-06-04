@@ -30,7 +30,7 @@ const UserDetails = () => {
   };
 
   return (
-    <div className="max-w-3xl mx-auto p-6 border border-light rounded-lg">
+    <div className="p-6 border border-light rounded-card">
       <BackButton url="/users" label="Back to Users" />
 
       <div className="mb-6 mt-4">

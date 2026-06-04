@@ -7,7 +7,7 @@ import type {
 import { Link } from "react-router-dom";
 import { classNames } from "../utils/classNames";
 
-type Variant = "primary" | "secondary" | "danger";
+type Variant = "primary" | "secondary" | "danger" | "ghost";
 
 type Size = "default" | "icon";
 
@@ -21,17 +21,15 @@ type ButtonProps = {
   AnchorHTMLAttributes<HTMLAnchorElement>;
 
 const variantClasses: Record<Variant, string> = {
-  primary:
-    "bg-primary text-on-primary hover:bg-primary-hover focus-visible:outline-primary",
-  secondary:
-    "bg-secondary text-on-secondary hover:bg-secondary-hover focus-visible:outline-on-secondary",
-  danger:
-    "bg-danger text-on-danger hover:bg-danger-hover focus-visible:outline-on-danger",
+  primary: "btn-primary",
+  secondary: "btn-secondary",
+  danger: "btn-danger",
+  ghost: "btn-ghost",
 };
 
 const sizeClasses: Record<Size, string> = {
-  default: "px-4 py-2",
-  icon: "p-2",
+  default: "btn-default",
+  icon: "btn-icon",
 };
 
 export default function Button({
@@ -44,10 +42,7 @@ export default function Button({
   ...props
 }: ButtonProps) {
   const classes = classNames(
-    "inline-flex items-center justify-center",
-    "rounded-full transition cursor-pointer",
-    "focus-visible:outline-2 focus-visible:outline-offset-2",
-    "disabled:opacity-50 disabled:cursor-not-allowed",
+    "btn",
     variantClasses[variant],
     sizeClasses[size],
     className,

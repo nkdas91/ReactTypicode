@@ -3,7 +3,7 @@ import Skeleton from "../../skeletons/Skeleton";
 
 export default function UserListSkeleton() {
   return (
-    <div className="max-w-5xl mx-auto">
+    <div>
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-2">
         <div className="flex justify-between items-center gap-4">
           <Skeleton className="h-5 w-20 rounded-full" />

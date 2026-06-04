@@ -26,7 +26,7 @@ const Comments = ({ id }: CommentsProps) => {
   }
 
   return (
-    <div className="max-w-5xl mx-auto">
+    <div>
       <div className="flex justify-between items-center gap-4 mb-2">
         <h2 className="text-xl mb-2">Comments</h2>
 
@@ -46,7 +46,7 @@ const Comments = ({ id }: CommentsProps) => {
       </div>
 
       {formVisible && (
-        <div className="max-w-5xl mx-auto mb-4 p-6 border border-light rounded-lg">
+        <div className="mb-4 p-6 border border-light rounded-card">
           <CommentForm
             form={form}
             errors={errors}

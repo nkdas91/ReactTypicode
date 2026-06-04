@@ -54,7 +54,7 @@ const UserList = () => {
   };
 
   return (
-    <div className="max-w-5xl mx-auto">
+    <div>
       <div className="flex justify-between items-center flex-wrap gap-2 mb-5">
         <h1 className="text-3xl">Users</h1>
 
