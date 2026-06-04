@@ -49,6 +49,8 @@ const Navbar = () => {
             onClick={() => setOpen((previousOpen) => !previousOpen)}
             className="flex flex-col gap-1 sm:hidden"
             aria-label="Toggle navigation menu"
+            aria-expanded={open}
+            aria-controls="mobile-navigation"
           >
             <Bars3Icon className="size-8" />
           </button>
@@ -56,7 +58,10 @@ const Navbar = () => {
 
         {/* Mobile Menu */}
         {open && (
-          <div className="mt-4 flex flex-col gap-2 sm:hidden">
+          <div
+            id="mobile-navigation"
+            className="mt-4 flex flex-col gap-2 sm:hidden"
+          >
             {navbarItems.map((item) => (
               <NavLink
                 key={item.to}
