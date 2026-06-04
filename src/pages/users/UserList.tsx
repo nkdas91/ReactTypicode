@@ -1,16 +1,14 @@
 import { useEffect, useState } from "react";
 import Button from "../../components/Button";
 import ErrorMessage from "../../components/ErrorMessage";
-import TextField from "../../components/TextField";
+import Pagination from "../../components/Pagination";
+import TableHeader from "../../components/TableHeader";
 import UserListItem from "../../components/users/UserListItem";
 import UserListSkeleton from "../../components/users/skeletons/UserListSkeleton";
 import useDebouncedValue from "../../hooks/useDebouncedValue";
 import useDeleteUser from "../../hooks/users/useDeleteUser";
 import useUserFilters from "../../hooks/users/useUserFilters";
 import useUsers from "../../hooks/users/useUsers";
-import Pagination from "../../components/Pagination";
-import SelectField from "../../components/SelectField";
-import { LIMITS } from "../../constants/pagination";
 
 const UserList = () => {
   const { page, limit, query, setPage, setLimit, setQuery } = useUserFilters();
@@ -63,21 +61,12 @@ const UserList = () => {
         <Button to="/users/create">Add new user</Button>
       </div>
 
-      <div className="flex flex-wrap gap-2 justify-between items-center">
-        <TextField
-          placeholder="Search"
-          name="search"
-          type="search"
-          value={searchInput}
-          onChange={handleSearch}
-        />
-
-        <div className="flex items-center gap-1 mb-2">
-          <label>Show</label>
-          <SelectField value={limit} onChange={setLimit} options={LIMITS} />
-          <label> Records</label>
-        </div>
-      </div>
+      <TableHeader
+        searchQuery={searchInput}
+        onSearch={handleSearch}
+        limit={limit}
+        onLimitChange={setLimit}
+      />
 
       {(!users || users.length === 0) && !isLoading ? (
         <ErrorMessage

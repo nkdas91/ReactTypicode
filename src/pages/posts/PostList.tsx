@@ -4,8 +4,8 @@ import Pagination from "../../components/Pagination";
 import PostListItem from "../../components/posts/PostListItem";
 import PostListSkeleton from "../../components/posts/skeletons/PostListSkeleton";
 import SelectField from "../../components/SelectField";
-import TextField from "../../components/TextField";
-import { LIMITS, NO_LIMIT } from "../../constants/pagination";
+import TableHeader from "../../components/TableHeader";
+import { NO_LIMIT } from "../../constants/pagination";
 import useDeletePost from "../../hooks/posts/useDeletePost";
 import usePostFilters from "../../hooks/posts/usePostFilters";
 import usePosts from "../../hooks/posts/usePosts";
@@ -78,8 +78,8 @@ const PostList = () => {
 
         <div className="flex flex-wrap gap-3">
           <div className="flex items-center gap-1">
-            <label>Posts by</label>
             <SelectField
+              label="Posts by"
               value={userId}
               onChange={setUserId}
               options={[
@@ -114,21 +114,12 @@ const PostList = () => {
         </div>
       </div>
 
-      <div className="flex flex-wrap gap-2 justify-between items-center">
-        <TextField
-          placeholder="Search"
-          name="search"
-          type="search"
-          value={searchInput}
-          onChange={handleSearch}
-        />
-
-        <div className="flex items-center gap-1 mb-2">
-          <label>Show</label>
-          <SelectField value={limit} onChange={setLimit} options={LIMITS} />
-          <label> Records</label>
-        </div>
-      </div>
+      <TableHeader
+        searchQuery={searchInput}
+        onSearch={handleSearch}
+        limit={limit}
+        onLimitChange={setLimit}
+      />
 
       {(!posts || posts.length === 0) && !isLoading ? (
         <ErrorMessage
