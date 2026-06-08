@@ -103,3 +103,23 @@ npm install axios
 npm install @heroicons/react
 npm install recharts
 ```
+
+## Environment Variables
+
+Create a `.env` file in the project root using `.env.example` as a reference.
+
+```env
+VITE_API_BASE_URL=https://jsonplaceholder.typicode.com
+APP_URL=http://localhost:5173
+```
+
+| Variable            | Description                                  |
+| ------------------- | -------------------------------------------- |
+| `VITE_API_BASE_URL` | Base URL of the API used by the application. |
+| `APP_URL`           | Local application URL used for development.  |
+
+Example setup:
+
+```bash
+cp .env.example .env
+```
