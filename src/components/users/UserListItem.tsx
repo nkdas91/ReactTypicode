@@ -5,7 +5,7 @@ import Button from "../Button";
 
 interface UserListItemProps {
   user: User;
-  onDelete: (e: React.MouseEvent, id: number) => Promise<void>;
+  onDelete: (e: React.MouseEvent, id: number) => void;
 }
 
 const UserListItem = ({ user, onDelete }: UserListItemProps) => {

@@ -1,11 +1,10 @@
-import { useEffect, useState } from "react";
 import Button from "../../components/Button";
 import ErrorMessage from "../../components/ErrorMessage";
 import Pagination from "../../components/Pagination";
 import TableHeader from "../../components/TableHeader";
 import UserListItem from "../../components/users/UserListItem";
 import UserListSkeleton from "../../components/users/skeletons/UserListSkeleton";
-import useDebouncedValue from "../../hooks/useDebouncedValue";
+import useListPageController from "../../hooks/useListPageController";
 import useDeleteUser from "../../hooks/users/useDeleteUser";
 import useUserFilters from "../../hooks/users/useUserFilters";
 import useUsers from "../../hooks/users/useUsers";
@@ -13,9 +12,10 @@ import useUsers from "../../hooks/users/useUsers";
 const UserList = () => {
   const { page, limit, query, setPage, setLimit, setQuery } = useUserFilters();
 
-  const [searchInput, setSearchInput] = useState(query);
-
-  const debouncedSearch = useDebouncedValue(searchInput);
+  const { searchInput, handleSearch } = useListPageController({
+    query,
+    setQuery,
+  });
 
   const {
     data: usersResponse,
@@ -29,29 +29,8 @@ const UserList = () => {
   const users = usersResponse?.data;
   const total = usersResponse?.total;
 
-  // Debounce search updates to avoid triggering
-  // navigation + API requests on every keystroke.
-  useEffect(() => {
-    setQuery(debouncedSearch);
-  }, [debouncedSearch, setQuery]);
-
-  if (isLoading) {
-    return <UserListSkeleton />;
-  }
-
-  if (error) {
-    return <ErrorMessage message={error.message} />;
-  }
-
-  const handleSearch = (_name: string, value: string) => {
-    setSearchInput(value);
-  };
-
-  const handleDelete = async (e: React.MouseEvent, id: number) => {
-    e.preventDefault();
-
-    await deleteUser(id);
-  };
+  if (isLoading) return <UserListSkeleton />;
+  if (error) return <ErrorMessage message={error.message} />;
 
   return (
     <div>
@@ -68,29 +47,34 @@ const UserList = () => {
         onLimitChange={setLimit}
       />
 
-      {(!users || users.length === 0) && !isLoading ? (
+      {!users?.length && (
         <ErrorMessage
           message={
             query ? `No users found matching "${query}"` : "No users available"
           }
         />
-      ) : null}
-
-      {users && (
-        <ul>
-          {users.map((user) => (
-            <UserListItem key={user.id} user={user} onDelete={handleDelete} />
-          ))}
-        </ul>
       )}
 
+      <ul>
+        {users?.map((user) => (
+          <UserListItem
+            key={user.id}
+            user={user}
+            onDelete={(e, id) => {
+              e.preventDefault();
+              deleteUser(id);
+            }}
+          />
+        ))}
+      </ul>
+
       {users?.length ? (
-        <div className="flex justify-end items-center gap-field mt-card">
+        <div className="flex justify-end mt-card">
           <Pagination
             totalRecords={total ?? 0}
             currentPage={page}
             limit={limit}
-            dataLength={users?.length ?? 0}
+            dataLength={users.length}
             onPageChange={setPage}
           />
         </div>
