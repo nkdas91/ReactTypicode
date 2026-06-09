@@ -2,7 +2,7 @@ import { useState } from "react";
 import useNotification from "../../context/useNotification";
 import { commentSchema } from "../../schemas/commentSchema";
 import type { Comment } from "../../types/Comment";
-import { validateSchema } from "../../utils/validateSchema";
+import useFormValidation from "../forms/useFormValidation";
 
 const createInitialCommentForm = (postId: number): Comment => ({
   postId,
@@ -20,85 +20,44 @@ export default function useCommentForm(
 ) {
   const [form, setForm] = useState<Comment>(createInitialCommentForm(postId));
 
-  /**
-   * Stores validation errors by field name.
-   *
-   * Example:
-   * {
-   *   name: "Name is required"
-   * }
-   */
-  const [errors, setErrors] = useState<Record<string, string>>({});
+  const { errors, validateField, validateForm } = useFormValidation(
+    commentSchema,
+    () => form,
+  );
 
   const { showNotification } = useNotification();
-
-  /**
-   * Validates the entire form and returns
-   * a map of validation errors.
-   */
-  const getValidationErrors = (comment: Comment) => {
-    const validation = validateSchema(commentSchema, comment);
-
-    return validation.success ? {} : validation.errors;
-  };
-
-  /**
-   * Validates a single field and updates
-   * only that field's error state.
-   */
-  const validateField = (name: string, value: string) => {
-    const updatedForm = {
-      ...form,
-      [name]: value,
-    };
-
-    const validationErrors = getValidationErrors(updatedForm);
-
-    setErrors((prev) => {
-      const next = { ...prev };
-
-      if (validationErrors[name]) {
-        next[name] = validationErrors[name];
-      } else {
-        delete next[name];
-      }
-
-      return next;
-    });
-  };
 
   /**
    * Updates form state and immediately re-validates
    * the field so errors disappear while typing.
    */
   const handleChange = (name: string, value: string) => {
-    setForm((prev) => ({
-      ...prev,
+    const updatedForm = {
+      ...form,
       [name]: value,
-    }));
+    };
 
-    validateField(name, value);
+    setForm(updatedForm);
+
+    validateField(name, updatedForm);
   };
 
   /**
-   * Re-validates a field when it loses focus.
+   * Validates a field when it loses focus.
    */
   const handleBlur = (name: string, value: string) => {
-    validateField(name, value);
+    validateField(name, {
+      ...form,
+      [name]: value,
+    });
   };
 
   const handleSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const validation = validateSchema(commentSchema, form);
-
-    if (!validation.success) {
-      setErrors(validation.errors);
-
+    if (!validateForm()) {
       return;
     }
-
-    setErrors({});
 
     const newComment: Comment = {
       ...form,
