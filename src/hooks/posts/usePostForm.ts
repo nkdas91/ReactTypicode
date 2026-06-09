@@ -7,7 +7,6 @@ import { validateSchema } from "../../utils/validateSchema";
  * Shared hook for managing post form state and validation.
  *
  * Used by:
- * useCreatePostForm
  * useUpdatePostForm
  */
 export default function usePostForm(initialForm: Post | null) {

@@ -49,14 +49,10 @@ export default function usePostComments(postId: number) {
   /**
    * Comment form logic.
    */
-  const { form, errors, handleChange, handleSubmit } = useCommentForm(
-    postId,
-    allComments.length,
-    addComment,
-    () => {
+  const { form, errors, handleChange, handleBlur, handleSubmit } =
+    useCommentForm(postId, allComments.length, addComment, () => {
       setFormVisible(false);
-    },
-  );
+    });
 
   return {
     comments: allComments,
@@ -66,6 +62,7 @@ export default function usePostComments(postId: number) {
     form,
     errors,
     handleChange,
+    handleBlur,
     handleSubmit,
   };
 }

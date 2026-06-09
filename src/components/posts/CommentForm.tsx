@@ -7,6 +7,7 @@ interface CommentFormProps {
   errors: Record<string, string>;
   loading?: boolean;
   onChange: (name: string, value: string) => void;
+  onBlur: (name: string, value: string) => void;
   onSubmit: (e: React.SubmitEvent<HTMLFormElement>) => void;
 }
 
@@ -15,6 +16,7 @@ export default function CommentForm({
   errors,
   loading = false,
   onChange,
+  onBlur,
   onSubmit,
 }: CommentFormProps) {
   return (
@@ -26,6 +28,7 @@ export default function CommentForm({
         value={form.name}
         error={errors.name}
         onChange={onChange}
+        onBlur={onBlur}
       />
 
       <TextField
@@ -35,6 +38,7 @@ export default function CommentForm({
         value={form.email}
         error={errors.email}
         onChange={onChange}
+        onBlur={onBlur}
       />
 
       <TextField
@@ -45,6 +49,7 @@ export default function CommentForm({
         value={form.body}
         error={errors.body}
         onChange={onChange}
+        onBlur={onBlur}
       />
 
       <div className="flex justify-end gap-field">

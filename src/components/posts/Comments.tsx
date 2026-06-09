@@ -18,6 +18,7 @@ const Comments = ({ id }: CommentsProps) => {
     form,
     errors,
     handleChange,
+    handleBlur,
     handleSubmit,
   } = usePostComments(id);
 
@@ -51,6 +52,7 @@ const Comments = ({ id }: CommentsProps) => {
             form={form}
             errors={errors}
             onChange={handleChange}
+            onBlur={handleBlur}
             onSubmit={handleSubmit}
           />
         </div>
