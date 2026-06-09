@@ -1,6 +1,7 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import BackButton from "../../components/BackButton";
 import Button from "../../components/Button";
+import ConfirmModal from "../../components/ConfirmModal";
 import ErrorMessage from "../../components/ErrorMessage";
 import UserDetailsSkeleton from "../../components/users/skeletons/UserDetailsSkeleton";
 import useDeleteUser from "../../hooks/users/useDeleteUser";
@@ -8,8 +9,11 @@ import useUser from "../../hooks/users/useUser";
 
 const UserDetails = () => {
   const { id } = useParams();
-  const { data: user, error, isLoading, refetch } = useUser(Number(id));
-  const deleteUser = useDeleteUser(refetch);
+  const { data: user, error, isLoading } = useUser(Number(id));
+
+  const navigate = useNavigate();
+  const { isConfirmOpen, requestDelete, cancelDelete, confirmDelete } =
+    useDeleteUser({ onSuccess: () => navigate("/users") });
 
   if (isLoading) {
     return <UserDetailsSkeleton />;
@@ -22,12 +26,6 @@ const UserDetails = () => {
   if (!user && !isLoading) {
     return <ErrorMessage message="User not found" />;
   }
-
-  const handleDelete = async (e: React.MouseEvent, id: number) => {
-    e.preventDefault();
-
-    await deleteUser(id);
-  };
 
   return (
     <div className="section">
@@ -70,11 +68,20 @@ const UserDetails = () => {
         <Button
           type="button"
           variant="danger"
-          onClick={(e) => handleDelete(e, Number(id))}
+          onClick={() => requestDelete(Number(id))}
         >
           Delete
         </Button>
       </div>
+
+      <ConfirmModal
+        isOpen={isConfirmOpen}
+        title="Delete User"
+        message="Are you sure you want to delete this user?"
+        confirmLabel="Delete"
+        onConfirm={confirmDelete}
+        onClose={cancelDelete}
+      />
     </div>
   );
 };

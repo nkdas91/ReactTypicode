@@ -1,24 +1,51 @@
+import { useState } from "react";
 import useNotification from "../../context/useNotification";
 import postService from "../../services/postService";
 
-export default function useDeletePost(refetch: () => void) {
+interface UseDeletePostOptions {
+  onSuccess?: () => void;
+}
+
+export default function useDeletePost({
+  onSuccess,
+}: UseDeletePostOptions = {}) {
   const { showNotification } = useNotification();
 
-  const deletePost = async (id: number) => {
-    const confirmed = window.confirm(
-      "Are you sure you want to delete this post?",
-    );
+  const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+  const [selectedPostId, setSelectedPostId] = useState<number | null>(null);
 
-    if (!confirmed) {
+  /**
+   * Opens the confirmation modal for a post.
+   */
+  const requestDelete = (id: number) => {
+    setSelectedPostId(id);
+    setIsConfirmOpen(true);
+  };
+
+  /**
+   * Closes the confirmation modal.
+   */
+  const cancelDelete = () => {
+    setSelectedPostId(null);
+    setIsConfirmOpen(false);
+  };
+
+  /**
+   * Deletes the selected post after confirmation.
+   */
+  const confirmDelete = async () => {
+    if (selectedPostId === null) {
       return;
     }
 
     try {
-      await postService.delete(id);
+      await postService.delete(selectedPostId);
 
       showNotification("Post deleted");
 
-      refetch();
+      onSuccess?.();
+
+      cancelDelete();
     } catch (error) {
       showNotification(
         error instanceof Error ? error.message : "Failed to delete post",
@@ -27,5 +54,10 @@ export default function useDeletePost(refetch: () => void) {
     }
   };
 
-  return deletePost;
+  return {
+    isConfirmOpen,
+    requestDelete,
+    cancelDelete,
+    confirmDelete,
+  };
 }

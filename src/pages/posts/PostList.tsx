@@ -1,3 +1,4 @@
+import ConfirmModal from "../../components/ConfirmModal";
 import ErrorMessage from "../../components/ErrorMessage";
 import Pagination from "../../components/Pagination";
 import PostListItem from "../../components/posts/PostListItem";
@@ -49,7 +50,9 @@ const PostList = () => {
   });
 
   const { data: usersResponse } = useUsers({ limit: NO_LIMIT });
-  const deletePost = useDeletePost(refetch);
+
+  const { isConfirmOpen, requestDelete, cancelDelete, confirmDelete } =
+    useDeletePost({ onSuccess: refetch });
 
   const posts = postsResponse?.data;
   const total = postsResponse?.total;
@@ -116,7 +119,7 @@ const PostList = () => {
             post={post}
             favourites={favourites}
             toggleFavourite={() => toggleFavourite(post.id)}
-            onDelete={deletePost}
+            onDelete={() => requestDelete(post.id)}
           />
         ))}
       </ul>
@@ -132,6 +135,15 @@ const PostList = () => {
           />
         </div>
       ) : null}
+
+      <ConfirmModal
+        isOpen={isConfirmOpen}
+        title="Delete Post"
+        message="Are you sure you want to delete this post?"
+        confirmLabel="Delete"
+        onConfirm={confirmDelete}
+        onClose={cancelDelete}
+      />
     </div>
   );
 };

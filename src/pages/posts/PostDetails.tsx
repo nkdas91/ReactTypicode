@@ -1,6 +1,7 @@
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import BackButton from "../../components/BackButton";
 import Button from "../../components/Button";
+import ConfirmModal from "../../components/ConfirmModal";
 import ErrorMessage from "../../components/ErrorMessage";
 import FavouriteButton from "../../components/FavouriteButton";
 import Comments from "../../components/posts/Comments";
@@ -13,9 +14,12 @@ import useFavouritesStore from "../../stores/favouriteStore";
 const PostDetails = () => {
   const { id } = useParams();
 
-  const { data: post, error, isLoading, refetch } = usePost(Number(id));
+  const { data: post, error, isLoading } = usePost(Number(id));
   const { data: user } = useUser(post?.userId ?? null);
-  const deletePost = useDeletePost(refetch);
+
+  const navigate = useNavigate();
+  const { isConfirmOpen, requestDelete, cancelDelete, confirmDelete } =
+    useDeletePost({ onSuccess: () => navigate("/posts") });
 
   const isFavourite = useFavouritesStore((state) =>
     state.isFavourite(Number(id)),
@@ -35,10 +39,10 @@ const PostDetails = () => {
     return <ErrorMessage message="Post not found" />;
   }
 
-  const handleDelete = async (e: React.MouseEvent, id: number) => {
+  const handleDelete = (e: React.MouseEvent, id: number) => {
     e.preventDefault();
 
-    await deletePost(id);
+    requestDelete(id);
   };
 
   return (
@@ -80,6 +84,15 @@ const PostDetails = () => {
           </Button>
         </div>
       </div>
+
+      <ConfirmModal
+        isOpen={isConfirmOpen}
+        title="Delete Post"
+        message="Are you sure you want to delete this post?"
+        confirmLabel="Delete"
+        onConfirm={confirmDelete}
+        onClose={cancelDelete}
+      />
 
       <Comments id={Number(id)} />
     </>

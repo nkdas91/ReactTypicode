@@ -1,4 +1,5 @@
 import Button from "../../components/Button";
+import ConfirmModal from "../../components/ConfirmModal";
 import ErrorMessage from "../../components/ErrorMessage";
 import Pagination from "../../components/Pagination";
 import TableHeader from "../../components/TableHeader";
@@ -24,7 +25,8 @@ const UserList = () => {
     refetch,
   } = useUsers({ page, limit, query });
 
-  const deleteUser = useDeleteUser(refetch);
+  const { isConfirmOpen, requestDelete, cancelDelete, confirmDelete } =
+    useDeleteUser({ onSuccess: refetch });
 
   const users = usersResponse?.data;
   const total = usersResponse?.total;
@@ -62,7 +64,7 @@ const UserList = () => {
             user={user}
             onDelete={(e, id) => {
               e.preventDefault();
-              deleteUser(id);
+              requestDelete(id);
             }}
           />
         ))}
@@ -79,6 +81,15 @@ const UserList = () => {
           />
         </div>
       ) : null}
+
+      <ConfirmModal
+        isOpen={isConfirmOpen}
+        title="Delete User"
+        message="Are you sure you want to delete this user?"
+        confirmLabel="Delete"
+        onConfirm={confirmDelete}
+        onClose={cancelDelete}
+      />
     </div>
   );
 };
