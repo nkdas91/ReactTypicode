@@ -17,6 +17,8 @@ const UserEdit = () => {
     loading,
     handleChange,
     handleAddressChange,
+    handleBlur,
+    handleAddressBlur,
     handleSubmit,
   } = useUpdateUserForm(Number(id), user);
 
@@ -42,6 +44,8 @@ const UserEdit = () => {
         loading={loading}
         handleChange={handleChange}
         handleAddressChange={handleAddressChange}
+        handleBlur={handleBlur}
+        handleAddressBlur={handleAddressBlur}
         handleSubmit={handleSubmit}
       />
     </div>

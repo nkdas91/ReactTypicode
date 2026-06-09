@@ -46,6 +46,8 @@ export default function useCreateUserForm() {
     setLoading,
     handleChange,
     handleAddressChange,
+    handleBlur,
+    handleAddressBlur,
     validateForm,
   } = useUserForm(initialUserForm);
 
@@ -96,6 +98,8 @@ export default function useCreateUserForm() {
     loading,
     handleChange,
     handleAddressChange,
+    handleBlur,
+    handleAddressBlur,
     handleSubmit,
   };
 }

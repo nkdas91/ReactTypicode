@@ -32,6 +32,8 @@ export default function useUpdateUserForm(
     setLoading,
     handleChange,
     handleAddressChange,
+    handleBlur,
+    handleAddressBlur,
     validateForm,
   } = useUserForm(initialForm ?? null);
 
@@ -78,6 +80,8 @@ export default function useUpdateUserForm(
     loading,
     handleChange,
     handleAddressChange,
+    handleBlur,
+    handleAddressBlur,
     handleSubmit,
   };
 }

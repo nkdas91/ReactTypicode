@@ -10,6 +10,7 @@ interface TextFieldProps {
   value?: string;
   error?: string;
   onChange: (name: string, value: string) => void;
+  onBlur?: (name: string, value: string) => void;
 }
 
 export default function TextField({
@@ -22,6 +23,7 @@ export default function TextField({
   value,
   error,
   onChange,
+  onBlur,
 }: TextFieldProps) {
   const commonProps = {
     id: name,
@@ -29,7 +31,9 @@ export default function TextField({
     placeholder,
     value: value ?? "",
     onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
-      onChange(e.target.name, e.target.value),
+      onChange(name, e.target.value),
+    onBlur: (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) =>
+      onBlur?.(name, e.target.value),
     "aria-invalid": !!error,
     "aria-describedby": error ? `${name}-error` : undefined,
     className: "form-field",

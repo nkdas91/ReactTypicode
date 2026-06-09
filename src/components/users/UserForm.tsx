@@ -17,15 +17,25 @@ interface UserFormProps {
   loading: boolean;
   handleChange: (name: string, value: string) => void;
   handleAddressChange: (name: string, value: string) => void;
+  handleBlur: (name: string, value: string) => void;
+  handleAddressBlur: (name: string, value: string) => void;
   handleSubmit: (event: React.SubmitEvent<HTMLFormElement>) => void;
 }
 
+/**
+ * Shared user form used by both create and update user pages.
+ *
+ * Responsible only for rendering form fields and forwarding
+ * user interactions to the parent form hook.
+ */
 export default function UserForm({
   form,
   errors,
   loading,
   handleChange,
   handleAddressChange,
+  handleBlur,
+  handleAddressBlur,
   handleSubmit,
 }: UserFormProps) {
   return (
@@ -38,6 +48,7 @@ export default function UserForm({
           value={form.name}
           error={errors.name}
           onChange={handleChange}
+          onBlur={handleBlur}
         />
 
         <TextField
@@ -47,6 +58,7 @@ export default function UserForm({
           value={form.username}
           error={errors.username}
           onChange={handleChange}
+          onBlur={handleBlur}
         />
       </div>
 
@@ -61,6 +73,7 @@ export default function UserForm({
             value={form.email}
             error={errors.email}
             onChange={handleChange}
+            onBlur={handleBlur}
           />
 
           <TextField
@@ -70,6 +83,7 @@ export default function UserForm({
             value={form.phone}
             error={errors.phone}
             onChange={handleChange}
+            onBlur={handleBlur}
           />
 
           <TextField
@@ -79,6 +93,7 @@ export default function UserForm({
             value={form.website}
             error={errors.website}
             onChange={handleChange}
+            onBlur={handleBlur}
           />
         </div>
       </div>
@@ -95,6 +110,7 @@ export default function UserForm({
               value={form.address.suite}
               error={errors["address.suite"]}
               onChange={handleAddressChange}
+              onBlur={handleAddressBlur}
             />
 
             <TextField
@@ -104,6 +120,7 @@ export default function UserForm({
               value={form.address.street}
               error={errors["address.street"]}
               onChange={handleAddressChange}
+              onBlur={handleAddressBlur}
             />
 
             <TextField
@@ -113,6 +130,7 @@ export default function UserForm({
               value={form.address.city}
               error={errors["address.city"]}
               onChange={handleAddressChange}
+              onBlur={handleAddressBlur}
             />
 
             <TextField
@@ -122,6 +140,7 @@ export default function UserForm({
               value={form.address.zipcode}
               error={errors["address.zipcode"]}
               onChange={handleAddressChange}
+              onBlur={handleAddressBlur}
             />
           </div>
         </div>

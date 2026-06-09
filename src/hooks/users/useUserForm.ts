@@ -7,18 +7,12 @@ import { validateSchema } from "../../utils/validateSchema";
  * Shared hook for managing user form state and validation.
  *
  * Used by:
- * - useCreateUserForm
- * - useUpdateUserForm
+ * useCreateUserForm
+ * useUpdateUserForm
  */
 export default function useUserForm(initialForm: User | null) {
-  /**
-   * Stores the current form values.
-   */
   const [form, setForm] = useState<User | null>(initialForm);
 
-  /**
-   * Sync async-loaded form data.
-   */
   useEffect(() => {
     if (initialForm) {
       // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -31,21 +25,113 @@ export default function useUserForm(initialForm: User | null) {
    *
    * Example:
    * {
-   *   name: "Name is required"
+   *   name: "Name is required",
+   *   "address.city": "City is required",
    * }
    */
   const [errors, setErrors] = useState<Record<string, string>>({});
 
-  /**
-   * Tracks submit/loading state.
-   */
   const [loading, setLoading] = useState(false);
+
+  /**
+   * Validates the entire form and updates error state.
+   *
+   * Used:
+   * on submit
+   * for field-level validation
+   */
+  const getValidationErrors = (user: User) => {
+    const validation = validateSchema(userSchema, user);
+
+    return validation.success ? {} : validation.errors;
+  };
+
+  /**
+   * Validates a single top-level field.
+   *
+   * Example:
+   * validateField("name", "John")
+   */
+  const validateField = (name: string, value: string) => {
+    if (!form) {
+      return;
+    }
+
+    const updatedForm = {
+      ...form,
+      [name]: value,
+    };
+
+    const validationErrors = getValidationErrors(updatedForm);
+
+    setErrors((prev) => {
+      const next = { ...prev };
+
+      if (validationErrors[name]) {
+        next[name] = validationErrors[name];
+      } else {
+        delete next[name];
+      }
+
+      return next;
+    });
+  };
+
+  /**
+   * Validates a nested address field.
+   *
+   * Example:
+   * validateAddressField("city", "London")
+   */
+  const validateAddressField = (name: string, value: string) => {
+    if (!form) {
+      return;
+    }
+
+    const updatedForm = {
+      ...form,
+      address: {
+        ...form.address,
+        [name]: value,
+      },
+    };
+
+    const validationErrors = getValidationErrors(updatedForm);
+
+    const errorKey = `address.${name}`;
+
+    setErrors((prev) => {
+      const next = { ...prev };
+
+      if (validationErrors[errorKey]) {
+        next[errorKey] = validationErrors[errorKey];
+      } else {
+        delete next[errorKey];
+      }
+
+      return next;
+    });
+  };
+
+  /**
+   * Validates a top-level field when it loses focus.
+   */
+  const handleBlur = (name: string, value: string) => {
+    validateField(name, value);
+  };
+
+  /**
+   * Validates an address field when it loses focus.
+   */
+  const handleAddressBlur = (name: string, value: string) => {
+    validateAddressField(name, value);
+  };
 
   /**
    * Updates top-level form fields.
    *
-   * Example:
-   * handleChange("name", "John")
+   * Validation runs immediately so errors
+   * disappear while the user types.
    */
   const handleChange = (name: string, value: string) => {
     setForm((prev) =>
@@ -56,13 +142,15 @@ export default function useUserForm(initialForm: User | null) {
           }
         : prev,
     );
+
+    validateField(name, value);
   };
 
   /**
    * Updates nested address fields.
    *
-   * Example:
-   * handleAddressChange("city", "London")
+   * Validation runs immediately so errors
+   * disappear while the user types.
    */
   const handleAddressChange = (name: string, value: string) => {
     setForm((prev) =>
@@ -76,14 +164,16 @@ export default function useUserForm(initialForm: User | null) {
           }
         : prev,
     );
+
+    validateAddressField(name, value);
   };
 
   /**
-   * Validates the form using the user schema.
+   * Validates the entire form using the schema.
    *
    * Returns:
-   * - true  => validation passed
-   * - false => validation failed
+   * true  => validation passed
+   * false => validation failed
    */
   const validateForm = () => {
     if (!form) {
@@ -111,6 +201,8 @@ export default function useUserForm(initialForm: User | null) {
     setLoading,
     handleChange,
     handleAddressChange,
+    handleBlur,
+    handleAddressBlur,
     validateForm,
   };
 }

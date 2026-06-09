@@ -9,6 +9,8 @@ const UserCreate = () => {
     loading,
     handleChange,
     handleAddressChange,
+    handleBlur,
+    handleAddressBlur,
     handleSubmit,
   } = useCreateUserForm();
 
@@ -22,6 +24,8 @@ const UserCreate = () => {
         loading={loading}
         handleChange={handleChange}
         handleAddressChange={handleAddressChange}
+        handleBlur={handleBlur}
+        handleAddressBlur={handleAddressBlur}
         handleSubmit={handleSubmit}
       />
     </div>
