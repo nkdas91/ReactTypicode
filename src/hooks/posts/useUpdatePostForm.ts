@@ -25,8 +25,15 @@ export default function useUpdatePostForm(
   /**
    * Shared post form logic.
    */
-  const { form, errors, loading, setLoading, handleChange, validateForm } =
-    usePostForm(initialForm ?? null);
+  const {
+    form,
+    errors,
+    loading,
+    setLoading,
+    handleChange,
+    handleBlur,
+    validateForm,
+  } = usePostForm(initialForm ?? null);
 
   /**
    * Handles form submission for updating a post.
@@ -70,6 +77,7 @@ export default function useUpdatePostForm(
     errors,
     loading,
     handleChange,
+    handleBlur,
     handleSubmit,
   };
 }

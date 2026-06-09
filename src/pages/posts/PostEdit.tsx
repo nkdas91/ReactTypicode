@@ -11,7 +11,7 @@ const PostEdit = () => {
   const { id } = useParams();
   const { data: post, error, isLoading } = usePost(Number(id));
 
-  const { form, errors, loading, handleChange, handleSubmit } =
+  const { form, errors, loading, handleChange, handleBlur, handleSubmit } =
     useUpdatePostForm(Number(id), post);
 
   if (isLoading) {
@@ -39,6 +39,7 @@ const PostEdit = () => {
             value={form?.title}
             error={errors?.title}
             onChange={handleChange}
+            onBlur={handleBlur}
           />
 
           <TextField
@@ -47,7 +48,9 @@ const PostEdit = () => {
             as="textarea"
             rows={10}
             value={form?.body}
+            error={errors?.body}
             onChange={handleChange}
+            onBlur={handleBlur}
           />
         </div>
 

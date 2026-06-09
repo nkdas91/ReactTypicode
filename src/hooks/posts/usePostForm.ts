@@ -7,16 +7,19 @@ import { validateSchema } from "../../utils/validateSchema";
  * Shared hook for managing post form state and validation.
  *
  * Used by:
- * - useUpdatePostForm
+ * useCreatePostForm
+ * useUpdatePostForm
  */
 export default function usePostForm(initialForm: Post | null) {
-  /**
-   * Stores the current form values.
-   */
   const [form, setForm] = useState<Post | null>(initialForm);
 
+  // Validation errors keyed by field name.
+  const [errors, setErrors] = useState<Record<string, string>>({});
+
+  const [loading, setLoading] = useState(false);
+
   /**
-   * Sync async-loaded form data.
+   * Synchronizes async-loaded form data.
    */
   useEffect(() => {
     if (initialForm) {
@@ -26,25 +29,44 @@ export default function usePostForm(initialForm: Post | null) {
   }, [initialForm]);
 
   /**
-   * Stores validation errors by field name.
-   *
-   * Example:
-   * {
-   *   title: "Title is required"
-   * }
+   * Returns validation errors for a post object.
    */
-  const [errors, setErrors] = useState<Record<string, string>>({});
+  const getValidationErrors = (post: Post) => {
+    const validation = validateSchema(postSchema, post);
+
+    return validation.success ? {} : validation.errors;
+  };
 
   /**
-   * Tracks submit/loading state.
+   * Validates a field and updates its error state.
    */
-  const [loading, setLoading] = useState(false);
+  const validateField = (name: string, value: string) => {
+    if (!form) {
+      return;
+    }
+
+    const updatedForm = {
+      ...form,
+      [name]: value,
+    };
+
+    const validationErrors = getValidationErrors(updatedForm);
+
+    setErrors((prev) => {
+      const next = { ...prev };
+
+      if (validationErrors[name]) {
+        next[name] = validationErrors[name];
+      } else {
+        delete next[name];
+      }
+
+      return next;
+    });
+  };
 
   /**
-   * Updates top-level form fields.
-   *
-   * Example:
-   * handleChange("title", "What is typescript")
+   * Updates a field and immediately re-validates it.
    */
   const handleChange = (name: string, value: string) => {
     setForm((prev) =>
@@ -55,14 +77,19 @@ export default function usePostForm(initialForm: Post | null) {
           }
         : prev,
     );
+
+    validateField(name, value);
   };
 
   /**
-   * Validates the form using the post schema.
-   *
-   * Returns:
-   * - true  => validation passed
-   * - false => validation failed
+   * Validates a field when it loses focus.
+   */
+  const handleBlur = (name: string, value: string) => {
+    validateField(name, value);
+  };
+
+  /**
+   * Validates the entire form.
    */
   const validateForm = () => {
     if (!form) {
@@ -89,6 +116,7 @@ export default function usePostForm(initialForm: Post | null) {
     loading,
     setLoading,
     handleChange,
+    handleBlur,
     validateForm,
   };
 }
