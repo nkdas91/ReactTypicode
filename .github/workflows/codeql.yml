@@ -31,7 +31,7 @@ jobs:
           - javascript-typescript
 
     steps:
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v5
 
       - name: Initialize CodeQL
@@ -39,7 +39,7 @@ jobs:
         with:
           languages: ${{ matrix.language }}
 
-      - name: Setup Node.js
+      - name: Setup Node
         uses: actions/setup-node@v5
         with:
           node-version: 24
