@@ -1,19 +1,15 @@
 name: Lighthouse
 
 on:
-  workflow_run:
-    workflows: ["CI"]
-    types:
-      - completed
+  push:
+  pull_request:
 
 concurrency:
-  group: lighthouse-${{ github.ref }}
+  group: lighthouse-${{ github.event.pull_request.number }}
   cancel-in-progress: true
 
 jobs:
   lighthouse:
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
-
     runs-on: ubuntu-latest
 
     steps:
