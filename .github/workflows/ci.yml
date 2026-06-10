@@ -33,3 +33,18 @@ jobs:
           path: coverage/
 
       - run: npm run build
+
+      - name: Start preview server
+        run: npm run preview &
+
+      - name: Wait for server
+        run: npx wait-on http://localhost:4173
+
+      - name: Run Lighthouse CI
+        run: npx lhci autorun
+
+      - name: Upload Lighthouse report
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-report
+          path: .lighthouseci/
