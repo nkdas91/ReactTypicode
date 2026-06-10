@@ -2,16 +2,15 @@ import { defineConfig } from "vite";
 
 import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
-import { visualizer } from "rollup-plugin-visualizer";
+import { analyzer } from "vite-bundle-analyzer";
 
 export default defineConfig({
   plugins: [
     react(),
     tailwindcss(),
-    visualizer({
-      filename: "dist/stats.html",
-      gzipSize: true,
-      brotliSize: true,
+    analyzer({
+      analyzerMode: "static",
+      openAnalyzer: true,
     }),
   ],
 });
