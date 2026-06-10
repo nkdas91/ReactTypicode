@@ -2,20 +2,42 @@ name: Lighthouse
 
 on:
   pull_request:
-  workflow_dispatch:
+
+concurrency:
+  group: lighthouse-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
 
 jobs:
   lighthouse:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v5
+      - name: Checkout
+        uses: actions/checkout@v5
 
-      - uses: actions/setup-node@v5
+      - name: Setup Node
+        uses: actions/setup-node@v5
         with:
           node-version: 24
           cache: npm
 
-      - run: npm ci
-      - run: npm run build
-      - run: npx lhci autorun
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build application
+        run: npm run build
+
+      - name: Start preview server
+        run: npm run preview -- --host 0.0.0.0 &
+
+      - name: Wait for preview server
+        run: npx wait-on http://localhost:4173 --timeout 60000
+
+      - name: Run Lighthouse
+        uses: treosh/lighthouse-ci-action@v12
+        with:
+          urls: |
+            http://localhost:4173
+          configPath: ./lighthouserc.json
+          uploadArtifacts: true
+          temporaryPublicStorage: true
