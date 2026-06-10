@@ -1,11 +1,19 @@
 name: Lighthouse
 
 on:
-  pull_request:
-  workflow_dispatch:
+  workflow_run:
+    workflows: ["CI"]
+    types:
+      - completed
+
+concurrency:
+  group: lighthouse-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   lighthouse:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+
     runs-on: ubuntu-latest
 
     steps:
@@ -17,5 +25,21 @@ jobs:
           cache: npm
 
       - run: npm ci
+
       - run: npm run build
-      - run: npx lhci autorun
+
+      - name: Start preview server
+        run: npm run preview -- --host 0.0.0.0 &
+
+      - name: Wait for server
+        run: npx wait-on http://localhost:4173 --timeout 60000
+
+      - name: Run Lighthouse CI
+        run: npx lhci autorun
+
+      - name: Upload Lighthouse report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-report
+          path: .lighthouseci/
