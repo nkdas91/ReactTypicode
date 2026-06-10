@@ -1,7 +1,6 @@
 name: Lighthouse
 
 on:
-  push:
   pull_request:
 
 concurrency:
@@ -13,29 +12,32 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v5
+      - name: Checkout
+        uses: actions/checkout@v5
 
-      - uses: actions/setup-node@v5
+      - name: Setup Node
+        uses: actions/setup-node@v5
         with:
           node-version: 24
           cache: npm
 
-      - run: npm ci
+      - name: Install dependencies
+        run: npm ci
 
-      - run: npm run build
+      - name: Build application
+        run: npm run build
 
       - name: Start preview server
         run: npm run preview -- --host 0.0.0.0 &
 
-      - name: Wait for server
+      - name: Wait for preview server
         run: npx wait-on http://localhost:4173 --timeout 60000
 
-      - name: Run Lighthouse CI
-        run: npx lhci autorun
-
-      - name: Upload Lighthouse report
-        if: always()
-        uses: actions/upload-artifact@v4
+      - name: Run Lighthouse
+        uses: treosh/lighthouse-ci-action@v12
         with:
-          name: lighthouse-report
-          path: .lighthouseci/
+          urls: |
+            http://localhost:4173
+          configPath: ./lighthouserc.json
+          uploadArtifacts: true
+          temporaryPublicStorage: true
