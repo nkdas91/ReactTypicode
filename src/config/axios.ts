@@ -3,47 +3,81 @@ import axios, { AxiosError } from "axios";
 import { API_TIMEOUT } from "../constants/api";
 import { API_BASE_URL } from "./env";
 
+/**
+ * Shared Axios instance used throughout the application.
+ *
+ * Configures:
+ * - API base URL
+ * - request timeout
+ * - global response handling
+ */
 export const axiosInstance = axios.create({
   baseURL: API_BASE_URL,
   timeout: API_TIMEOUT,
 });
 
-// Intercept every API response globally.
+/**
+ * Global response interceptor.
+ *
+ * Responsibilities:
+ * - preserve request cancellation behavior
+ * - normalize timeout errors
+ * - extract API error messages
+ * - return consistent Error objects across the application
+ */
 axiosInstance.interceptors.response.use(
-  // Return successful responses unchanged.
+  /**
+   * Returns successful responses unchanged.
+   *
+   * @param response - Axios response
+   * @returns Original response
+   */
   (response) => response,
 
+  /**
+   * Handles and normalizes API errors.
+   *
+   * @param {AxiosError} error - Axios error object
+   * @returns {Promise<never>} Rejected promise containing a normalized Error
+   */
   (error: AxiosError) => {
-    // React Query + Axios use AbortController internally.
-    //
-    // Cancelled requests throw ERR_CANCELED.
-    // Preserve the original error so React Query
-    // can handle cancellation correctly.
+    /**
+     * React Query and Axios use AbortController internally.
+     *
+     * Cancelled requests throw ERR_CANCELED.
+     * Preserve the original error so React Query
+     * can handle cancellation correctly.
+     */
     if (error.code === "ERR_CANCELED") {
       return Promise.reject(error);
     }
 
-    // Handle request timeout errors with a
-    // user-friendly message.
+    /**
+     * Convert timeout errors into a user-friendly message.
+     */
     if (error.code === "ECONNABORTED" && error.message.includes("timeout")) {
       return Promise.reject(
         new Error("The request timed out. Please try again."),
       );
     }
 
-    // Extract the most meaningful error message.
-    //
-    // Fallback order:
-    // 1. API response message
-    // 2. Axios error message
-    // 3. Generic fallback message
+    /**
+     * Extract the most meaningful error message.
+     *
+     * Fallback order:
+     * 1. API response message
+     * 2. Axios error message
+     * 3. Generic fallback message
+     */
     const message =
       (error.response?.data as { message?: string })?.message ||
       error.message ||
       "Something went wrong";
 
-    // Normalize all errors into standard Error objects
-    // for consistent handling across the app.
+    /**
+     * Normalize all errors into standard Error objects
+     * for consistent handling across the application.
+     */
     return Promise.reject(new Error(message));
   },
 );
