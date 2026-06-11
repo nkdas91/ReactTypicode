@@ -2,20 +2,52 @@ import { useState } from "react";
 import useNotification from "../../context/useNotification";
 import postService from "../../services/postService";
 
+/**
+ * Options for useDeletePost hook.
+ */
 interface UseDeletePostOptions {
+  /**
+   * Callback triggered after successful deletion.
+   */
   onSuccess?: () => void;
 }
 
+/**
+ * Custom hook for handling post deletion with confirmation flow.
+ *
+ * Provides:
+ * - confirmation modal state
+ * - delete request handling
+ * - API deletion
+ * - success/error notifications
+ *
+ * @param {UseDeletePostOptions} [options] - Hook configuration options
+ * @returns {{
+ *   isConfirmOpen: boolean;
+ *   requestDelete: (id: number) => void;
+ *   cancelDelete: () => void;
+ *   confirmDelete: () => Promise<void>;
+ * }} Delete workflow state and actions
+ */
 export default function useDeletePost({
   onSuccess,
 }: UseDeletePostOptions = {}) {
   const { showNotification } = useNotification();
 
-  const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+  /**
+   * Controls visibility of the delete confirmation modal.
+   */
+  const [isConfirmOpen, setIsConfirmOpen] = useState<boolean>(false);
+
+  /**
+   * Currently selected post ID for deletion.
+   */
   const [selectedPostId, setSelectedPostId] = useState<number | null>(null);
 
   /**
-   * Opens the confirmation modal for a post.
+   * Opens the confirmation modal for a specific post.
+   *
+   * @param {number} id - ID of the post to delete
    */
   const requestDelete = (id: number) => {
     setSelectedPostId(id);
@@ -23,7 +55,7 @@ export default function useDeletePost({
   };
 
   /**
-   * Closes the confirmation modal.
+   * Cancels deletion and resets selected post state.
    */
   const cancelDelete = () => {
     setSelectedPostId(null);
@@ -31,9 +63,13 @@ export default function useDeletePost({
   };
 
   /**
-   * Deletes the selected post after confirmation.
+   * Confirms deletion of the selected post.
+   *
+   * Calls API, shows notifications, and triggers success callback if provided.
+   *
+   * @returns {Promise<void>}
    */
-  const confirmDelete = async () => {
+  const confirmDelete = async (): Promise<void> => {
     if (selectedPostId === null) {
       return;
     }

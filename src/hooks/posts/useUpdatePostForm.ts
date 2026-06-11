@@ -8,22 +8,32 @@ import usePostForm from "./usePostForm";
  * Hook for handling update post form logic.
  *
  * Responsibilities:
- * - form state
+ * - form state management
  * - validation
  * - submit handling
  * - notifications
- * - navigation
+ * - navigation after update
+ *
+ * @param {number} id - ID of the post being updated
+ * @param {Post | null} [initialForm] - Initial form data (optional, can be null while loading)
+ * @returns {{
+ *   form: Post | null;
+ *   errors: Record<string, string>;
+ *   loading: boolean;
+ *   handleChange: (name: string, value: string) => void;
+ *   handleBlur: (name: string, value: string) => void;
+ *   handleSubmit: (e: React.SubmitEvent<HTMLFormElement>) => void;
+ * }} Update post form state and handlers
  */
 export default function useUpdatePostForm(
   id: number,
   initialForm?: Post | null,
 ) {
   const navigate = useNavigate();
-
   const { showNotification } = useNotification();
 
   /**
-   * Shared post form logic.
+   * Shared post form logic (state + validation).
    */
   const {
     form,
@@ -37,12 +47,16 @@ export default function useUpdatePostForm(
 
   /**
    * Handles form submission for updating a post.
+   *
+   * @param {React.SubmitEvent<HTMLFormElement>} e - Form submit event
    */
-  const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
+  const handleSubmit = async (
+    e: React.FormEvent<HTMLFormElement>,
+  ): Promise<void> => {
     e.preventDefault();
 
     /**
-     * Stop submission if validation fails.
+     * Stop submission if validation fails or form is not ready.
      */
     if (!validateForm() || !form) {
       return;
@@ -52,14 +66,14 @@ export default function useUpdatePostForm(
 
     try {
       /**
-       * Update existing post.
+       * Sends updated post data to API.
        */
       await postService.patch(id, form);
 
       showNotification("Post updated");
 
       /**
-       * Redirect back to post details page.
+       * Navigate back to post detail page.
        */
       navigate(`/posts/${id}`);
     } catch (error) {

@@ -2,20 +2,53 @@ import { useState } from "react";
 import useNotification from "../../context/useNotification";
 import userService from "../../services/userService";
 
+/**
+ * Options for useDeleteUser hook.
+ */
 interface UseDeleteUserOptions {
+  /**
+   * Callback triggered after successful deletion.
+   */
   onSuccess?: () => void;
 }
 
+/**
+ * Custom hook for handling user deletion with confirmation flow.
+ *
+ * Responsibilities:
+ * - confirmation modal state
+ * - selected user tracking
+ * - delete API call
+ * - success/error notifications
+ * - post-delete callback handling
+ *
+ * @param {UseDeleteUserOptions} [options] - Hook configuration options
+ * @returns {{
+ *   isConfirmOpen: boolean;
+ *   requestDelete: (id: number) => void;
+ *   cancelDelete: () => void;
+ *   confirmDelete: () => Promise<void>;
+ * }} User deletion state and actions
+ */
 export default function useDeleteUser({
   onSuccess,
 }: UseDeleteUserOptions = {}) {
   const { showNotification } = useNotification();
 
-  const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+  /**
+   * Controls visibility of the confirmation modal.
+   */
+  const [isConfirmOpen, setIsConfirmOpen] = useState<boolean>(false);
+
+  /**
+   * Currently selected user ID for deletion.
+   */
   const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
 
   /**
-   * Opens the confirmation modal for a user.
+   * Opens confirmation modal for a specific user.
+   *
+   * @param {number} id - User ID to delete
    */
   const requestDelete = (id: number) => {
     setSelectedUserId(id);
@@ -23,7 +56,7 @@ export default function useDeleteUser({
   };
 
   /**
-   * Closes the confirmation modal and clears selection.
+   * Cancels deletion and resets selected user state.
    */
   const cancelDelete = () => {
     setSelectedUserId(null);
@@ -31,9 +64,13 @@ export default function useDeleteUser({
   };
 
   /**
-   * Deletes the selected user after confirmation.
+   * Confirms deletion of selected user.
+   *
+   * Calls API, handles notifications, and triggers success callback.
+   *
+   * @returns {Promise<void>}
    */
-  const confirmDelete = async () => {
+  const confirmDelete = async (): Promise<void> => {
     if (selectedUserId === null) {
       return;
     }

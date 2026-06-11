@@ -9,19 +9,49 @@ import type { User } from "../../types/User";
  * Used by:
  * - useCreateUserForm
  * - useUpdateUserForm
+ *
+ * Handles:
+ * - form state management
+ * - nested address updates
+ * - field-level validation
+ * - full-form validation
+ * - async form initialization
+ *
+ * @param {User | null} initialForm - Initial user form data (can be null while loading)
+ * @returns {{
+ *   form: User | null;
+ *   setForm: React.Dispatch<React.SetStateAction<User | null>>;
+ *   errors: Record<string, string>;
+ *   loading: boolean;
+ *   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
+ *   handleChange: (name: string, value: string) => void;
+ *   handleAddressChange: (name: string, value: string) => void;
+ *   handleBlur: (name: string, value: string) => void;
+ *   handleAddressBlur: (name: string, value: string) => void;
+ *   validateForm: () => boolean;
+ * }} User form state and handlers
  */
 export default function useUserForm(initialForm: User | null) {
+  /**
+   * User form state.
+   */
   const [form, setForm] = useState<User | null>(initialForm);
 
+  /**
+   * Validation utilities and error state.
+   */
   const { errors, validateField, validateForm } = useFormValidation(
     userSchema,
     () => form!,
   );
 
-  const [loading, setLoading] = useState(false);
+  /**
+   * Loading state for async form operations.
+   */
+  const [loading, setLoading] = useState<boolean>(false);
 
   /**
-   * Synchronizes async-loaded form data.
+   * Syncs async-loaded initial form data into state.
    */
   useEffect(() => {
     if (initialForm) {
@@ -31,32 +61,33 @@ export default function useUserForm(initialForm: User | null) {
   }, [initialForm]);
 
   /**
-   * Updates a top-level field and validates it immediately.
+   * Updates a top-level form field and triggers validation.
+   *
+   * @param {string} name - Field name
+   * @param {string} value - Field value
    */
   const handleChange = (name: string, value: string) => {
-    if (!form) {
-      return;
-    }
+    if (!form) return;
 
-    const updatedForm = {
+    const updatedForm: User = {
       ...form,
       [name]: value,
     };
 
     setForm(updatedForm);
-
     validateField(name, updatedForm);
   };
 
   /**
-   * Updates an address field and validates it immediately.
+   * Updates a nested address field and triggers validation.
+   *
+   * @param {string} name - Address field name
+   * @param {string} value - Field value
    */
   const handleAddressChange = (name: string, value: string) => {
-    if (!form) {
-      return;
-    }
+    if (!form) return;
 
-    const updatedForm = {
+    const updatedForm: User = {
       ...form,
       address: {
         ...form.address,
@@ -65,17 +96,17 @@ export default function useUserForm(initialForm: User | null) {
     };
 
     setForm(updatedForm);
-
     validateField(`address.${name}`, updatedForm);
   };
 
   /**
    * Validates a top-level field on blur.
+   *
+   * @param {string} name - Field name
+   * @param {string} value - Field value
    */
   const handleBlur = (name: string, value: string) => {
-    if (!form) {
-      return;
-    }
+    if (!form) return;
 
     validateField(name, {
       ...form,
@@ -84,12 +115,13 @@ export default function useUserForm(initialForm: User | null) {
   };
 
   /**
-   * Validates an address field on blur.
+   * Validates a nested address field on blur.
+   *
+   * @param {string} name - Address field name
+   * @param {string} value - Field value
    */
   const handleAddressBlur = (name: string, value: string) => {
-    if (!form) {
-      return;
-    }
+    if (!form) return;
 
     validateField(`address.${name}`, {
       ...form,
