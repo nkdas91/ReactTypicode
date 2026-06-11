@@ -5,7 +5,9 @@ import type { User } from "../../types/User";
 import useUserForm from "./useUserForm";
 
 /**
- * Initial empty form state for creating users.
+ * Initial empty form state for creating a new user.
+ *
+ * Used to initialize the create user form with default values.
  */
 const initialUserForm: User = {
   name: "",
@@ -25,19 +27,30 @@ const initialUserForm: User = {
  * Hook for handling create user form logic.
  *
  * Responsibilities:
- * - form state
- * - validation
- * - submit handling
+ * - form state management
+ * - field validation
+ * - nested address handling
+ * - form submission
  * - notifications
- * - navigation
+ * - navigation after success
+ *
+ * @returns {{
+ *   form: User;
+ *   errors: Record<string, string>;
+ *   loading: boolean;
+ *   handleChange: (name: string, value: string) => void;
+ *   handleAddressChange: (name: string, value: string) => void;
+ *   handleBlur: (name: string, value: string) => void;
+ *   handleAddressBlur: (name: string, value: string) => void;
+ *   handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
+ * }} Create user form state and handlers
  */
 export default function useCreateUserForm() {
   const navigate = useNavigate();
-
   const { showNotification } = useNotification();
 
   /**
-   * Shared user form logic.
+   * Shared user form logic (state + validation).
    */
   const {
     form,
@@ -52,13 +65,17 @@ export default function useCreateUserForm() {
   } = useUserForm(initialUserForm);
 
   /**
-   * Handles form submission for creating a user.
+   * Handles form submission for creating a new user.
+   *
+   * @param {React.SubmitEvent<HTMLFormElement>} e - Form submit event
    */
-  const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
+  const handleSubmit = async (
+    e: React.SubmitEvent<HTMLFormElement>,
+  ): Promise<void> => {
     e.preventDefault();
 
     /**
-     * Stop submission if validation fails.
+     * Stop submission if validation fails or form is not ready.
      */
     if (!validateForm() || !form) {
       return;
@@ -68,14 +85,14 @@ export default function useCreateUserForm() {
 
     try {
       /**
-       * Create new user.
+       * Sends new user data to API.
        */
       await userService.post(form);
 
       showNotification("User created");
 
       /**
-       * Redirect to user list page.
+       * Navigate to user list page after success.
        */
       navigate("/users");
     } catch (error) {
@@ -90,8 +107,7 @@ export default function useCreateUserForm() {
 
   return {
     /**
-     * Non-null assertion is safe here because
-     * create form always starts with initial values.
+     * Form state is guaranteed to be non-null in create flow.
      */
     form: form!,
     errors,

@@ -4,6 +4,27 @@ import useCommentForm from "./useCommentForm";
 import useComments from "./useComments";
 import useLocalStorage from "./useLocalStorage";
 
+/**
+ * Custom hook that manages post comments from both API and local storage.
+ *
+ * Combines:
+ * - API comments (server data)
+ * - locally added comments (persisted in localStorage)
+ * - comment form state and handlers
+ *
+ * @param {number} postId - ID of the post whose comments are being managed
+ * @returns {{
+ *   comments: Comment[];
+ *   isLoading: boolean;
+ *   formVisible: boolean;
+ *   toggleFormVisibility: () => void;
+ *   form: Comment;
+ *   errors: Record<string, string>;
+ *   handleChange: (name: string, value: string) => void;
+ *   handleBlur: (name: string, value: string) => void;
+ *   handleSubmit: (e: React.SubmitEvent<HTMLFormElement>) => void;
+ * }} Post comments state, merged data, and form handlers
+ */
 export default function usePostComments(postId: number) {
   /**
    * Fetch API comments.
@@ -11,7 +32,7 @@ export default function usePostComments(postId: number) {
   const { data: commentsResponse, isLoading } = useComments(postId);
 
   /**
-   * Local persisted comments.
+   * Locally persisted comments stored in localStorage.
    */
   const [savedComments, setSavedComments] = useLocalStorage<Comment[]>(
     `comments_${postId}`,
@@ -19,35 +40,37 @@ export default function usePostComments(postId: number) {
   );
 
   /**
-   * Toggle add comment form.
+   * Controls visibility of the comment form.
    */
-  const [formVisible, setFormVisible] = useState(false);
+  const [formVisible, setFormVisible] = useState<boolean>(false);
 
   /**
-   * Merge local + API comments.
+   * Combined list of API comments and locally added comments.
    */
-  const allComments = useMemo(() => {
+  const allComments = useMemo<Comment[]>(() => {
     const comments = commentsResponse?.data ?? [];
 
     return [...savedComments, ...comments];
   }, [savedComments, commentsResponse?.data]);
 
   /**
-   * Add comment handler.
+   * Adds a new comment to local storage.
+   *
+   * @param {Comment} comment - New comment to add
    */
   const addComment = (comment: Comment) => {
     setSavedComments((prev) => [...prev, comment]);
   };
 
   /**
-   * Toggle comment form visibility.
+   * Toggles comment form visibility.
    */
   const toggleFormVisibility = () => {
     setFormVisible((prev) => !prev);
   };
 
   /**
-   * Comment form logic.
+   * Comment form logic and handlers.
    */
   const { form, errors, handleChange, handleBlur, handleSubmit } =
     useCommentForm(postId, allComments.length, addComment, () => {
