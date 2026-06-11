@@ -68,13 +68,16 @@ export default function useCommentForm(
    * @param {string} value - New value of the field
    */
   const handleChange = (name: string, value: string) => {
-    const updatedForm = {
-      ...form,
-      [name]: value,
-    };
+    setForm((prev) => {
+      const updatedForm = {
+        ...prev,
+        [name]: value,
+      };
 
-    setForm(updatedForm);
-    validateField(name, updatedForm);
+      validateField(name, updatedForm);
+
+      return updatedForm;
+    });
   };
 
   /**
