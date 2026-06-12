@@ -1,14 +1,20 @@
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { DEFAULT_STALE_TIME } from "../../config/queryClient";
 import { DEFAULT_LIMIT, DEFAULT_PAGE } from "../../constants/pagination";
 import { QUERY_KEYS } from "../../constants/queryKeys";
 import useUsers from "./useUsers";
 
-vi.mock("@tanstack/react-query", () => ({
-  useQuery: vi.fn(),
-  keepPreviousData: Symbol("keepPreviousData"),
-}));
+vi.mock("@tanstack/react-query", async () => {
+  const actual = await vi.importActual<typeof import("@tanstack/react-query")>(
+    "@tanstack/react-query",
+  );
+
+  return {
+    ...actual,
+    useQuery: vi.fn(),
+    keepPreviousData: Symbol("keepPreviousData"),
+  };
+});
 
 vi.mock("../../services/userService", () => ({
   default: {
@@ -32,7 +38,6 @@ describe("useUsers", () => {
       QUERY_KEYS.users(DEFAULT_PAGE, DEFAULT_LIMIT),
     );
 
-    expect(queryOptions.staleTime).toBe(DEFAULT_STALE_TIME);
     expect(queryOptions.placeholderData).toBe(keepPreviousData);
   });
 

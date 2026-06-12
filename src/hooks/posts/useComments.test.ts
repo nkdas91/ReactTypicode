@@ -3,12 +3,12 @@ import {
   type QueryFunctionContext,
   type UseQueryResult,
 } from "@tanstack/react-query";
-import { describe, expect, it, vi, beforeEach } from "vitest";
-import { DEFAULT_STALE_TIME } from "../../config/queryClient";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { QUERY_KEYS } from "../../constants/queryKeys";
+import type { ApiError } from "../../errors/ApiError";
 import commentService from "../../services/commentService";
-import useComments from "./useComments";
 import type { Comment } from "../../types/Comment";
+import useComments from "./useComments";
 
 vi.mock("@tanstack/react-query", () => ({
   useQuery: vi.fn(),
@@ -47,7 +47,6 @@ describe("useComments", () => {
       expect.objectContaining({
         queryKey: QUERY_KEYS.comments(5),
         enabled: true,
-        staleTime: DEFAULT_STALE_TIME,
       }),
     );
   });
@@ -67,7 +66,9 @@ describe("useComments", () => {
   }) => {
     useComments(5);
 
-    vi.mocked(useQuery).mockReturnValue({} as UseQueryResult<unknown, Error>);
+    vi.mocked(useQuery).mockReturnValue(
+      {} as UseQueryResult<Comment, ApiError>,
+    );
 
     const queryFn = getQueryFn();
 

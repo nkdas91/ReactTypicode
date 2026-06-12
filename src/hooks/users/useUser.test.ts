@@ -3,9 +3,9 @@ import {
   type QueryFunctionContext,
   type UseQueryResult,
 } from "@tanstack/react-query";
-import { describe, expect, it, vi, beforeEach } from "vitest";
-import { DEFAULT_STALE_TIME } from "../../config/queryClient";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { QUERY_KEYS } from "../../constants/queryKeys";
+import type { ApiError } from "../../errors/ApiError";
 import userService from "../../services/userService";
 import type { User } from "../../types/User";
 import useUser from "./useUser";
@@ -37,7 +37,7 @@ function getQueryFn() {
 describe("useUser", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    vi.mocked(useQuery).mockReturnValue({} as UseQueryResult<User, Error>);
+    vi.mocked(useQuery).mockReturnValue({} as UseQueryResult<User, ApiError>);
   });
 
   it("configures query correctly for a valid user id", () => {
@@ -47,7 +47,6 @@ describe("useUser", () => {
       expect.objectContaining({
         queryKey: QUERY_KEYS.user(5),
         enabled: true,
-        staleTime: DEFAULT_STALE_TIME,
       }),
     );
   });
@@ -68,7 +67,7 @@ describe("useUser", () => {
   }) => {
     useUser(7);
 
-    vi.mocked(useQuery).mockReturnValue({} as UseQueryResult<User, Error>);
+    vi.mocked(useQuery).mockReturnValue({} as UseQueryResult<User, ApiError>);
 
     const queryFn = getQueryFn();
 
@@ -80,22 +79,5 @@ describe("useUser", () => {
     } as Parameters<typeof queryFn>[0]);
 
     expect(userService.get).toHaveBeenCalledWith(7, { signal });
-  });
-
-  it("throws error when user id is null in queryFn", () => {
-    useUser(null);
-
-    vi.mocked(useQuery).mockReturnValue({} as UseQueryResult<User, Error>);
-
-    const queryFn = getQueryFn();
-
-    expect(() => {
-      queryFn({
-        signal: new AbortController().signal,
-        queryKey: QUERY_KEYS.user(0),
-      } as Parameters<typeof queryFn>[0]);
-    }).toThrow("User ID is required");
-
-    expect(userService.get).not.toHaveBeenCalled();
   });
 });

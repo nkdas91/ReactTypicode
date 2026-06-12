@@ -1,5 +1,4 @@
 import { useQuery } from "@tanstack/react-query";
-import { DEFAULT_STALE_TIME } from "../../config/queryClient";
 import { QUERY_KEYS } from "../../constants/queryKeys";
 import commentService from "../../services/commentService";
 
@@ -27,10 +26,5 @@ export default function useComments(id: number) {
      * Prevents the query from running if the post ID is invalid.
      */
     enabled: id > 0,
-
-    /**
-     * Time before data is considered stale.
-     */
-    staleTime: DEFAULT_STALE_TIME,
   });
 }

@@ -4,8 +4,8 @@ import {
   type UseQueryResult,
 } from "@tanstack/react-query";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { DEFAULT_STALE_TIME } from "../../config/queryClient";
 import { QUERY_KEYS } from "../../constants/queryKeys";
+import type { ApiError } from "../../errors/ApiError";
 import postService from "../../services/postService";
 import type { Post } from "../../types/Post";
 import usePost from "./usePost";
@@ -38,7 +38,7 @@ describe("usePost", () => {
   beforeEach(() => {
     vi.clearAllMocks();
 
-    vi.mocked(useQuery).mockReturnValue({} as UseQueryResult<Post, Error>);
+    vi.mocked(useQuery).mockReturnValue({} as UseQueryResult<Post, ApiError>);
   });
 
   it("configures React Query with correct options", () => {
@@ -48,7 +48,6 @@ describe("usePost", () => {
       expect.objectContaining({
         queryKey: QUERY_KEYS.post(5),
         enabled: true,
-        staleTime: DEFAULT_STALE_TIME,
       }),
     );
   });
@@ -69,7 +68,7 @@ describe("usePost", () => {
   }) => {
     usePost(5);
 
-    vi.mocked(useQuery).mockReturnValue({} as UseQueryResult<Post, Error>);
+    vi.mocked(useQuery).mockReturnValue({} as UseQueryResult<Post, ApiError>);
 
     const queryFn = getQueryFn();
 
@@ -86,7 +85,7 @@ describe("usePost", () => {
   it("throws error when id is null in queryFn", async ({ expect }) => {
     usePost(null);
 
-    vi.mocked(useQuery).mockReturnValue({} as UseQueryResult<Error>);
+    vi.mocked(useQuery).mockReturnValue({} as UseQueryResult<ApiError>);
 
     const queryFn = getQueryFn();
 
