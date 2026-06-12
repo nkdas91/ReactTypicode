@@ -1,6 +1,6 @@
 import axios, { AxiosError } from "axios";
-
 import { API_TIMEOUT } from "../constants/api";
+import { ApiError } from "../errors/ApiError";
 import { API_BASE_URL } from "./env";
 
 /**
@@ -75,9 +75,11 @@ axiosInstance.interceptors.response.use(
       "Something went wrong";
 
     /**
-     * Normalize all errors into standard Error objects
-     * for consistent handling across the application.
+     * Normalize Axios errors into a structured ApiError instance.
+     *
+     * This ensures consistent error shape (message + status code)
+     * across services, hooks, and React Query.
      */
-    return Promise.reject(new Error(message));
+    return Promise.reject(new ApiError(message, error.response?.status));
   },
 );

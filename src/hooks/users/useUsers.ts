@@ -1,7 +1,7 @@
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
-import { DEFAULT_STALE_TIME } from "../../config/queryClient";
 import { DEFAULT_LIMIT, DEFAULT_PAGE } from "../../constants/pagination";
 import { QUERY_KEYS } from "../../constants/queryKeys";
+import type { ApiError } from "../../errors/ApiError";
 import userService from "../../services/userService";
 import type { APIListResponse } from "../../types/APIListResponse";
 import type { User } from "../../types/User";
@@ -36,7 +36,7 @@ interface UseUsersProps {
  * - pagination cache preservation
  *
  * @param {UseUsersProps} [props] - Query configuration options
- * @returns {import("@tanstack/react-query").UseQueryResult<APIListResponse<User>, Error>} React Query result containing users data, loading, and error states
+ * @returns {import("@tanstack/react-query").UseQueryResult<APIListResponse<User>, ApiError>} React Query result containing users data, loading, and error states
  */
 const useUsers = ({
   page = DEFAULT_PAGE,
@@ -64,7 +64,7 @@ const useUsers = ({
     ...(isSearching ? { name_like: query } : {}),
   };
 
-  return useQuery<APIListResponse<User>, Error>({
+  return useQuery<APIListResponse<User>, ApiError>({
     queryKey: isSearching
       ? QUERY_KEYS.usersSearch(page, limit, query)
       : QUERY_KEYS.users(page, limit),
@@ -81,11 +81,6 @@ const useUsers = ({
         params,
         signal,
       }),
-
-    /**
-     * Time before cached data is considered stale.
-     */
-    staleTime: DEFAULT_STALE_TIME,
 
     /**
      * Keeps previous page data while fetching new page (better UX).

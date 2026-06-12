@@ -1,7 +1,7 @@
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
-import { DEFAULT_STALE_TIME } from "../../config/queryClient";
 import { DEFAULT_LIMIT, DEFAULT_PAGE } from "../../constants/pagination";
 import { QUERY_KEYS } from "../../constants/queryKeys";
+import type { ApiError } from "../../errors/ApiError";
 import postService from "../../services/postService";
 import type { APIListResponse } from "../../types/APIListResponse";
 import type { Post } from "../../types/Post";
@@ -52,7 +52,7 @@ interface UsePostsProps {
  * - cache-aware query keys
  *
  * @param {UsePostsProps} [props] - Query configuration options
- * @returns {import("@tanstack/react-query").UseQueryResult<APIListResponse<Post>, Error>} React Query result containing posts data, loading, and error states
+ * @returns {import("@tanstack/react-query").UseQueryResult<APIListResponse<Post>, ApiError>} React Query result containing posts data, loading, and error states
  */
 const usePosts = ({
   page = DEFAULT_PAGE,
@@ -92,7 +92,7 @@ const usePosts = ({
     ...(isSearching ? { title_like: query } : {}),
   };
 
-  return useQuery<APIListResponse<Post>, Error>({
+  return useQuery<APIListResponse<Post>, ApiError>({
     queryKey: isSearching
       ? QUERY_KEYS.postsSearch(
           page,
@@ -116,11 +116,6 @@ const usePosts = ({
         params,
         signal,
       }),
-
-    /**
-     * Time before cached data is considered stale.
-     */
-    staleTime: DEFAULT_STALE_TIME,
 
     /**
      * Keeps previous data while fetching new data (better UX for pagination).

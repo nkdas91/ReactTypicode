@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
-import { DEFAULT_STALE_TIME } from "../../config/queryClient";
 import { QUERY_KEYS } from "../../constants/queryKeys";
+import type { ApiError } from "../../errors/ApiError";
 import postService from "../../services/postService";
 import type { Post } from "../../types/Post";
 
@@ -10,10 +10,10 @@ import type { Post } from "../../types/Post";
  * Handles caching, background refetching, and request cancellation.
  *
  * @param {number | null} id - ID of the post to fetch. If null, the query is disabled.
- * @returns {import("@tanstack/react-query").UseQueryResult<Post, Error>} React Query result containing post data, loading, and error states
+ * @returns {import("@tanstack/react-query").UseQueryResult<Post, ApiError>} React Query result containing post data, loading, and error states
  */
 const usePost = (id: number | null) => {
-  return useQuery<Post, Error>({
+  return useQuery<Post, ApiError>({
     queryKey: QUERY_KEYS.post(id ?? 0),
 
     /**
@@ -35,11 +35,6 @@ const usePost = (id: number | null) => {
      * Prevents query execution when post ID is not available.
      */
     enabled: id !== null,
-
-    /**
-     * Time (in ms) before the data is considered stale.
-     */
-    staleTime: DEFAULT_STALE_TIME,
   });
 };
 

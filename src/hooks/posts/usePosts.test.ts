@@ -1,13 +1,19 @@
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
-import { DEFAULT_STALE_TIME } from "../../config/queryClient";
 import { DEFAULT_LIMIT, DEFAULT_PAGE } from "../../constants/pagination";
 import { QUERY_KEYS } from "../../constants/queryKeys";
 import usePosts from "./usePosts";
 
-vi.mock("@tanstack/react-query", () => ({
-  useQuery: vi.fn(),
-  keepPreviousData: Symbol("keepPreviousData"),
-}));
+vi.mock("@tanstack/react-query", async () => {
+  const actual = await vi.importActual<typeof import("@tanstack/react-query")>(
+    "@tanstack/react-query",
+  );
+
+  return {
+    ...actual,
+    useQuery: vi.fn(),
+    keepPreviousData: Symbol("keepPreviousData"),
+  };
+});
 
 describe("usePosts", () => {
   beforeEach(() => {
@@ -26,7 +32,6 @@ describe("usePosts", () => {
           undefined,
           undefined,
         ),
-        staleTime: DEFAULT_STALE_TIME,
         placeholderData: keepPreviousData,
       }),
     );
@@ -86,14 +91,5 @@ describe("usePosts", () => {
         ),
       }),
     );
-  });
-
-  it("passes stale time and placeholder data", () => {
-    usePosts();
-
-    const options = vi.mocked(useQuery).mock.calls[0][0];
-
-    expect(options.staleTime).toBe(DEFAULT_STALE_TIME);
-    expect(options.placeholderData).toBe(keepPreviousData);
   });
 });

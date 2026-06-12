@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
-import { DEFAULT_STALE_TIME } from "../../config/queryClient";
 import { QUERY_KEYS } from "../../constants/queryKeys";
+import type { ApiError } from "../../errors/ApiError";
 import userService from "../../services/userService";
 import type { User } from "../../types/User";
 
@@ -10,10 +10,10 @@ import type { User } from "../../types/User";
  * Provides caching, request deduplication, and background refetching.
  *
  * @param {number | null} id - User ID to fetch. If null, query is disabled.
- * @returns {import("@tanstack/react-query").UseQueryResult<User, Error>} React Query result containing user data, loading, and error states
+ * @returns {import("@tanstack/react-query").UseQueryResult<User, ApiError>} React Query result containing user data, loading, and error states
  */
 const useUser = (id: number | null) => {
-  return useQuery<User, Error>({
+  return useQuery<User, ApiError>({
     queryKey: QUERY_KEYS.user(id ?? 0),
 
     /**
@@ -24,22 +24,13 @@ const useUser = (id: number | null) => {
      * @returns {Promise<User>} Fetched user data
      */
     queryFn: ({ signal }) => {
-      if (id === null) {
-        throw new Error("User ID is required");
-      }
-
-      return userService.get(id, { signal });
+      return userService.get(Number(id), { signal });
     },
 
     /**
      * Prevents query execution when user ID is not available.
      */
     enabled: id !== null,
-
-    /**
-     * Time (in ms) before cached data is considered stale.
-     */
-    staleTime: DEFAULT_STALE_TIME,
   });
 };
 
