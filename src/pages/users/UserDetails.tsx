@@ -32,8 +32,8 @@ const UserDetails = () => {
       <BackButton url="/users" label="Back to Users" />
 
       <div className="form-section mt-card">
-        <h1 className="text-3xl">{user?.name}</h1>
-        <p className="text-muted">@{user?.username}</p>
+        <h1 className="title">{user?.name}</h1>
+        <p className="caption">@{user?.username}</p>
       </div>
 
       <div className="form-section">

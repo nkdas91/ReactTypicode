@@ -29,7 +29,7 @@ const Comments = ({ id }: CommentsProps) => {
   return (
     <div>
       <div className="flex justify-between items-center gap-card my-card">
-        <h2 className="text-xl">Comments</h2>
+        <h2 className="section-title">Comments</h2>
 
         <Button
           type="button"

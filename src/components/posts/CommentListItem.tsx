@@ -7,11 +7,11 @@ interface CommentListItemProps {
 export default function CommentListItem({ comment }: CommentListItemProps) {
   return (
     <li className="section">
-      <h3 className="text-lg">{comment.name}</h3>
+      <h3 className="section-title">{comment.name}</h3>
 
-      <p className="text-sm text-muted italic mb-field">{comment.email}</p>
+      <p className="caption">{comment.email}</p>
 
-      <p className="whitespace-pre-line">{comment.body}</p>
+      <p className="whitespace-pre-line mt-2">{comment.body}</p>
     </li>
   );
 }

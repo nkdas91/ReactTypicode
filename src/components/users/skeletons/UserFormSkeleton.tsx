@@ -3,7 +3,7 @@ import Skeleton from "../../skeletons/Skeleton";
 
 export default function UserFormSkeleton() {
   return (
-    <div className="p-6 border border-light rounded-card">
+    <div className="p-6 border border-border rounded-card">
       <Skeleton className="w-30 h-8 rounded-full" />
 
       <div className="mb-6 mt-4 grid md:grid-cols-2 gap-2">

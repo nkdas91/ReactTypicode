@@ -18,16 +18,34 @@
   --color-on-accent: var(--color-white);
 
   /* Surface & Text */
-  --color-surface: var(--color-zinc-100);
   --color-background: var(--color-white);
+  --color-surface: var(--color-zinc-100);
 
   --color-text: var(--color-neutral-800);
   --color-muted: var(--color-gray-500);
 
-  --color-light: var(--color-gray-100);
+  /* Border */
+  --color-border: var(--color-gray-200);
+  --color-border-hover: var(--color-gray-300);
+
+  /* Typography */
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --text-caption: var(--text-sm);
+  --text-label: var(--text-sm);
+  --text-body: var(--text-base);
+  --text-title: var(--text-3xl);
+  --text-section-title: var(--text-lg);
+
+  --font-weight-body: var(--font-weight-normal);
+  --font-weight-label: var(--font-weight-medium);
+  --font-weight-title: var(--font-weight-normal);
+  --font-weight-section-title: var(--font-weight-medium);
 
   /* Radius */
   --radius-card: var(--radius-3xl);
+  --radius-section: var(--radius-4xl);
   --radius-field: var(--radius-md);
 
   /* Layout */
@@ -35,36 +53,70 @@
 
   /* Spacing */
   --spacing-section: 2rem;
-  --spacing-card: 1rem;
+  --spacing-card: 1.5rem;
   --spacing-field: 0.5rem;
 
   /* Focus */
-  --color-focus-ring: var(--color-indigo-500);
+  --color-focus-ring: var(--color-primary);
+  --focus-ring-width: 2px;
+  --focus-ring-offset: 3px;
 
   /* Motion */
-  --default-transition-duration: 200ms;
+  --duration-fast: 150ms;
+  --duration-normal: 200ms;
+  --duration-slow: 300ms;
+
+  --ease-default: ease-in-out;
+
+  /* State */
+  --opacity-disabled: 0.5;
+
+  /* Shadows */
+  --shadow-card: var(--shadow-md);
+  --shadow-toast: var(--shadow-sm);
+
+  /* Layers */
+  --z-dropdown: 10;
+  --z-modal: 40;
+  --z-toast: 50;
+}
+
+body {
+  font-family: var(--font-sans);
+  color: var(--color-text);
+}
+
+/* Link */
+@utility link {
+  @apply text-sm text-muted italic;
+  @apply hover:text-primary hover:underline;
+  @apply focus-visible:text-primary focus-visible:underline outline-0;
 }
 
 /* Button */
 @utility btn {
   @apply inline-flex items-center justify-center;
-  @apply rounded-full transition cursor-pointer;
-  @apply focus-visible:outline-2 focus-visible:outline-offset-2;
+  @apply rounded-full cursor-pointer;
+  @apply transition;
   @apply disabled:opacity-50 disabled:cursor-not-allowed;
+  @apply focus-visible:outline-2 focus-visible:outline-offset-2;
 }
 
 @utility btn-primary {
-  @apply bg-primary text-on-primary hover:bg-primary-hover;
+  @apply bg-primary text-on-primary;
+  @apply hover:bg-primary-hover;
   @apply focus-visible:outline-primary;
 }
 
 @utility btn-secondary {
-  @apply bg-secondary text-on-secondary hover:bg-secondary-hover;
+  @apply bg-secondary text-on-secondary;
+  @apply hover:bg-secondary-hover;
   @apply focus-visible:outline-on-secondary;
 }
 
 @utility btn-danger {
-  @apply bg-danger text-on-danger hover:bg-danger-hover;
+  @apply bg-danger text-on-danger;
+  @apply hover:bg-danger-hover;
   @apply focus-visible:outline-on-danger;
 }
 
@@ -82,10 +134,10 @@
 
 /* Favourite Button */
 @utility favourite-button {
-  @apply p-1;
-  @apply hover:scale-110;
+  @apply p-1 cursor-pointer;
   @apply transition;
-  @apply focus-visible:outline-2;
+  @apply hover:scale-110;
+  @apply focus-visible:outline-2 focus-visible:outline-offset-2;
 }
 
 @utility favourite-button-active {
@@ -104,11 +156,12 @@
   @apply size-8 text-muted;
 }
 
-/* TextField and SelectField */
+/* Form */
 @utility form-field {
   @apply w-full px-4 py-2;
-  @apply border border-light;
+  @apply border border-border;
   @apply rounded-field;
+  @apply focus-visible:outline-2;
   @apply focus-visible:outline-primary;
 }
 
@@ -122,20 +175,23 @@
 
 /* Toast */
 @utility toast {
-  @apply fixed top-5 right-5 z-50;
+  @apply fixed top-5 right-5;
+  @apply z-(--z-toast);
   @apply flex items-center gap-3;
   @apply min-w-[320px] max-w-md;
   @apply rounded-card px-4 py-3;
-  @apply border shadow-lg;
-  @apply transition-all duration-300;
+  @apply border shadow-toast;
+  @apply transition-all;
 }
 
 @utility toast-success {
-  @apply bg-secondary text-on-secondary border-on-secondary;
+  @apply bg-secondary text-on-secondary;
+  @apply border-on-secondary;
 }
 
 @utility toast-error {
-  @apply bg-danger text-on-danger border-on-danger;
+  @apply bg-danger text-on-danger;
+  @apply border-on-danger;
 }
 
 @utility toast-close-button {
@@ -145,21 +201,57 @@
 }
 
 /* Card */
-@utility section {
-  @apply border border-light;
+@utility card {
+  @apply border border-border;
   @apply rounded-card;
+  @apply p-card;
+}
+
+@utility card-title {
+  @apply text-section-title font-section-title;
+  @apply mb-field;
+}
+
+/* Section */
+@utility section {
+  @apply border border-border;
+  @apply rounded-section;
   @apply p-section;
 }
 
-/* Two column grid */
+@utility section-title {
+  @apply text-section-title font-section-title;
+  @apply mb-field;
+}
+
+/* Layout */
 @utility form-grid {
-  @apply grid md:grid-cols-2 gap-field;
+  @apply grid gap-field md:grid-cols-2;
 }
 
 @utility form-section {
   @apply mb-card;
 }
 
-@utility section-title {
-  @apply text-lg font-medium mb-field;
+/* List */
+@utility list-row {
+  @apply border border-border flex justify-between items-center flex-wrap gap-2;
+}
+
+@utility list-link {
+  @apply p-4 border-l-3 border-transparent grow;
+  @apply hover:text-primary hover:border-primary hover:bg-linear-to-r hover:from-indigo-100 hover:to-white;
+  @apply focus-visible:text-primary focus-visible:border-primary focus-visible:bg-linear-to-r focus-visible:from-indigo-100 focus-visible:to-white focus-visible:outline-0;
+}
+
+@utility list-actions {
+  @apply flex justify-end items-center ml-auto gap-field p-field;
+}
+
+@utility title {
+  @apply text-title;
+}
+
+@utility caption {
+  @apply text-caption italic text-muted;
 }
