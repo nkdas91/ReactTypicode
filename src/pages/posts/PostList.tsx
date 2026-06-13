@@ -64,7 +64,7 @@ const PostList = () => {
   return (
     <div>
       <div className="flex justify-between items-center flex-wrap gap-field mb-card">
-        <h1 className="text-3xl">Posts</h1>
+        <h1 className="title">Posts</h1>
 
         <div className="flex flex-wrap gap-3">
           <div className="flex items-center gap-1">

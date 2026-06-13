@@ -37,7 +37,7 @@ const UserList = () => {
   return (
     <div>
       <div className="flex justify-between items-center flex-wrap gap-field mb-card">
-        <h1 className="text-3xl">Users</h1>
+        <h1 className="title">Users</h1>
 
         <Button to="/users/create">Add new user</Button>
       </div>

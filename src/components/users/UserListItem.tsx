@@ -10,14 +10,11 @@ interface UserListItemProps {
 
 const UserListItem = ({ user, onDelete }: UserListItemProps) => {
   return (
-    <li className="border border-light flex justify-between items-center flex-wrap gap-2">
-      <Link
-        to={`/users/${user.id}`}
-        className="p-4 grow hover:text-primary border-l-3 border-transparent hover:border-l-3 hover:border-primary hover:bg-linear-to-r hover:from-indigo-100 hover:to-white"
-      >
+    <li className="list-row">
+      <Link to={`/users/${user.id}`} className="list-link">
         {user.name}
       </Link>
-      <div className="flex justify-end ml-auto gap-2 px-4 py-2">
+      <div className="list-actions">
         <Button to={`/posts?userId=${user.id}`} variant="secondary">
           Posts
         </Button>

@@ -17,7 +17,7 @@ export default function UserListSkeleton() {
       {Array.from({ length: 5 }).map((_, index) => (
         <div
           key={index}
-          className="border border-light p-2 flex justify-between items-center flex-wrap gap-2"
+          className="border border-border p-2 flex justify-between items-center flex-wrap gap-2"
         >
           <Skeleton className="h-5 w-40 rounded-full" />
 

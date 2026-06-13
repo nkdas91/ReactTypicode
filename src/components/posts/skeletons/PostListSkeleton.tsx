@@ -4,7 +4,7 @@ import Skeleton from "../../skeletons/Skeleton";
 export default function PostListSkeleton() {
   return (
     <div>
-      <h1 className="text-3xl mb-4">
+      <h1 className="title mb-4">
         <Skeleton className="h-5 w-20 rounded-full" />
       </h1>
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end md:items-center gap-3">
@@ -22,7 +22,7 @@ export default function PostListSkeleton() {
           <div className="flex items-center gap-1">
             <Skeleton className="h-5 w-10 rounded-full" />
 
-            <div className="border border-light p-4 rounded-field flex justify-between items-center">
+            <div className="border border-border p-4 rounded-field flex justify-between items-center">
               <Skeleton className="w-10 h-5 rounded-full" />
             </div>
 
@@ -34,7 +34,7 @@ export default function PostListSkeleton() {
       {Array.from({ length: 5 }).map((_, index) => (
         <div
           key={index}
-          className="border border-light p-2 flex justify-between items-center flex-wrap gap-2"
+          className="border border-border p-2 flex justify-between items-center flex-wrap gap-2"
         >
           <Skeleton className="h-5 w-40 rounded-full" />
 

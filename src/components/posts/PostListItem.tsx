@@ -21,19 +21,13 @@ const PostListItem = ({
   const { data: user } = useUser(post.userId);
 
   return (
-    <li className="border border-light flex justify-between items-center flex-wrap gap-2">
-      <Link
-        to={`/posts/${post.id}`}
-        className="p-4 grow hover:text-primary border-l-3 border-transparent hover:border-l-3 hover:border-primary hover:bg-linear-to-r hover:from-indigo-100 hover:to-white"
-      >
+    <li className="list-row">
+      <Link to={`/posts/${post.id}`} className="list-link">
         {post.title}
       </Link>
-      <div className="flex items-center ml-auto justify-end gap-2 px-4 py-2">
+      <div className="list-actions">
         {user && (
-          <Link
-            to={`/users/${user.id}`}
-            className="text-sm text-muted italic hover:text-primary hover:underline"
-          >
+          <Link to={`/users/${user.id}`} className="link">
             {user.name}
           </Link>
         )}

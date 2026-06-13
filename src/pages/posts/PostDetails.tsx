@@ -58,11 +58,8 @@ const PostDetails = () => {
         </div>
 
         <div className="my-card">
-          <h1 className="text-3xl">{post?.title}</h1>
-          <Link
-            to={`/users/${post?.userId}`}
-            className="text-sm text-muted italic hover:text-primary hover:underline"
-          >
+          <h1 className="title">{post?.title}</h1>
+          <Link to={`/users/${post?.userId}`} className="link">
             {user?.name}
           </Link>
         </div>
