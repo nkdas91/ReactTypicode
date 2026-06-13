@@ -1,0 +1,6 @@
+blank_issues_enabled: false
+
+contact_links:
+  - name: Contribution Guidelines
+    url: .github/CONTRIBUTING.md
+    about: Please review contribution guidelines before submitting changes.
