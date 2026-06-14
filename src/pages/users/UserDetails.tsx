@@ -1,8 +1,8 @@
 import { useNavigate, useParams } from "react-router-dom";
-import BackButton from "../../components/BackButton";
-import Button from "../../components/Button";
-import ConfirmModal from "../../components/ConfirmModal";
-import ErrorMessage from "../../components/ErrorMessage";
+import BackButton from "../../components/backButton/BackButton";
+import Button from "../../components/button/Button";
+import ConfirmModal from "../../components/confirmModal/ConfirmModal";
+import ErrorMessage from "../../components/errorMessage/ErrorMessage";
 import UserDetailsSkeleton from "../../components/users/skeletons/UserDetailsSkeleton";
 import useDeleteUser from "../../hooks/users/useDeleteUser";
 import useUser from "../../hooks/users/useUser";

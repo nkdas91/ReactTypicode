@@ -1,5 +1,5 @@
 import { XMarkIcon } from "@heroicons/react/24/solid";
-import { classNames } from "../utils/classNames";
+import { classNames } from "../../utils/classNames";
 
 interface ToastProps {
   message: string;

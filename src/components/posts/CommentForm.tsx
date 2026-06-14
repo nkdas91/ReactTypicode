@@ -1,5 +1,5 @@
-import Button from "../Button";
-import TextField from "../TextField";
+import Button from "../button/Button";
+import TextField from "../textField/TextField";
 import type { Comment } from "../../types/Comment";
 
 interface CommentFormProps {

@@ -1,6 +1,6 @@
 import type { Address } from "../../types/Address";
-import Button from "../Button";
-import TextField from "../TextField";
+import Button from "../button/Button";
+import TextField from "../textField/TextField";
 
 interface UserFormData {
   name: string;

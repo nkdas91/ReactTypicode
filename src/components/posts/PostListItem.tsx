@@ -2,8 +2,8 @@ import { PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { Link } from "react-router-dom";
 import useUser from "../../hooks/users/useUser";
 import type { Post } from "../../types/Post";
-import FavouriteButton from "../FavouriteButton";
-import Button from "../Button";
+import FavouriteButton from "../favouriteButton/FavouriteButton";
+import Button from "../button/Button";
 
 interface PostListItemProps {
   post: Post;

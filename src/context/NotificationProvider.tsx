@@ -1,5 +1,5 @@
 import { useEffect, useState, type ReactNode } from "react";
-import Toast from "../components/Toast";
+import Toast from "../components/toast/Toast";
 import { NOTIFICATION_DURATION } from "../constants/api";
 import type { NotificationType } from "../types/Notification";
 import { NotificationContext } from "./NotificationContext";
