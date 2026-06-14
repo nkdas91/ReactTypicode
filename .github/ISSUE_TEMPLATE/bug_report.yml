@@ -60,7 +60,7 @@ body:
         - Edge
         - Other
 
-  - type: input
+  - type: dropdown
     id: operating_system
     attributes:
       label: Operating System
