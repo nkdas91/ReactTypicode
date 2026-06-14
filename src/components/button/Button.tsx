@@ -5,7 +5,7 @@ import type {
 } from "react";
 
 import { Link } from "react-router-dom";
-import { classNames } from "../utils/classNames";
+import { classNames } from "../../utils/classNames";
 
 type Variant = "primary" | "secondary" | "danger" | "ghost";
 

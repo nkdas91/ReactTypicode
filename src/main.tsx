@@ -4,7 +4,7 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import App from "./App.tsx";
-import ErrorBoundary from "./components/ErrorBoundary/ErrorBoundary.tsx";
+import ErrorBoundary from "./components/errorBoundary/ErrorBoundary.tsx";
 import { queryClient } from "./config/queryClient.ts";
 import NotificationProvider from "./context/NotificationProvider.tsx";
 

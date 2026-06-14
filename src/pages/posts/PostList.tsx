@@ -1,10 +1,10 @@
-import ConfirmModal from "../../components/ConfirmModal";
-import ErrorMessage from "../../components/ErrorMessage";
-import Pagination from "../../components/Pagination";
+import ConfirmModal from "../../components/confirmModal/ConfirmModal";
+import ErrorMessage from "../../components/errorMessage/ErrorMessage";
+import Pagination from "../../components/pagination/Pagination";
 import PostListItem from "../../components/posts/PostListItem";
 import PostListSkeleton from "../../components/posts/skeletons/PostListSkeleton";
-import SelectField from "../../components/SelectField";
-import TableHeader from "../../components/TableHeader";
+import SelectField from "../../components/selectField/SelectField";
+import TableHeader from "../../components/tableHeader/TableHeader";
 import { NO_LIMIT } from "../../constants/pagination";
 import useDeletePost from "../../hooks/posts/useDeletePost";
 import usePostFilters from "../../hooks/posts/usePostFilters";

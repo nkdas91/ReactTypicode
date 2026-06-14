@@ -1,6 +1,6 @@
-import { LIMITS } from "../constants/pagination";
-import SelectField from "./SelectField";
-import TextField from "./TextField";
+import { LIMITS } from "../../constants/pagination";
+import SelectField from "../selectField/SelectField";
+import TextField from "../textField/TextField";
 
 interface TableHeaderProps {
   searchQuery: string;

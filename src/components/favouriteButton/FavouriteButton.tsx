@@ -1,8 +1,8 @@
 import { HeartIcon } from "@heroicons/react/24/outline";
 import { HeartIcon as HeartSolidIcon } from "@heroicons/react/24/solid";
 
-import Button from "./Button";
-import { classNames } from "../utils/classNames";
+import Button from "../button/Button";
+import { classNames } from "../../utils/classNames";
 
 interface FavouriteButtonProps {
   isFavourite: boolean;

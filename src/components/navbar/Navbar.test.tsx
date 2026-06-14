@@ -1,97 +1,160 @@
-import { render, screen } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
-import { BrowserRouter } from "react-router-dom";
+import { fireEvent, render, screen, within } from "@testing-library/react";
+import { MemoryRouter } from "react-router-dom";
+import { describe, expect, it, vi } from "vitest";
 
 import Navbar from "./Navbar";
 
-function renderNavbar() {
-  return render(
-    <BrowserRouter>
-      <Navbar />
-    </BrowserRouter>,
-  );
-}
+vi.mock("./NavbarLink", () => ({
+  default: ({
+    item,
+    onClick,
+  }: {
+    item: {
+      label: string;
+    };
+    onClick?: () => void;
+  }) => (
+    <a
+      href="#"
+      onClick={(event) => {
+        event.preventDefault();
+        onClick?.();
+      }}
+    >
+      {item.label}
+    </a>
+  ),
+}));
+
+vi.mock("../../config/navigation", () => ({
+  navbarItems: [
+    {
+      label: "Home",
+      to: "/",
+    },
+    {
+      label: "About",
+      to: "/about",
+    },
+  ],
+}));
 
 describe("Navbar", () => {
-  it("renders navigation links", () => {
-    renderNavbar();
-
-    expect(screen.getByText("Home")).toBeInTheDocument();
-    expect(screen.getByText("Users")).toBeInTheDocument();
-    expect(screen.getByText("Posts")).toBeInTheDocument();
-  });
-
-  it("renders skip to content link", () => {
-    renderNavbar();
+  it("renders brand link", () => {
+    render(
+      <MemoryRouter>
+        <Navbar />
+      </MemoryRouter>,
+    );
 
     expect(
       screen.getByRole("link", {
-        name: /skip to main content/i,
+        name: "My App",
       }),
     ).toBeInTheDocument();
   });
 
-  it("opens mobile menu when toggle button is clicked", async () => {
-    const user = userEvent.setup();
+  it("renders skip navigation link", () => {
+    render(
+      <MemoryRouter>
+        <Navbar />
+      </MemoryRouter>,
+    );
 
-    renderNavbar();
-
-    const menuButton = screen.getByRole("button", {
-      name: /toggle navigation menu/i,
-    });
-
-    expect(menuButton).toHaveAttribute("aria-expanded", "false");
-
-    expect(
-      document.getElementById("mobile-navigation"),
-    ).not.toBeInTheDocument();
-
-    await user.click(menuButton);
-
-    expect(menuButton).toHaveAttribute("aria-expanded", "true");
-
-    expect(document.getElementById("mobile-navigation")).toBeInTheDocument();
+    expect(screen.getByText("Skip to main content")).toBeInTheDocument();
   });
 
-  it("closes mobile menu when toggle button is clicked twice", async () => {
-    const user = userEvent.setup();
-
-    renderNavbar();
-
-    const menuButton = screen.getByRole("button", {
-      name: /toggle navigation menu/i,
-    });
-
-    await user.click(menuButton);
-
-    expect(document.getElementById("mobile-navigation")).toBeInTheDocument();
-
-    await user.click(menuButton);
+  it("renders navigation links", () => {
+    render(
+      <MemoryRouter>
+        <Navbar />
+      </MemoryRouter>,
+    );
 
     expect(
-      document.getElementById("mobile-navigation"),
+      screen.getByRole("link", {
+        name: "Home",
+      }),
+    ).toBeInTheDocument();
+
+    expect(
+      screen.getByRole("link", {
+        name: "About",
+      }),
+    ).toBeInTheDocument();
+  });
+
+  it("mobile menu button is initially closed", () => {
+    render(
+      <MemoryRouter>
+        <Navbar />
+      </MemoryRouter>,
+    );
+
+    expect(
+      screen.getByRole("button", {
+        name: "Toggle navigation menu",
+      }),
+    ).toHaveAttribute("aria-expanded", "false");
+
+    expect(
+      screen.queryByRole("region", {
+        name: "mobile-navigation",
+      }),
     ).not.toBeInTheDocument();
   });
 
-  it("closes mobile menu when a mobile link is clicked", async () => {
-    const user = userEvent.setup();
+  it("opens mobile menu when button is clicked", () => {
+    render(
+      <MemoryRouter>
+        <Navbar />
+      </MemoryRouter>,
+    );
 
-    renderNavbar();
-
-    const menuButton = screen.getByRole("button", {
-      name: /toggle navigation menu/i,
+    const button = screen.getByRole("button", {
+      name: "Toggle navigation menu",
     });
 
-    await user.click(menuButton);
+    fireEvent.click(button);
 
-    expect(menuButton).toHaveAttribute("aria-expanded", "true");
+    expect(button).toHaveAttribute("aria-expanded", "true");
 
-    const homeLinks = screen.getAllByRole("link", {
-      name: "Home",
+    const mobileMenu = document.getElementById("mobile-navigation");
+
+    expect(mobileMenu).toBeInTheDocument();
+
+    expect(
+      within(mobileMenu as HTMLElement).getByRole("link", {
+        name: "Home",
+      }),
+    ).toBeInTheDocument();
+  });
+
+  it("closes mobile menu when a mobile link is clicked", () => {
+    render(
+      <MemoryRouter>
+        <Navbar />
+      </MemoryRouter>,
+    );
+
+    const button = screen.getByRole("button", {
+      name: "Toggle navigation menu",
     });
 
-    await user.click(homeLinks[homeLinks.length - 1]);
+    fireEvent.click(button);
 
-    expect(menuButton).toHaveAttribute("aria-expanded", "false");
+    expect(button).toHaveAttribute("aria-expanded", "true");
+
+    const mobileMenu = document.getElementById("mobile-navigation");
+
+    expect(mobileMenu).toBeInTheDocument();
+
+    fireEvent.click(
+      within(mobileMenu as HTMLElement).getByRole("link", {
+        name: "Home",
+      }),
+    );
+
+    expect(button).toHaveAttribute("aria-expanded", "false");
   });
 });

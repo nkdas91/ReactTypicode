@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
-import BackButton from "../../components/BackButton";
-import ErrorMessage from "../../components/ErrorMessage";
+import BackButton from "../../components/backButton/BackButton";
+import ErrorMessage from "../../components/errorMessage/ErrorMessage";
 import UserFormSkeleton from "../../components/users/skeletons/UserFormSkeleton";
 import UserForm from "../../components/users/UserForm";
 import useUpdateUserForm from "../../hooks/users/useUpdateUserForm";

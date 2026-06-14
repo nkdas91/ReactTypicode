@@ -1,6 +1,6 @@
 import { MinusIcon, PlusIcon } from "@heroicons/react/24/solid";
 import usePostComments from "../../hooks/posts/usePostComments";
-import Button from "../Button";
+import Button from "../button/Button";
 import CommentForm from "./CommentForm";
 import CommentList from "./CommentList";
 import CommentsSkeleton from "./skeletons/CommentsSkeleton";

@@ -1,6 +1,6 @@
 import { type ReactNode } from "react";
 
-import RouteErrorBoundary from "../components/ErrorBoundary/RouteErrorBoundary";
+import RouteErrorBoundary from "../components/errorBoundary/RouteErrorBoundary";
 
 import { ROUTES } from "./routePaths";
 

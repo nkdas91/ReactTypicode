@@ -1,9 +1,9 @@
 import { useParams } from "react-router-dom";
-import BackButton from "../../components/BackButton";
-import Button from "../../components/Button";
-import ErrorMessage from "../../components/ErrorMessage";
+import BackButton from "../../components/backButton/BackButton";
+import Button from "../../components/button/Button";
+import ErrorMessage from "../../components/errorMessage/ErrorMessage";
 import PostFormSkeleton from "../../components/posts/skeletons/PostFormSkeleton";
-import TextField from "../../components/TextField";
+import TextField from "../../components/textField/TextField";
 import usePost from "../../hooks/posts/usePost";
 import useUpdatePostForm from "../../hooks/posts/useUpdatePostForm";
 
