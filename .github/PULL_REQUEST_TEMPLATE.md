@@ -1,6 +1,4 @@
-# Pull Request
-
-## Description
+### Description
 
 <!--
 Provide a clear summary of what this PR changes and why.
@@ -10,7 +8,7 @@ Example:
 - Refactored components to use semantic design tokens
 -->
 
-## Related Issue
+### Related Issue
 
 <!-- Link related issue/ticket if applicable -->
 
@@ -18,7 +16,7 @@ Closes #
 
 ---
 
-## Type of Change
+### Type of Change
 
 Please check the relevant option(s):
 
@@ -32,17 +30,15 @@ Please check the relevant option(s):
 
 ---
 
-## Changes Made
+### Changes Made
 
 <!-- List the important changes -->
 
 -
 -
--
+- ***
 
----
-
-## Screenshots / Videos
+### Screenshots / Videos
 
 <!--
 Required for UI changes.
@@ -52,11 +48,11 @@ Add screenshots or recordings demonstrating the changes.
 
 ---
 
-## Testing Performed
+### Testing Performed
 
 Please confirm the following:
 
-### Unit Tests
+#### Unit Tests
 
 - [ ] Tests added/updated where required
 - [ ] Passed locally
@@ -67,7 +63,7 @@ npm run test:run
 
 ---
 
-### Accessibility Tests
+#### Accessibility Tests
 
 - [ ] Accessibility checks pass
 
@@ -77,7 +73,7 @@ npm run test:run
 
 ---
 
-### End-to-End Tests
+#### End-to-End Tests
 
 - [ ] E2E tests added/updated where required
 - [ ] Passed locally
@@ -88,7 +84,7 @@ npm run test:e2e
 
 ---
 
-### Build Verification
+#### Build Verification
 
 - [ ] Production build succeeds
 
@@ -98,7 +94,7 @@ npm run build
 
 ---
 
-## Code Quality Checklist
+### Code Quality Checklist
 
 - [ ] TypeScript has no errors
 - [ ] ESLint passes
@@ -108,7 +104,7 @@ npm run build
 
 ---
 
-## Accessibility Checklist
+### Accessibility Checklist
 
 For UI changes:
 
@@ -121,7 +117,7 @@ For UI changes:
 
 ---
 
-## API / Data Changes Checklist
+### API / Data Changes Checklist
 
 For API-related changes:
 
@@ -133,7 +129,7 @@ For API-related changes:
 
 ---
 
-## Design System Checklist
+### Design System Checklist
 
 For UI changes:
 
@@ -144,7 +140,7 @@ For UI changes:
 
 ---
 
-## Deployment Considerations
+### Deployment Considerations
 
 <!--
 Mention any environment variables,
@@ -154,7 +150,7 @@ or deployment changes.
 
 ---
 
-## Reviewer Notes
+### Reviewer Notes
 
 <!--
 Anything reviewers should pay special attention to.
@@ -162,7 +158,7 @@ Anything reviewers should pay special attention to.
 
 ---
 
-## Final Checklist
+### Final Checklist
 
 - [ ] I have reviewed my own changes
 - [ ] I have updated documentation if needed

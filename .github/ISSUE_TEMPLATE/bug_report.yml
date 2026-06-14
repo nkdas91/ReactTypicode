@@ -1,0 +1,80 @@
+name: Bug Report
+description: Report a reproducible problem or unexpected behavior
+title: "[Bug]: "
+labels:
+  - bug
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: Provide a clear and concise description of the issue.
+      placeholder: Describe the problem.
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps_to_reproduce
+    attributes:
+      label: Steps to Reproduce
+      description: List the exact steps required to reproduce the issue.
+      placeholder: |
+        1. 
+        2. 
+        3. 
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected_behavior
+    attributes:
+      label: Expected Behavior
+      description: Describe what should have happened.
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual_behavior
+    attributes:
+      label: Actual Behavior
+      description: Describe what actually happened.
+    validations:
+      required: true
+
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Screenshots / Videos
+      description: Add screenshots, screen recordings, or other visual evidence if applicable.
+      placeholder: Drag and drop files here.
+
+  - type: dropdown
+    id: browser
+    attributes:
+      label: Browser
+      description: Select the browser where the issue occurred.
+      options:
+        - Chrome
+        - Firefox
+        - Safari
+        - Edge
+        - Other
+
+  - type: input
+    id: operating_system
+    attributes:
+      label: Operating System
+      description: Example: Ubuntu 24.04, Windows 11, macOS Sonoma
+
+  - type: input
+    id: application_version
+    attributes:
+      label: Application Version / Commit
+      description: Optional. Provide version number or commit hash.
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Console Errors / Logs
+      description: Paste relevant console errors or logs.
+      render: text

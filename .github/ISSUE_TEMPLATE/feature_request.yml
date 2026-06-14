@@ -1,0 +1,44 @@
+name: Feature Request
+description: Suggest an idea or improvement
+title: "[Feature]: "
+labels:
+  - enhancement
+
+body:
+  - type: textarea
+    id: problem_statement
+    attributes:
+      label: Problem Statement
+      description: What problem does this feature solve?
+      placeholder: Describe the problem or user need.
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposed_solution
+    attributes:
+      label: Proposed Solution
+      description: Describe the desired behavior or implementation.
+      placeholder: Explain how this feature should work.
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional_context
+    attributes:
+      label: Additional Context
+      description: Add screenshots, examples, references, or related issues.
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Checklist
+      options:
+        - label: This feature aligns with the project goals
+          required: true
+
+        - label: Existing functionality cannot solve this problem
+          required: true
+
+        - label: I have considered accessibility implications
+          required: true
