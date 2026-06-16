@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import useNotification from "../../context/useNotification";
 import userService from "../../services/userService";
 
@@ -50,18 +50,18 @@ export default function useDeleteUser({
    *
    * @param {number} id - User ID to delete
    */
-  const requestDelete = (id: number) => {
+  const requestDelete = useCallback((id: number) => {
     setSelectedUserId(id);
     setIsConfirmOpen(true);
-  };
+  }, []);
 
   /**
    * Cancels deletion and resets selected user state.
    */
-  const cancelDelete = () => {
+  const cancelDelete = useCallback(() => {
     setSelectedUserId(null);
     setIsConfirmOpen(false);
-  };
+  }, []);
 
   /**
    * Confirms deletion of selected user.
@@ -70,7 +70,7 @@ export default function useDeleteUser({
    *
    * @returns {Promise<void>}
    */
-  const confirmDelete = async (): Promise<void> => {
+  const confirmDelete = useCallback(async (): Promise<void> => {
     if (selectedUserId === null) {
       return;
     }
@@ -89,7 +89,7 @@ export default function useDeleteUser({
         "error",
       );
     }
-  };
+  }, [selectedUserId, showNotification, onSuccess, cancelDelete]);
 
   return {
     isConfirmOpen,

@@ -1,3 +1,4 @@
+import { useCallback } from "react";
 import Button from "../../components/button/Button";
 import ConfirmModal from "../../components/confirmModal/ConfirmModal";
 import ErrorMessage from "../../components/errorMessage/ErrorMessage";
@@ -31,6 +32,14 @@ const UserList = () => {
   const users = usersResponse?.data;
   const total = usersResponse?.total;
 
+  const handleDelete = useCallback(
+    (event: React.MouseEvent, id: number) => {
+      event.preventDefault();
+      requestDelete(id);
+    },
+    [requestDelete],
+  );
+
   if (isLoading) return <UserListSkeleton />;
   if (error) return <ErrorMessage message={error.message} />;
 
@@ -59,14 +68,7 @@ const UserList = () => {
 
       <ul>
         {users?.map((user) => (
-          <UserListItem
-            key={user.id}
-            user={user}
-            onDelete={(e, id) => {
-              e.preventDefault();
-              requestDelete(id);
-            }}
-          />
+          <UserListItem key={user.id} user={user} onDelete={handleDelete} />
         ))}
       </ul>
 

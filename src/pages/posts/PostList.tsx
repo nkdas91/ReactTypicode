@@ -1,3 +1,4 @@
+import { useCallback } from "react";
 import ConfirmModal from "../../components/confirmModal/ConfirmModal";
 import ErrorMessage from "../../components/errorMessage/ErrorMessage";
 import Pagination from "../../components/pagination/Pagination";
@@ -57,6 +58,20 @@ const PostList = () => {
   const posts = postsResponse?.data;
   const total = postsResponse?.total;
   const users = usersResponse?.data;
+
+  const handleToggleFavourite = useCallback(
+    (id: number) => {
+      toggleFavourite(id);
+    },
+    [toggleFavourite],
+  );
+
+  const handleDelete = useCallback(
+    (id: number) => {
+      requestDelete(id);
+    },
+    [requestDelete],
+  );
 
   if (isLoading) return <PostListSkeleton />;
   if (error) return <ErrorMessage message={error.message} />;
@@ -118,8 +133,8 @@ const PostList = () => {
             key={post.id}
             post={post}
             favourites={favourites}
-            toggleFavourite={() => toggleFavourite(post.id)}
-            onDelete={() => requestDelete(post.id)}
+            toggleFavourite={handleToggleFavourite}
+            onDelete={handleDelete}
           />
         ))}
       </ul>
