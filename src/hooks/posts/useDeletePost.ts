@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import useNotification from "../../context/useNotification";
 import postService from "../../services/postService";
 
@@ -49,18 +49,18 @@ export default function useDeletePost({
    *
    * @param {number} id - ID of the post to delete
    */
-  const requestDelete = (id: number) => {
+  const requestDelete = useCallback((id: number) => {
     setSelectedPostId(id);
     setIsConfirmOpen(true);
-  };
+  }, []);
 
   /**
    * Cancels deletion and resets selected post state.
    */
-  const cancelDelete = () => {
+  const cancelDelete = useCallback(() => {
     setSelectedPostId(null);
     setIsConfirmOpen(false);
-  };
+  }, []);
 
   /**
    * Confirms deletion of the selected post.
@@ -69,7 +69,7 @@ export default function useDeletePost({
    *
    * @returns {Promise<void>}
    */
-  const confirmDelete = async (): Promise<void> => {
+  const confirmDelete = useCallback(async (): Promise<void> => {
     if (selectedPostId === null) {
       return;
     }
@@ -88,8 +88,7 @@ export default function useDeletePost({
         "error",
       );
     }
-  };
-
+  }, [selectedPostId, showNotification, onSuccess, cancelDelete]);
   return {
     isConfirmOpen,
     requestDelete,

@@ -1,4 +1,5 @@
 import { PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
+import { memo } from "react";
 import { Link } from "react-router-dom";
 import type { User } from "../../types/User";
 import Button from "../button/Button";
@@ -8,7 +9,7 @@ interface UserListItemProps {
   onDelete: (e: React.MouseEvent, id: number) => void;
 }
 
-const UserListItem = ({ user, onDelete }: UserListItemProps) => {
+const UserListItem = memo(({ user, onDelete }: UserListItemProps) => {
   return (
     <li className="list-row">
       <Link to={`/users/${user.id}`} className="list-link">
@@ -38,6 +39,6 @@ const UserListItem = ({ user, onDelete }: UserListItemProps) => {
       </div>
     </li>
   );
-};
+});
 
 export default UserListItem;
