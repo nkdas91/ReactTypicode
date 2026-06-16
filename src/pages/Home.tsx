@@ -27,7 +27,7 @@ const Home = () => {
   );
 
   return (
-    <div className="flex flex-wrap gap-4">
+    <div className="flex flex-wrap gap-card">
       <ChartContainer title="Posts (Liked vs Not Liked)">
         <LikedPostsPieChart data={pieData} />
       </ChartContainer>

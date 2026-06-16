@@ -102,11 +102,12 @@ const PostList = () => {
           {favourites.length ? (
             <div className="flex items-center gap-2">
               <input
+                id="favouritesCheckbox"
                 type="checkbox"
                 checked={showFavourites}
                 onChange={(e) => setShowFavourites(e.target.checked)}
               />
-              <label>Show only favourites</label>
+              <label htmlFor="favouritesCheckbox">Show only favourites</label>
             </div>
           ) : null}
         </div>
