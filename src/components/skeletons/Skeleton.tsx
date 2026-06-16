@@ -6,7 +6,7 @@ export default function Skeleton({ className = "" }: SkeletonProps) {
   return (
     <div
       className={`
-        animate-pulse bg-light
+        animate-pulse bg-border
         ${className}
       `}
     />
