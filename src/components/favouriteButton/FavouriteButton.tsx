@@ -18,8 +18,12 @@ const FavouriteButton = ({
       variant="ghost"
       size="icon"
       onClick={toggleFavourite}
-      aria-label={isFavourite ? "Remove from favorites" : "Add to favorites"}
-      title={isFavourite ? "Remove from favorites" : "Add to favorites"}
+      aria-label={
+        isFavourite ? "Remove post from favorites" : "Add post to favorites"
+      }
+      title={
+        isFavourite ? "Remove post from favorites" : "Add post to favorites"
+      }
       className={classNames(
         "favourite-button",
         isFavourite ? "favourite-button-active" : "favourite-button-inactive",

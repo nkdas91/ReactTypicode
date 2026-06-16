@@ -11,7 +11,7 @@ describe("FavouriteButton", () => {
     render(<FavouriteButton isFavourite={false} toggleFavourite={() => {}} />);
 
     const button = screen.getByRole("button", {
-      name: "Add to favorites",
+      name: "Add post to favorites",
     });
 
     expect(button).toBeInTheDocument();
@@ -23,7 +23,7 @@ describe("FavouriteButton", () => {
     render(<FavouriteButton isFavourite={true} toggleFavourite={() => {}} />);
 
     const button = screen.getByRole("button", {
-      name: "Remove from favorites",
+      name: "Remove post from favorites",
     });
 
     expect(button).toBeInTheDocument();
@@ -36,7 +36,7 @@ describe("FavouriteButton", () => {
 
     expect(screen.getByRole("button")).toHaveAttribute(
       "title",
-      "Add to favorites",
+      "Add post to favorites",
     );
   });
 
@@ -45,7 +45,7 @@ describe("FavouriteButton", () => {
 
     expect(screen.getByRole("button")).toHaveAttribute(
       "title",
-      "Remove from favorites",
+      "Remove post from favorites",
     );
   });
 
@@ -60,7 +60,7 @@ describe("FavouriteButton", () => {
 
     await user.click(
       screen.getByRole("button", {
-        name: "Add to favorites",
+        name: "Add post to favorites",
       }),
     );
 
@@ -74,7 +74,7 @@ describe("FavouriteButton", () => {
 
     expect(
       screen.getByRole("button", {
-        name: "Add to favorites",
+        name: "Add post to favorites",
       }),
     ).toBeInTheDocument();
 
@@ -82,7 +82,7 @@ describe("FavouriteButton", () => {
 
     expect(
       screen.getByRole("button", {
-        name: "Remove from favorites",
+        name: "Remove post from favorites",
       }),
     ).toBeInTheDocument();
   });

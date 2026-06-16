@@ -109,7 +109,7 @@ describe("PostListItem", () => {
 
     await user.click(
       screen.getByRole("button", {
-        name: /add to favorites/i,
+        name: /add post to favorites/i,
       }),
     );
 

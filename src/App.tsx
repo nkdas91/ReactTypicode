@@ -4,6 +4,7 @@ import Navbar from "./components/navbar/Navbar";
 import { appRoutes } from "./config/routes";
 
 import "./App.css";
+import Skeleton from "./components/skeletons/Skeleton";
 
 function App() {
   return (
@@ -13,7 +14,7 @@ function App() {
         id="main-content"
         className="max-w-(--container-content) mx-auto px-10 py-5"
       >
-        <Suspense fallback={<div>Loading page...</div>}>
+        <Suspense fallback={<Skeleton />}>
           <Routes>
             {appRoutes().map((route) => (
               <Route
